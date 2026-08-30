@@ -11,6 +11,7 @@
 - [Advertising](https://ojedaworks.com/advertising.html): campaigns built around one real offer with tracked results
 - [About](https://ojedaworks.com/about.html): why Ojeda Works exists and how it started with AO Audit
 - [Contact](https://ojedaworks.com/contact.html): how to reach Alejandro directly
+- [Español](https://ojedaworks.com/es.html): the Spanish-language landing page
 
 ## Articles
 

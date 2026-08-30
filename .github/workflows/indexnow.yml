@@ -1,0 +1,16 @@
+name: Ping IndexNow on deploy
+on:
+  push:
+    branches: [main]
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          sleep 90  # let Pages finish deploying
+          urls=$(curl -s https://ojedaworks.com/sitemap.xml | grep -o '<loc>[^<]*</loc>' | sed 's/<[^>]*>//g' | sed 's/.*/"&"/' | paste -sd, -)
+          echo "Pinging IndexNow with URLs: ${urls}"
+          curl -s -X POST "https://api.indexnow.org/indexnow" \
+            -H "Content-Type: application/json; charset=utf-8" \
+            -d "{\"host\":\"ojedaworks.com\",\"key\":\"af84e14f03cd591dbd3ba33531ec6d27\",\"urlList\":[${urls}]}" \
+            -o /dev/null -w "IndexNow bulk ping: HTTP %{http_code}\n"
