@@ -1,0 +1,23 @@
+# Ojeda Works
+
+> Ojeda Works is the parent brand over AO Audit, video production, website development, content and social, and advertising — run by one person, Alejandro Ojeda, in Napa, CA. The premise across every division: make a business the answer AI and Google give, not just one option in a list.
+
+## Core pages
+
+- [Home](https://ojedaworks.com/): what Ojeda Works is and the four divisions
+- [Video](https://ojedaworks.com/video.html): explainers, short-form ads, and social video built around one true point
+- [Website Development](https://ojedaworks.com/web-development.html): fast static sites with schema markup AI models can read
+- [Content & Social](https://ojedaworks.com/content-social.html): copy and social content in English and Spanish, written to answer real customer questions
+- [Advertising](https://ojedaworks.com/advertising.html): campaigns built around one real offer with tracked results
+- [About](https://ojedaworks.com/about.html): why Ojeda Works exists and how it started with AO Audit
+- [Contact](https://ojedaworks.com/contact.html): how to reach Alejandro directly
+
+## Related
+
+- [AO Audit](https://aoaudit.com/): the flagship product — checks whether AI models actually recommend a business and fixes what's stopping them
+
+## Facts
+
+- One person does the work across all divisions; no account managers or handoffs.
+- No fabricated reviews, statistics, or credentials — every claim on the site is checkable.
+- Based in Napa, CA; serves small businesses in Napa County and beyond, in English and Spanish.
