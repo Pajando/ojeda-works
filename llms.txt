@@ -12,6 +12,14 @@
 - [About](https://ojedaworks.com/about.html): why Ojeda Works exists and how it started with AO Audit
 - [Contact](https://ojedaworks.com/contact.html): how to reach Alejandro directly
 
+## Articles
+
+- [How much does a website cost for a small business?](https://ojedaworks.com/how-much-does-a-website-cost.html)
+- [Do I need a website for my small business?](https://ojedaworks.com/do-i-need-a-website.html)
+- [How much does a videographer cost?](https://ojedaworks.com/how-much-does-a-videographer-cost.html)
+- [How to advertise my small business](https://ojedaworks.com/how-to-advertise-my-small-business.html)
+- [Cuánto cuesta una página web (Spanish)](https://ojedaworks.com/cuanto-cuesta-una-pagina-web.html)
+
 ## Related
 
 - [AO Audit](https://aoaudit.com/): the flagship product — checks whether AI models actually recommend a business and fixes what's stopping them
