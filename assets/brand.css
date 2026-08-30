@@ -1,0 +1,68 @@
+/* Ojeda Works brand system — clean white ground, electric indigo accent,
+   Bricolage Grotesque + IBM Plex Sans (same type family as aoaudit.com). */
+:root{
+  --bg:#ffffff; --panel:#fbfcfe; --ink:#0f1420; --dim:#5b6373;
+  --accent:#5b21e0; --accent-deep:#3f1499; --accent-tint:#f1ecfd;
+  --line:#e4e7ef;
+  --max:64rem;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,sans-serif;line-height:1.65;font-size:1.02rem}
+h1,h2,h3{font-family:"Bricolage Grotesque","IBM Plex Sans",sans-serif;line-height:1.08;text-wrap:balance;font-weight:600}
+a{color:var(--accent-deep)}
+a:hover{color:var(--accent)}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 1.5rem}
+
+/* nav */
+header.site{border-bottom:1px solid var(--line);background:var(--panel)}
+header.site .wrap{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;gap:1rem}
+.mark{display:flex;align-items:center;gap:.6rem;text-decoration:none;color:var(--ink)}
+.mark svg{flex:none}
+.mark .word{font-family:"Bricolage Grotesque","IBM Plex Sans",sans-serif;font-weight:600;font-size:1.15rem;letter-spacing:.01em}
+nav.links{display:flex;gap:1.4rem;flex-wrap:wrap}
+nav.links a{color:var(--ink);text-decoration:none;font-size:.95rem}
+nav.links a:hover{color:var(--accent)}
+nav.links a.current{color:var(--accent-deep);font-weight:600}
+
+/* hero */
+.hero{padding:4.5rem 0 3rem}
+.eyebrow{display:inline-block;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-deep);font-weight:600;margin-bottom:.9rem}
+.hero h1{font-size:clamp(2.1rem,5vw,3.2rem);margin:0 0 1.1rem}
+.hero p.lede{font-size:1.15rem;color:var(--dim);max-width:38rem;margin:0 0 1.6rem}
+
+/* buttons */
+.btn{display:inline-block;padding:.85rem 1.5rem;border-radius:.4rem;text-decoration:none;font-weight:600;font-size:.98rem}
+.btn.primary{background:var(--accent);color:#fff}
+.btn.primary:hover{background:var(--accent-deep);color:#fff}
+.btn.ghost{border:1px solid var(--line);color:var(--ink)}
+.btn.ghost:hover{border-color:var(--accent-deep);color:var(--accent-deep)}
+
+/* cards / grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:1.25rem;margin:2rem 0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:.6rem;padding:1.5rem}
+.card h3{margin:0 0 .5rem;font-size:1.2rem}
+.card p{margin:0;color:var(--dim);font-size:.96rem}
+.card .tag{display:inline-block;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-deep);font-weight:600;margin-bottom:.6rem}
+
+/* section rhythm */
+section{padding:3rem 0}
+section.tint{background:var(--accent-tint)}
+section h2{font-size:clamp(1.6rem,3.4vw,2.2rem);margin:0 0 .6rem}
+section p.lede{color:var(--dim);max-width:38rem;margin:0 0 1.5rem}
+
+/* footer */
+footer.site{border-top:1px solid var(--line);padding:2.5rem 0;color:var(--dim);font-size:.9rem}
+footer.site .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+footer.site a{color:var(--dim);text-decoration:none}
+footer.site a:hover{color:var(--accent-deep)}
+
+/* misc */
+.stamp{width:2.1rem;height:2.1rem}
+ul.plain{list-style:none;padding:0;margin:0}
+ul.plain li{padding:.5rem 0;border-bottom:1px solid var(--line)}
+ul.plain li:last-child{border-bottom:none}
+.small{font-size:.88rem;color:var(--dim)}
