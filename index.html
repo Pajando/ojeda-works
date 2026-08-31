@@ -288,8 +288,9 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
     cam.position.set(0, 0, 8);
 
     const mat = new THREE.MeshStandardMaterial({
-      color: 0x2a1a6e, metalness: 0.85, roughness: 0.25,
-      emissive: 0x5b21e0, emissiveIntensity: 0.22
+      color: 0x8f7bff, metalness: 0.6, roughness: 0.18,
+      emissive: 0x7c4dff, emissiveIntensity: 0.4,
+      transparent: true, opacity: 0.72
     });
     // "O" — thick ring
     const oMesh = new THREE.Mesh(new THREE.TorusGeometry(1.35, 0.55, 48, 96), mat);
