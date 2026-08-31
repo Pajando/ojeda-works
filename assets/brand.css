@@ -24,7 +24,7 @@ header.site{border-bottom:1px solid var(--line);background:var(--panel)}
 header.site .wrap{display:flex;align-items:center;justify-content:space-between;padding:1.5rem;gap:1.2rem}
 .mark{display:flex;align-items:center;gap:.6rem;text-decoration:none;color:var(--ink)}
 .mark svg{flex:none}
-.mark .word{font-family:'Poppins','IBM Plex Sans',sans-serif;font-weight:700;font-size:1.7rem;letter-spacing:.09em;text-transform:uppercase}
+.mark .word{font-family:'Poppins','IBM Plex Sans',sans-serif;font-weight:700;font-size:1.7rem;letter-spacing:.09em;text-transform:uppercase;white-space:nowrap}
 nav.links{display:flex;gap:1.7rem;flex-wrap:wrap;align-items:center}
 nav.links a{color:var(--ink);text-decoration:none;font-size:1.08rem}
 nav.links a:hover{color:var(--accent)}
