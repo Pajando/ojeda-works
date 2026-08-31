@@ -13,6 +13,7 @@ html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--ink);
   font-family:"IBM Plex Sans",system-ui,sans-serif;line-height:1.65;font-size:1.02rem}
 h1,h2,h3{font-family:"Bricolage Grotesque","IBM Plex Sans",sans-serif;line-height:1.08;text-wrap:balance;font-weight:600}
+h1{font-family:'Sifonn','Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:.01em}
 a{color:var(--accent-deep)}
 a:hover{color:var(--accent)}
 .wrap{max-width:var(--max);margin:0 auto;padding:0 1.5rem}
