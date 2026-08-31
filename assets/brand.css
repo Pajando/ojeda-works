@@ -23,7 +23,7 @@ header.site{border-bottom:1px solid var(--line);background:var(--panel)}
 header.site .wrap{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;gap:1rem}
 .mark{display:flex;align-items:center;gap:.6rem;text-decoration:none;color:var(--ink)}
 .mark svg{flex:none}
-.mark .word{font-family:"Bricolage Grotesque","IBM Plex Sans",sans-serif;font-weight:600;font-size:1.15rem;letter-spacing:.01em}
+.mark .word{font-family:'Sifonn','Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.2rem;letter-spacing:.02em}
 nav.links{display:flex;gap:1.4rem;flex-wrap:wrap}
 nav.links a{color:var(--ink);text-decoration:none;font-size:.95rem}
 nav.links a:hover{color:var(--accent)}
