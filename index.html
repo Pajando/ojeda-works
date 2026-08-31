@@ -288,9 +288,8 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
     cam.position.set(0, 0, 8);
 
     const mat = new THREE.MeshStandardMaterial({
-      color: 0x8f7bff, metalness: 0.6, roughness: 0.18,
-      emissive: 0x7c4dff, emissiveIntensity: 0.4,
-      transparent: true, opacity: 0.72
+      color: 0xa593ff, metalness: 0.55, roughness: 0.2,
+      emissive: 0x7c4dff, emissiveIntensity: 0.55
     });
     // "O" — thick ring
     const oMesh = new THREE.Mesh(new THREE.TorusGeometry(1.35, 0.55, 48, 96), mat);
@@ -309,10 +308,10 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
     wGroup.position.set(1.8, -0.25, 0);
     scene.add(wGroup);
 
-    scene.add(new THREE.AmbientLight(0x8f7bff, 0.35));
-    const l1 = new THREE.PointLight(0x7c4dff, 90); l1.position.set(4, 3, 4); scene.add(l1);
-    const l2 = new THREE.PointLight(0xd4537e, 55); l2.position.set(-4, -2, 3); scene.add(l2);
-    const l3 = new THREE.PointLight(0xffffff, 30); l3.position.set(0, 4, -3); scene.add(l3);
+    scene.add(new THREE.AmbientLight(0xb9a5f5, 0.55));
+    const l1 = new THREE.PointLight(0x9d7bff, 130); l1.position.set(4, 3, 4); scene.add(l1);
+    const l2 = new THREE.PointLight(0xff7a9e, 80); l2.position.set(-4, -2, 3); scene.add(l2);
+    const l3 = new THREE.PointLight(0xffffff, 60); l3.position.set(0, 4, -3); scene.add(l3);
 
     let mx = 0, my = 0;
     addEventListener('pointermove', e => {
