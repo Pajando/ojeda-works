@@ -285,7 +285,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
     const scene = new THREE.Scene();
     const cam = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
-    cam.position.set(0, 0, 8);
+    cam.position.set(0, 0, 8.8);
 
     const mat = new THREE.MeshStandardMaterial({
       color: 0xc7bbff, metalness: 0.5, roughness: 0.22,
@@ -293,9 +293,9 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
     });
     // "O" — flat extruded ring, like the logo letter
     const oShape = new THREE.Shape();
-    oShape.absarc(0, 0, 1.85, 0, Math.PI * 2, false);
+    oShape.absarc(0, 0, 1.72, 0, Math.PI * 2, false);
     const oHole = new THREE.Path();
-    oHole.absarc(0, 0, 1.0, 0, Math.PI * 2, true);
+    oHole.absarc(0, 0, 1.14, 0, Math.PI * 2, true);
     oShape.holes.push(oHole);
     const oGeo = new THREE.ExtrudeGeometry(oShape, {
       depth: 0.55, bevelEnabled: true, bevelThickness: 0.09,
@@ -303,7 +303,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
     });
     oGeo.translate(0, 0, -0.275);
     const oMesh = new THREE.Mesh(oGeo, mat);
-    oMesh.position.set(-1.9, 0.35, 0);
+    oMesh.position.set(-1.55, 0.3, 0);
     scene.add(oMesh);
     // "W" — two chunky Vs built from slanted bars
     const wGroup = new THREE.Group();
@@ -315,7 +315,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
       wGroup.add(l, r);
     };
     mk(-0.62); mk(0.62);
-    wGroup.position.set(1.8, -0.25, 0);
+    wGroup.position.set(1.7, -0.2, 0);
     scene.add(wGroup);
 
     scene.add(new THREE.AmbientLight(0xb9a5f5, 0.55));
