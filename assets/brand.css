@@ -37,8 +37,8 @@ nav.links a.current{color:var(--accent-deep);font-weight:600}
 
 /* buttons */
 .btn{display:inline-block;padding:.85rem 1.5rem;border-radius:.4rem;text-decoration:none;font-weight:600;font-size:.98rem}
-.btn.primary{background:var(--accent);color:#fff}
-.btn.primary:hover{background:var(--accent-deep);color:#fff}
+.btn.primary{background:linear-gradient(135deg,#ff5a1f,#f43d00);color:#fff}
+.btn.primary:hover{background:linear-gradient(135deg,#ff6d38,#ff5a1f);color:#fff}
 .btn.ghost{border:1px solid var(--line);color:var(--ink)}
 .btn.ghost:hover{border-color:var(--accent-deep);color:var(--accent-deep)}
 

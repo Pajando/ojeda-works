@@ -134,9 +134,10 @@
 <header class="site">
   <div class="wrap">
     <a class="mark" href="index.html">
-      <svg class="stamp" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <rect x="1" y="1" width="38" height="38" rx="8" fill="#0f1420"/>
-        <text x="20" y="26" text-anchor="middle" font-family="Bricolage Grotesque, IBM Plex Sans, sans-serif" font-weight="700" font-size="15" fill="#f1ecfd">OW</text>
+      <svg class="stamp" viewBox="0 0 128 84" style="width:3.2rem;height:2.1rem" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="34" cy="42" r="25" fill="none" stroke="currentColor" stroke-width="17"/>
+        <path d="M64 16 L84 68 L104 16" fill="none" stroke="currentColor" stroke-width="16"/>
+        <path d="M82 16 L102 68 L122 16" fill="none" stroke="currentColor" stroke-width="16"/>
       </svg>
       <span class="word">Ojeda Works</span>
     </a>
@@ -284,15 +285,28 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
     const scene = new THREE.Scene();
     const cam = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
-    cam.position.set(0, 0, 7);
+    cam.position.set(0, 0, 8);
 
-    const geo = new THREE.TorusKnotGeometry(1.7, 0.52, 220, 36);
     const mat = new THREE.MeshStandardMaterial({
       color: 0x2a1a6e, metalness: 0.85, roughness: 0.25,
       emissive: 0x5b21e0, emissiveIntensity: 0.22
     });
-    const knot = new THREE.Mesh(geo, mat);
-    scene.add(knot);
+    // "O" — thick ring
+    const oMesh = new THREE.Mesh(new THREE.TorusGeometry(1.35, 0.55, 48, 96), mat);
+    oMesh.position.set(-1.9, 0.35, 0);
+    scene.add(oMesh);
+    // "W" — two chunky Vs built from slanted bars
+    const wGroup = new THREE.Group();
+    const bar = () => new THREE.Mesh(new THREE.BoxGeometry(0.5, 2.7, 0.55), mat);
+    const tilt = 0.36;
+    const mk = (xc) => {
+      const l = bar(); l.rotation.z =  tilt; l.position.set(xc - 0.47, 0, 0);
+      const r = bar(); r.rotation.z = -tilt; r.position.set(xc + 0.47, 0, 0);
+      wGroup.add(l, r);
+    };
+    mk(-0.62); mk(0.62);
+    wGroup.position.set(1.8, -0.25, 0);
+    scene.add(wGroup);
 
     scene.add(new THREE.AmbientLight(0x8f7bff, 0.35));
     const l1 = new THREE.PointLight(0x7c4dff, 90); l1.position.set(4, 3, 4); scene.add(l1);
@@ -315,8 +329,12 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
 
     document.querySelector('.hero-fallback').style.display = 'none';
     renderer.setAnimationLoop(t => {
-      knot.rotation.x = t * 0.00012 + my;
-      knot.rotation.y = t * 0.00018 + mx;
+      oMesh.rotation.y = Math.sin(t * 0.0004) * 0.55 + mx;
+      oMesh.rotation.x = Math.sin(t * 0.00027) * 0.22 + my;
+      oMesh.position.y = 0.35 + Math.sin(t * 0.0006) * 0.22;
+      wGroup.rotation.y = -Math.sin(t * 0.00034) * 0.5 - mx * 0.7;
+      wGroup.rotation.x = Math.cos(t * 0.0003) * 0.16 + my * 0.5;
+      wGroup.position.y = -0.25 + Math.cos(t * 0.0005) * 0.2;
       renderer.render(scene, cam);
     });
   } catch (e) { /* WebGL or CDN unavailable: CSS glow fallback stays visible */ }
