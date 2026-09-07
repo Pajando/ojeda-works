@@ -1,9 +1,12 @@
 /* Ojeda Works brand system — clean white ground, electric indigo accent,
-   Bricolage Grotesque + IBM Plex Sans (same type family as aoaudit.com). */
+   Sifonn display + Bricolage Grotesque + IBM Plex Sans (same type family as aoaudit.com). */
 :root{
   --bg:#ffffff; --panel:#fbfcfe; --ink:#0f1420; --dim:#5b6373;
   --accent:#5b21e0; --accent-deep:#3f1499; --accent-tint:#f1ecfd;
   --line:#e4e7ef;
+  --cta:#db3a00; --cta-deep:#c53000; --cta-press:#ad2a00;
+  --cta-ghost:#cc3300; --cta-ghost-press:#a82a00;
+  --ease-out:cubic-bezier(0.23,1,0.32,1);
   --max:64rem;
 }
 *{box-sizing:border-box}
@@ -19,42 +22,56 @@ a{color:var(--accent-deep)}
 a:hover{color:var(--accent)}
 .wrap{max-width:var(--max);margin:0 auto;padding:0 1.5rem}
 
+/* skip link — visually hidden until keyboard focus */
+.skip{position:absolute;left:.5rem;top:-3rem;z-index:100;background:var(--accent-deep);color:#fff;
+  padding:.5rem 1rem;border-radius:.5rem;text-decoration:none;font-weight:600;
+  transition:top 150ms var(--ease-out)}
+.skip:focus{top:.5rem;color:#fff}
+
 /* nav */
 header.site{border-bottom:1px solid var(--line);background:var(--panel)}
-header.site .wrap{display:flex;align-items:center;justify-content:space-between;padding:1.5rem;gap:1.2rem}
-.mark{display:flex;align-items:center;gap:.6rem;text-decoration:none;color:var(--ink)}
+header.site .wrap{display:flex;align-items:center;justify-content:space-between;padding:1.5rem;gap:1.25rem}
+.mark{display:flex;align-items:center;gap:.5rem;text-decoration:none;color:var(--ink)}
 .mark svg{flex:none}
-.mark .word{font-family:'Poppins','IBM Plex Sans',sans-serif;font-weight:700;font-size:1.7rem;letter-spacing:.09em;text-transform:uppercase;white-space:nowrap}
-nav.links{display:flex;gap:1.7rem;flex-wrap:wrap;align-items:center}
-nav.links a{color:var(--ink);text-decoration:none;font-size:1.08rem}
+.mark .word{font-family:'Sifonn','Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.7rem;letter-spacing:.09em;text-transform:uppercase;white-space:nowrap}
+nav.links{display:flex;gap:1.5rem;flex-wrap:wrap;align-items:center}
+nav.links a{color:var(--ink);text-decoration:none;font-size:1.08rem;transition:color 150ms ease}
 nav.links a:hover{color:var(--accent)}
 nav.links a.current{color:var(--accent-deep);font-weight:600}
 @media (max-width:760px){
   header.site .wrap{flex-direction:column;align-items:flex-start;gap:.75rem;padding:1rem 1.5rem}
   .mark .word{font-size:1.15rem}
-  nav.links{gap:.6rem 1.1rem}
-  nav.links a{font-size:.95rem;padding:.35rem 0;display:inline-block}
+  nav.links{gap:.5rem 1rem}
+  nav.links a{font-size:.95rem;padding:.5rem 0;display:inline-block}
 }
+
+/* external links open a new tab — say so */
+nav.links a[target="_blank"]::after,
+footer.site a[target="_blank"]::after{content:" \2197";font-size:.8em}
 
 /* hero */
 .hero{padding:4.5rem 0 3rem}
-.eyebrow{display:inline-block;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-deep);font-weight:600;margin-bottom:.9rem}
-.hero h1{font-size:clamp(2.1rem,5vw,3.2rem);margin:0 0 1.1rem}
-.hero p.lede{font-size:1.15rem;color:var(--dim);max-width:38rem;margin:0 0 1.6rem}
+.eyebrow{display:inline-block;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-deep);font-weight:600;margin-bottom:1rem}
+.hero h1{font-size:clamp(2.1rem,5vw,3.2rem);margin:0 0 1rem}
+.hero p.lede{font-size:1.15rem;color:var(--dim);max-width:38rem;margin:0 0 1.5rem}
 
 /* buttons */
-.btn{display:inline-block;padding:.85rem 1.5rem;border-radius:.4rem;text-decoration:none;font-weight:600;font-size:.98rem}
-.btn.primary{background:linear-gradient(135deg,#db3a00,#c53000);color:#fff}
-.btn.primary:hover{background:linear-gradient(135deg,#c53000,#ad2a00);color:#fff}
-.btn.ghost{border:1.5px solid #cc3300;color:#cc3300}
-.btn.ghost:hover{border-color:#a82a00;color:#a82a00;background:rgba(204,51,0,.06)}
+.btn{display:inline-block;padding:.75rem 1.5rem;border-radius:.5rem;text-decoration:none;font-weight:600;font-size:.98rem;
+  transition:transform 160ms var(--ease-out)}
+.btn:active{transform:scale(0.97)}
+.btn.primary{background:linear-gradient(135deg,var(--cta),var(--cta-deep));color:#fff}
+.btn.primary:hover{background:linear-gradient(135deg,var(--cta-deep),var(--cta-press));color:#fff}
+.btn.ghost{border:1.5px solid var(--cta-ghost);color:var(--cta-ghost)}
+.btn.ghost:hover{border-color:var(--cta-ghost-press);color:var(--cta-ghost-press);background:rgba(204,51,0,.06)}
 
 /* cards / grid */
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:1.25rem;margin:2rem 0}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:.6rem;padding:1.5rem}
-.card h3{margin:0 0 .7rem;font-size:1.2rem;line-height:1.25}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:.75rem;padding:1.5rem}
+a.card{text-decoration:none;color:inherit;transition:border-color 150ms ease}
+a.card:hover{border-color:var(--accent)}
+.card h3{margin:0 0 .75rem;font-size:1.2rem;line-height:1.25}
 .card p{margin:0;color:var(--dim);font-size:.96rem}
-.card .tag{display:inline-block;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-deep);font-weight:600;margin-bottom:.6rem}
+.card .tag{display:inline-block;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-deep);font-weight:600;margin-bottom:.5rem}
 
 /* section rhythm */
 section{padding:3rem 0}

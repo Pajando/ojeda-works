@@ -9,7 +9,7 @@
 <meta name="description" content="Be the answer, not just an option — AO Audit, video, web development, content, and advertising, all under one name: Ojeda Works.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <link href="https://fonts.cdnfonts.com/css/sifonn" rel="stylesheet">
 <link rel="stylesheet" href="assets/brand.css">
 <style>
@@ -22,14 +22,16 @@
 .hero-3d .wrap{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:2rem;align-items:center}
 .hero-3d .eyebrow{color:#b9a5f5;letter-spacing:.14em}
 .hero-3d h1{font-family:'Sifonn','Bricolage Grotesque',sans-serif;font-weight:700;
-  font-size:clamp(2.5rem,6vw,4.2rem);line-height:1.04;margin:0 0 1.1rem;
-  background:linear-gradient(92deg,#ffffff 0%,#cfc2ff 55%,#8f7bff 100%);
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-  text-wrap:balance}
+  font-size:clamp(2.5rem,6vw,4.2rem);line-height:1.04;margin:0 0 1rem;
+  color:#dcd2ff;text-wrap:balance}
+@supports ((-webkit-background-clip:text) or (background-clip:text)){
+  .hero-3d h1{background:linear-gradient(92deg,#ffffff 0%,#cfc2ff 55%,#8f7bff 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+}
 .hero-3d .lede{color:#f2f0fb;font-size:1.22rem;font-weight:500;line-height:1.55;max-width:34rem;margin:0 0 1.7rem;text-shadow:0 1px 12px rgba(11,14,26,.8)}
-.hero-3d .btn.primary{background:linear-gradient(135deg,#db3a00,#c53000);color:#fff;
+.hero-3d .btn.primary{background:linear-gradient(135deg,var(--cta),var(--cta-deep));color:#fff;
   box-shadow:0 0 28px rgba(219,58,0,.45);border:none}
-.hero-3d .btn.primary:hover{box-shadow:0 0 40px rgba(219,58,0,.7);background:linear-gradient(135deg,#c53000,#ad2a00)}
+.hero-3d .btn.primary:hover{box-shadow:0 0 40px rgba(219,58,0,.7);background:linear-gradient(135deg,var(--cta-deep),var(--cta-press))}
 .hero-3d .btn.ghost{border:1.5px solid #ff5a1f;color:#ffa07e;backdrop-filter:blur(4px)}
 .hero-3d .btn.ghost:hover{border-color:#ff8a5c;color:#ffc4ab;box-shadow:0 0 20px rgba(244,61,0,.35)}
 #hero-stage{position:relative;min-height:340px}
@@ -37,7 +39,7 @@
 .hero-fallback{position:absolute;inset:0;background:radial-gradient(closest-side,rgba(124,77,255,.5),rgba(91,33,224,.15) 60%,transparent);filter:blur(6px);border-radius:50%}
 @media (max-width:760px){
   .hero-3d .wrap{grid-template-columns:1fr}
-  #hero-stage{position:absolute;inset:0;min-height:0;opacity:.35;z-index:-1}
+  #hero-stage{position:absolute;inset:0;min-height:0;opacity:.18;z-index:-1}
   .hero-3d{padding:4rem 0 3.5rem}
 }
 @media (prefers-reduced-motion: reduce){ #hero-canvas{display:none} }
@@ -130,6 +132,7 @@
 </script>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 
 <header class="site">
   <div class="wrap">
@@ -149,7 +152,7 @@
   </div>
 </header>
 
-<section class="hero hero-3d">
+<section id="main" class="hero hero-3d">
   <div class="wrap">
     <div>
       <span class="eyebrow">The parent brand</span>
@@ -172,22 +175,22 @@
     <h2>What we do</h2>
     <p class="lede">Four ways we work, all under one name and one person doing the actual work.</p>
     <div class="grid">
-      <a class="card" href="video.html" style="text-decoration:none;color:inherit">
+      <a class="card" href="video.html">
         <span class="tag">Video</span>
         <h3>Video</h3>
         <p>Video that makes you the answer, not just noise in a feed.</p>
       </a>
-      <a class="card" href="web-development.html" style="text-decoration:none;color:inherit">
+      <a class="card" href="web-development.html">
         <span class="tag">Web</span>
         <h3>Website Development</h3>
         <p>Sites AI and Google can read clearly enough to recommend.</p>
       </a>
-      <a class="card" href="content-social.html" style="text-decoration:none;color:inherit">
+      <a class="card" href="content-social.html">
         <span class="tag">Content</span>
         <h3>Content &amp; Social</h3>
         <p>Words that answer the question, not fill a calendar.</p>
       </a>
-      <a class="card" href="advertising.html" style="text-decoration:none;color:inherit">
+      <a class="card" href="advertising.html">
         <span class="tag">Advertising</span>
         <h3>Advertising</h3>
         <p>Ads that put the answer in front of the person asking.</p>
@@ -274,6 +277,8 @@
 <script type="module">
 if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
   try {
+    // let critical content render/settle first; the hero glow fallback covers the wait
+    await new Promise(r => 'requestIdleCallback' in window ? requestIdleCallback(r, {timeout: 1500}) : setTimeout(r, 200));
     const THREE = await import('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js');
     const canvas = document.getElementById('hero-canvas');
     const stage = document.getElementById('hero-stage');
@@ -429,10 +434,10 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
       for (const s of shards) { s.rotation.x += s.userData.rx * 16; s.rotation.y += s.userData.ry * 16; }
       const a1 = t * 0.00016;
       ojeda.position.set(Math.cos(a1) * 2.7, Math.sin(a1 * 0.8) * 1.0 + 0.4, Math.sin(a1) * 2.4);
-      ojeda.material.opacity = 0.5 + 0.5 * ((Math.sin(a1) + 1) / 2);
+      ojeda.material.opacity = 0.2 + 0.35 * ((Math.sin(a1) + 1) / 2);
       const a2 = -t * 0.00013 + 2.6;
       works.position.set(Math.cos(a2) * 2.9, Math.sin(a2 * 0.9) * 1.1 - 0.4, Math.sin(a2) * 2.6);
-      works.material.opacity = 0.5 + 0.5 * ((Math.sin(a2) + 1) / 2);
+      works.material.opacity = 0.2 + 0.35 * ((Math.sin(a2) + 1) / 2);
       renderer.render(scene, cam);
     });
   } catch (e) { /* WebGL or CDN unavailable: CSS glow fallback stays visible */ }
