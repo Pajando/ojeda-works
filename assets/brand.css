@@ -112,3 +112,7 @@ ul.plain{list-style:none;padding:0;margin:0}
 ul.plain li{padding:.5rem 0;border-bottom:1px solid var(--line)}
 ul.plain li:last-child{border-bottom:none}
 .small{font-size:.88rem;color:var(--dim)}
+
+/* 2x2 services grid — no orphan card on desktop */
+.grid.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:640px){.grid.grid-2{grid-template-columns:1fr}}
