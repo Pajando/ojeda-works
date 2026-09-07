@@ -13,6 +13,8 @@
 <link href="https://fonts.cdnfonts.com/css/sifonn" rel="stylesheet">
 <link rel="stylesheet" href="assets/brand.css">
 <link rel="canonical" href="https://ojedaworks.com/contact.html">
+<link rel="alternate" hreflang="en" href="https://ojedaworks.com/contact.html">
+<link rel="alternate" hreflang="es" href="https://ojedaworks.com/contacto.html">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Ojeda Works">
@@ -81,6 +83,7 @@
       <a href="advertising.html">Advertising</a>
       <a href="about.html">About</a>
       <a class="current" href="contact.html">Contact</a>
+      <a href="contacto.html">Español</a>
     </nav>
   </div>
 </header>
@@ -97,8 +100,9 @@
   <div class="wrap">
     <div class="card" style="max-width:28rem">
       <h3>Email</h3>
-      <p><a href="mailto:alejandro@ojedaworks.com">alejandro@ojedaworks.com</a></p>
-      <p class="small">Based in Napa, CA &mdash; connected to the world. Replies come from Alejandro directly, no intake form, no account manager.</p>
+      <p><a href="mailto:alejandro@ojedaworks.com">alejandro@ojedaworks.com</a>
+        <button class="copy-btn" type="button" data-email="alejandro@ojedaworks.com" aria-label="Copy the email address">Copy</button></p>
+      <p class="small">Based in Napa, CA. Replies come from Alejandro directly &mdash; no intake form, no account manager.</p>
     </div>
   </div>
 </section>
@@ -114,6 +118,16 @@
     <p class="lede" style="margin-top:1rem">There's no ticket queue and no auto-reply &mdash; every email gets read and answered by the person who'd actually do the work.</p>
   </div>
 </section>
+
+<script>
+document.querySelectorAll('.copy-btn').forEach(b => b.addEventListener('click', async () => {
+  try {
+    await navigator.clipboard.writeText(b.dataset.email);
+    b.textContent = 'Copied ✓';
+    setTimeout(() => { b.textContent = 'Copy'; }, 2000);
+  } catch (e) {}
+}));
+</script>
 
 <footer class="site">
   <div class="wrap">

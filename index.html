@@ -28,7 +28,7 @@
   .hero-3d h1{background:linear-gradient(92deg,#ffffff 0%,#cfc2ff 55%,#8f7bff 100%);
     -webkit-background-clip:text;background-clip:text;color:transparent}
 }
-.hero-3d .lede{color:#f2f0fb;font-size:1.22rem;font-weight:500;line-height:1.55;max-width:34rem;margin:0 0 1.7rem;text-shadow:0 1px 12px rgba(11,14,26,.8)}
+section.hero-3d p.lede{color:#f2f0fb;font-size:1.22rem;font-weight:500;line-height:1.55;max-width:34rem;margin:0 0 1.5rem;text-shadow:0 1px 12px rgba(11,14,26,.8)}
 .hero-3d .btn.primary{background:linear-gradient(135deg,var(--cta),var(--cta-deep));color:#fff;
   box-shadow:0 0 28px rgba(219,58,0,.45);border:none}
 .hero-3d .btn.primary:hover{box-shadow:0 0 40px rgba(219,58,0,.7);background:linear-gradient(135deg,var(--cta-deep),var(--cta-press))}
@@ -53,77 +53,115 @@
 <meta property="og:title" content="Ojeda Works — One name behind everything we build">
 <meta property="og:description" content="Be the answer, not just an option — Answer Optimization Audit, video, web development, content, and advertising, all under one name: Ojeda Works.">
 <meta property="og:url" content="https://ojedaworks.com/">
-<meta property="og:image" content="https://ojedaworks.com/assets/logo-512.png">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://ojedaworks.com/assets/og-card.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://ojedaworks.com/assets/og-card.jpg">
 <meta name="twitter:title" content="Ojeda Works — One name behind everything we build">
 <meta name="twitter:description" content="Be the answer, not just an option — Answer Optimization Audit, video, web development, content, and advertising, all under one name: Ojeda Works.">
 <script type="application/ld+json">
 {
-  "@context":"https://schema.org",
-  "@graph":[
+  "@context": "https://schema.org",
+  "@graph": [
     {
-      "@type":"Organization",
-      "@id":"https://ojedaworks.com/#org",
-      "name":"Ojeda Works",
-      "url":"https://ojedaworks.com/",
-      "logo":"https://ojedaworks.com/assets/logo-512.png",
-      "description":"Ojeda Works is the parent brand over the Answer Optimization Audit, video, website development, content and social, and advertising.",
-      "founder":{"@type":"Person","name":"Alejandro Ojeda"},
-      "email":"alejandro@ojedaworks.com",
-      "areaServed":{"@type":"City","name":"Napa, CA"},
-      "knowsLanguage":["en","es"],
-      "subOrganization":{
-        "@type":"Organization",
-        "name":"The AO Audit","alternateName":"Answer Optimization Audit",
-        "url":"https://aoaudit.com/",
-        "@id":"https://aoaudit.com/#org"
+      "@type": "Organization",
+      "@id": "https://ojedaworks.com/#org",
+      "name": "Ojeda Works",
+      "url": "https://ojedaworks.com/",
+      "logo": "https://ojedaworks.com/assets/logo-512.png",
+      "description": "Ojeda Works is the parent brand over the Answer Optimization Audit, video, website development, content and social, and advertising.",
+      "founder": {
+        "@type": "Person",
+        "name": "Alejandro Ojeda"
+      },
+      "email": "alejandro@ojedaworks.com",
+      "areaServed": {
+        "@type": "City",
+        "name": "Napa, CA"
+      },
+      "knowsLanguage": [
+        "en",
+        "es"
+      ],
+      "subOrganization": {
+        "@type": "Organization",
+        "name": "The AO Audit",
+        "alternateName": "Answer Optimization Audit",
+        "url": "https://aoaudit.com/",
+        "@id": "https://aoaudit.com/#org"
       }
     },
     {
-      "@type":"WebSite",
-      "@id":"https://ojedaworks.com/#website",
-      "url":"https://ojedaworks.com/",
-      "name":"Ojeda Works",
-      "publisher":{"@id":"https://ojedaworks.com/#org"}
+      "@type": "WebSite",
+      "@id": "https://ojedaworks.com/#website",
+      "url": "https://ojedaworks.com/",
+      "name": "Ojeda Works",
+      "publisher": {
+        "@id": "https://ojedaworks.com/#org"
+      }
     },
     {
-      "@type":"WebPage",
-      "@id":"https://ojedaworks.com/#webpage",
-      "url":"https://ojedaworks.com/",
-      "name":"Ojeda Works — One name behind everything we build",
-      "description":"Be the answer, not just an option — Answer Optimization Audit, video, web development, content, and advertising, all under one name: Ojeda Works.",
-      "isPartOf":{"@id":"https://ojedaworks.com/#website"},
-      "about":{"@id":"https://ojedaworks.com/#org"},
-      "speakable":{"@type":"SpeakableSpecification","cssSelector":[".hero h1",".hero .lede"]}
+      "@type": "WebPage",
+      "@id": "https://ojedaworks.com/#webpage",
+      "url": "https://ojedaworks.com/",
+      "name": "Ojeda Works — One name behind everything we build",
+      "description": "Be the answer, not just an option — Answer Optimization Audit, video, web development, content, and advertising, all under one name: Ojeda Works.",
+      "isPartOf": {
+        "@id": "https://ojedaworks.com/#website"
+      },
+      "about": {
+        "@id": "https://ojedaworks.com/#org"
+      },
+      "speakable": {
+        "@type": "SpeakableSpecification",
+        "cssSelector": [
+          ".hero h1",
+          ".hero .lede"
+        ]
+      }
     },
     {
-      "@type":"FAQPage",
-      "@id":"https://ojedaworks.com/#faq",
-      "mainEntity":[
+      "@type": "FAQPage",
+      "@id": "https://ojedaworks.com/#faq",
+      "mainEntity": [
         {
-          "@type":"Question",
-          "name":"What is Ojeda Works?",
-          "acceptedAnswer":{"@type":"Answer","text":"Ojeda Works is the parent brand over the Answer Optimization Audit and everything else built here — video, website development, content and social, and advertising. One person does the work across all of it, so nothing gets lost between departments."}
+          "@type": "Question",
+          "name": "What is Ojeda Works?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ojeda Works is the parent brand over the Answer Optimization Audit and everything else built here — video, website development, content and social, and advertising. One person does the work across all of it, so nothing gets lost between departments."
+          }
         },
         {
-          "@type":"Question",
-          "name":"Why does Ojeda Works exist?",
-          "acceptedAnswer":{"@type":"Answer","text":"Because most small businesses get handed off between an agency's account manager, a junior designer, and a freelancer who never talks to either — and the work suffers for it. Ojeda Works exists so the person who understands your business is the same person building for it, from the first video to the last line of code."}
+          "@type": "Question",
+          "name": "Why does Ojeda Works exist?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Because most small businesses get handed off between an agency's account manager, a junior designer, and a freelancer who never talks to either — and the work suffers for it. Ojeda Works exists so the person who understands your business is the same person building for it, from the first video to the last line of code."
+          }
         },
         {
-          "@type":"Question",
-          "name":"What's different about working with one person instead of an agency?",
-          "acceptedAnswer":{"@type":"Answer","text":"No handoffs, no waiting on a chain of approvals, and no explaining your business twice. What you get is direct answers, faster turnaround, and work that stays consistent because one person is holding the whole picture in their head."}
+          "@type": "Question",
+          "name": "What's the relationship between Ojeda Works and the Answer Optimization Audit?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Answer Optimization Audit came first — a tool that checks whether AI models like ChatGPT actually recommend a business, and fixes what's stopping them. It's the proof this whole approach works. Ojeda Works is the name over the Answer Optimization Audit and everything built after it."
+          }
         },
         {
-          "@type":"Question",
-          "name":"What's the relationship between Ojeda Works and the Answer Optimization Audit?",
-          "acceptedAnswer":{"@type":"Answer","text":"Answer Optimization Audit came first — a tool that checks whether AI models like ChatGPT actually recommend a business, and fixes what's stopping them. It's the proof this whole approach works. Ojeda Works is the name over the Answer Optimization Audit and everything built after it."}
+          "@type": "Question",
+          "name": "Does Ojeda Works use fake reviews or fabricated stats?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. No fabricated reviews, no invented numbers, no borrowed credentials. If a claim is on this site, it's true and it's checkable — that rule doesn't bend for a better-sounding sentence."
+          }
         },
         {
-          "@type":"Question",
-          "name":"Does Ojeda Works use fake reviews or fabricated stats?",
-          "acceptedAnswer":{"@type":"Answer","text":"No. No fabricated reviews, no invented numbers, no borrowed credentials. If a claim is on this site, it's true and it's checkable — that rule doesn't bend for a better-sounding sentence."}
+          "@type": "Question",
+          "name": "What's different about working with one person instead of an agency?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No handoffs, no waiting on a chain of approvals, and no explaining your business twice. What you get is direct answers, faster turnaround, and work that stays consistent because one person is holding the whole picture in their head."
+          }
         }
       ]
     }
@@ -252,10 +290,6 @@
         <p>Because most small businesses get handed off between an agency's account manager, a junior designer, and a freelancer who never talks to either &mdash; and the work suffers for it. Ojeda Works exists so the person who understands your business is the same person building for it, from the first video to the last line of code.</p>
       </div>
       <div class="card">
-        <h3>What's different about working with one person instead of an agency?</h3>
-        <p>No handoffs, no waiting on a chain of approvals, and no explaining your business twice. What you get is direct answers, faster turnaround, and work that stays consistent because one person is holding the whole picture in their head.</p>
-      </div>
-      <div class="card">
         <h3>What's the relationship between Ojeda Works and the Answer Optimization Audit?</h3>
         <p>Answer Optimization Audit came first &mdash; a tool that checks whether AI models like ChatGPT actually recommend a business, and fixes what's stopping them. It's the proof this whole approach works. Ojeda Works is the name over the Answer Optimization Audit and everything built after it.</p>
       </div>
@@ -263,7 +297,22 @@
         <h3>Does Ojeda Works use fake reviews or fabricated stats?</h3>
         <p>No. No fabricated reviews, no invented numbers, no borrowed credentials. If a claim is on this site, it's true and it's checkable &mdash; that rule doesn't bend for a better-sounding sentence.</p>
       </div>
+      <div class="card">
+        <h3>What's different about working with one person instead of an agency?</h3>
+        <p>No handoffs, no waiting on a chain of approvals, and no explaining your business twice. What you get is direct answers, faster turnaround, and work that stays consistent because one person is holding the whole picture in their head.</p>
+      </div>
     </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Ready to be the answer?</h2>
+    <p class="lede">One email, straight to the person who'd actually do the work. Or start with the audit and see where your business stands today.</p>
+    <p>
+      <a class="btn primary" href="contact.html">Get in touch</a>
+      <a class="btn ghost" href="https://aoaudit.com" target="_blank" rel="noopener">See the Answer Optimization Audit</a>
+    </p>
   </div>
 </section>
 
@@ -275,7 +324,7 @@
 </footer>
 
 <script type="module">
-if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches && matchMedia('(min-width: 761px)').matches) {
   try {
     // let critical content render/settle first; the hero glow fallback covers the wait
     await new Promise(r => 'requestIdleCallback' in window ? requestIdleCallback(r, {timeout: 1500}) : setTimeout(r, 200));

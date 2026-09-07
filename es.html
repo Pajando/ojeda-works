@@ -12,6 +12,38 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <link href="https://fonts.cdnfonts.com/css/sifonn" rel="stylesheet">
 <link rel="stylesheet" href="assets/brand.css">
+<style>
+/* homepage 3D hero — dark stage, rest of site stays light */
+.hero-3d{position:relative;overflow:hidden;background:
+  radial-gradient(1200px 600px at 78% 30%, rgba(91,33,224,.45), transparent 60%),
+  radial-gradient(900px 500px at 15% 85%, rgba(212,83,126,.18), transparent 60%),
+  linear-gradient(160deg,#0b0e1a 0%,#131033 55%,#0b0e1a 100%);
+  padding:5.5rem 0 4.5rem}
+.hero-3d .wrap{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:2rem;align-items:center}
+.hero-3d .eyebrow{color:#b9a5f5;letter-spacing:.14em}
+.hero-3d h1{font-family:'Sifonn','Bricolage Grotesque',sans-serif;font-weight:700;
+  font-size:clamp(2.5rem,6vw,4.2rem);line-height:1.04;margin:0 0 1rem;
+  color:#dcd2ff;text-wrap:balance}
+@supports ((-webkit-background-clip:text) or (background-clip:text)){
+  .hero-3d h1{background:linear-gradient(92deg,#ffffff 0%,#cfc2ff 55%,#8f7bff 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+}
+section.hero-3d p.lede{color:#f2f0fb;font-size:1.22rem;font-weight:500;line-height:1.55;max-width:34rem;margin:0 0 1.5rem;text-shadow:0 1px 12px rgba(11,14,26,.8)}
+.hero-3d .btn.primary{background:linear-gradient(135deg,var(--cta),var(--cta-deep));color:#fff;
+  box-shadow:0 0 28px rgba(219,58,0,.45);border:none}
+.hero-3d .btn.primary:hover{box-shadow:0 0 40px rgba(219,58,0,.7);background:linear-gradient(135deg,var(--cta-deep),var(--cta-press))}
+.hero-3d .btn.ghost{border:1.5px solid #ff5a1f;color:#ffa07e;backdrop-filter:blur(4px)}
+.hero-3d .btn.ghost:hover{border-color:#ff8a5c;color:#ffc4ab;box-shadow:0 0 20px rgba(244,61,0,.35)}
+#hero-stage{position:relative;min-height:340px}
+#hero-canvas{width:100%;height:100%;position:absolute;inset:0;display:block}
+.hero-fallback{position:absolute;inset:0;background:radial-gradient(closest-side,rgba(124,77,255,.5),rgba(91,33,224,.15) 60%,transparent);filter:blur(6px);border-radius:50%}
+@media (max-width:760px){
+  .hero-3d .wrap{grid-template-columns:1fr}
+  #hero-stage{position:absolute;inset:0;min-height:0;opacity:.18;z-index:-1}
+  .hero-3d{padding:4rem 0 3.5rem}
+}
+@media (prefers-reduced-motion: reduce){ #hero-canvas{display:none} }
+</style>
 <link rel="canonical" href="https://ojedaworks.com/es.html">
 <link rel="alternate" hreflang="en" href="https://ojedaworks.com/">
 <link rel="alternate" hreflang="es" href="https://ojedaworks.com/es.html">
@@ -21,8 +53,9 @@
 <meta property="og:title" content="Ojeda Works — Sé la respuesta, no solo una opción">
 <meta property="og:description" content="Sé la respuesta, no solo una opción — Answer Optimization Audit, video, desarrollo web, contenido y publicidad, todo bajo un solo nombre: Ojeda Works.">
 <meta property="og:url" content="https://ojedaworks.com/es.html">
-<meta property="og:image" content="https://ojedaworks.com/assets/logo-512.png">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://ojedaworks.com/assets/og-card.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://ojedaworks.com/assets/og-card.jpg">
 <meta name="twitter:title" content="Ojeda Works — Sé la respuesta, no solo una opción">
 <meta name="twitter:description" content="Sé la respuesta, no solo una opción — Answer Optimization Audit, video, desarrollo web, contenido y publicidad, todo bajo un solo nombre: Ojeda Works.">
 <script type="application/ld+json">
@@ -101,14 +134,6 @@
         },
         {
           "@type": "Question",
-          "name": "¿Atienden en español?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Sí, completamente. Contenido, sitios web y campañas en español hechos como versiones propias, no traducciones de máquina. Puedes escribir en español y recibes respuesta en español, de la misma persona que hace el trabajo."
-          }
-        },
-        {
-          "@type": "Question",
           "name": "¿Cuál es la relación entre Ojeda Works y Answer Optimization Audit?",
           "acceptedAnswer": {
             "@type": "Answer",
@@ -121,6 +146,14 @@
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "No. Ni reseñas fabricadas, ni números inventados, ni credenciales prestadas. Si una afirmación está en este sitio, es verdadera y se puede comprobar."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Atienden en español?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sí, completamente. Contenido, sitios web y campañas en español hechos como versiones propias, no traducciones de máquina. Puedes escribir en español y recibes respuesta en español, de la misma persona que hace el trabajo."
           }
         }
       ]
@@ -139,25 +172,32 @@
     </a>
     <nav class="links">
       <a href="https://aoaudit.com/es.html" target="_blank" rel="noopener">Answer Optimization Audit</a>
-      <a href="video.html">Video</a>
-      <a href="web-development.html">Web</a>
-      <a href="content-social.html">Contenido</a>
-      <a href="advertising.html">Publicidad</a>
-      <a href="about.html">Nosotros</a>
-      <a href="contact.html">Contacto</a>
+      <a href="video.html" hreflang="en">Video <span class="small">(EN)</span></a>
+      <a href="web-development.html" hreflang="en">Web <span class="small">(EN)</span></a>
+      <a href="content-social.html" hreflang="en">Contenido <span class="small">(EN)</span></a>
+      <a href="advertising.html" hreflang="en">Publicidad <span class="small">(EN)</span></a>
+      <a href="about.html" hreflang="en">Nosotros <span class="small">(EN)</span></a>
+      <a href="contacto.html">Contacto</a>
+      <a href="index.html">English</a>
     </nav>
   </div>
 </header>
 
-<section id="main" class="hero">
+<section id="main" class="hero hero-3d">
   <div class="wrap">
-    <span class="eyebrow">La marca principal</span>
-    <h1>Sé la respuesta, no solo una opción.</h1>
-    <p class="lede">Cuando alguien le pregunta a la IA o a Google por lo que tú haces, quieres que tu negocio sea la respuesta &mdash; no uno más en una lista de opciones. Eso es lo que construye cada división de Ojeda Works: Answer Optimization Audit, video, desarrollo web, contenido y publicidad, todo bajo un solo nombre, una sola persona, una sola meta.</p>
-    <p>
-      <a class="btn primary" href="https://aoaudit.com/es.html" target="_blank" rel="noopener">Ver el Answer Optimization Audit</a>
-      <a class="btn ghost" href="contact.html">Escríbenos</a>
-    </p>
+    <div>
+      <span class="eyebrow">La marca principal</span>
+      <h1>Sé la respuesta, no solo una opción.</h1>
+      <p class="lede">Más clientes, en el momento exacto en que buscan lo que tú haces. Esa es la única meta detrás de todo lo que hay aquí &mdash; los videos, los sitios web, el contenido, los anuncios. Un solo nombre, una sola persona, sin movimientos de más.</p>
+      <p>
+        <a class="btn primary" href="https://aoaudit.com/es.html" target="_blank" rel="noopener">Ver el Answer Optimization Audit</a>
+        <a class="btn ghost" href="contacto.html">Escríbenos</a>
+      </p>
+    </div>
+    <div id="hero-stage">
+      <div class="hero-fallback"></div>
+      <canvas id="hero-canvas" aria-hidden="true"></canvas>
+    </div>
   </div>
 </section>
 
@@ -166,25 +206,29 @@
     <h2>Qué hacemos</h2>
     <p class="lede">Cuatro formas de trabajar, todas bajo un mismo nombre y con una sola persona haciendo el trabajo real &mdash; en inglés y en español.</p>
     <div class="grid">
-      <a class="card" href="video.html">
+      <a class="card" href="video.html" hreflang="en">
         <span class="tag">Video</span>
         <h3>Video</h3>
         <p>Video que te convierte en la respuesta, no en más ruido.</p>
+        <p class="small">Página en inglés.</p>
       </a>
-      <a class="card" href="web-development.html">
+      <a class="card" href="web-development.html" hreflang="en">
         <span class="tag">Web</span>
         <h3>Desarrollo Web</h3>
         <p>Sitios que la IA y Google pueden leer y recomendar.</p>
+        <p class="small">Página en inglés.</p>
       </a>
-      <a class="card" href="content-social.html">
+      <a class="card" href="content-social.html" hreflang="en">
         <span class="tag">Contenido</span>
         <h3>Contenido y Redes</h3>
         <p>Palabras que responden la pregunta, no relleno de calendario.</p>
+        <p class="small">Página en inglés.</p>
       </a>
-      <a class="card" href="advertising.html">
+      <a class="card" href="advertising.html" hreflang="en">
         <span class="tag">Publicidad</span>
         <h3>Publicidad</h3>
         <p>Anuncios que ponen la respuesta frente a quien pregunta.</p>
+        <p class="small">Página en inglés.</p>
       </a>
     </div>
   </div>
@@ -199,10 +243,6 @@
         <p>Ojeda Works es la marca principal sobre el Answer Optimization Audit y todo lo demás que se construye aquí — video, desarrollo web, contenido y redes, y publicidad. Una sola persona hace el trabajo en todas las divisiones, así nada se pierde entre departamentos.</p>
       </div>
       <div class="card">
-        <h3>¿Atienden en español?</h3>
-        <p>Sí, completamente. Contenido, sitios web y campañas en español hechos como versiones propias, no traducciones de máquina. Puedes escribir en español y recibes respuesta en español, de la misma persona que hace el trabajo.</p>
-      </div>
-      <div class="card">
         <h3>¿Cuál es la relación entre Ojeda Works y Answer Optimization Audit?</h3>
         <p>Answer Optimization Audit fue lo primero — una herramienta que revisa si los modelos de IA como ChatGPT realmente recomiendan un negocio, y arregla lo que lo impide. Es la prueba de que este enfoque funciona. Ojeda Works es el nombre sobre el Answer Optimization Audit y todo lo que se construye después.</p>
       </div>
@@ -210,11 +250,26 @@
         <h3>¿Usan reseñas falsas o estadísticas inventadas?</h3>
         <p>No. Ni reseñas fabricadas, ni números inventados, ni credenciales prestadas. Si una afirmación está en este sitio, es verdadera y se puede comprobar.</p>
       </div>
+      <div class="card">
+        <h3>¿Atienden en español?</h3>
+        <p>Sí, completamente. Contenido, sitios web y campañas en español hechos como versiones propias, no traducciones de máquina. Puedes escribir en español y recibes respuesta en español, de la misma persona que hace el trabajo.</p>
+      </div>
     </div>
   </div>
 </section>
 
 <section>
+  <div class="wrap">
+    <h2>¿Listo para ser la respuesta?</h2>
+    <p class="lede">Un correo, directo a la persona que haría el trabajo. O empieza con el audit y ve dónde está tu negocio hoy.</p>
+    <p>
+      <a class="btn primary" href="contacto.html">Escríbenos</a>
+      <a class="btn ghost" href="https://aoaudit.com/es.html" target="_blank" rel="noopener">Ver el Answer Optimization Audit</a>
+    </p>
+  </div>
+</section>
+
+<section class="tint">
   <div class="wrap">
     <p class="small">Artículo en español: <a href="cuanto-cuesta-una-pagina-web.html">¿Cuánto cuesta una página web para un negocio pequeño?</a> &middot; <a href="index.html">English version</a></p>
   </div>
@@ -226,6 +281,169 @@
     <div><a href="mailto:alejandro@ojedaworks.com">alejandro@ojedaworks.com</a> &middot; <a href="https://aoaudit.com" target="_blank" rel="noopener">aoaudit.com</a> &middot; <a href="privacidad.html">Privacidad</a> &middot; <a href="terminos.html">Términos</a></div>
   </div>
 </footer>
+
+<script type="module">
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches && matchMedia('(min-width: 761px)').matches) {
+  try {
+    // let critical content render/settle first; the hero glow fallback covers the wait
+    await new Promise(r => 'requestIdleCallback' in window ? requestIdleCallback(r, {timeout: 1500}) : setTimeout(r, 200));
+    const THREE = await import('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js');
+    const canvas = document.getElementById('hero-canvas');
+    const stage = document.getElementById('hero-stage');
+    const renderer = new THREE.WebGLRenderer({canvas, alpha: true, antialias: true});
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    const scene = new THREE.Scene();
+    const cam = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+    cam.position.set(0, 0, 8.8);
+
+    const mat = new THREE.MeshStandardMaterial({
+      color: 0xc7bbff, metalness: 0.5, roughness: 0.22,
+      emissive: 0x8f6bff, emissiveIntensity: 0.8
+    });
+    const oShape = new THREE.Shape();
+    oShape.absarc(0, 0, 1.72, 0, Math.PI * 2, false);
+    const oHole = new THREE.Path();
+    oHole.absarc(0, 0, 1.14, 0, Math.PI * 2, true);
+    oShape.holes.push(oHole);
+    const oGeo = new THREE.ExtrudeGeometry(oShape, {
+      depth: 0.55, bevelEnabled: true, bevelThickness: 0.09,
+      bevelSize: 0.09, bevelSegments: 3, curveSegments: 72
+    });
+    oGeo.translate(0, 0, -0.275);
+    const oMesh = new THREE.Mesh(oGeo, mat);
+    oMesh.position.set(-1.55, 0.3, 0);
+    scene.add(oMesh);
+    const wGroup = new THREE.Group();
+    const bar = () => new THREE.Mesh(new THREE.BoxGeometry(0.5, 2.7, 0.55), mat);
+    const tilt = 0.36;
+    const mk = (xc) => {
+      const l = bar(); l.rotation.z =  tilt; l.position.set(xc - 0.47, 0, 0);
+      const r = bar(); r.rotation.z = -tilt; r.position.set(xc + 0.47, 0, 0);
+      wGroup.add(l, r);
+    };
+    mk(-0.62); mk(0.62);
+    wGroup.position.set(1.7, -0.2, 0);
+    scene.add(wGroup);
+
+    const rings = [
+      { r: 3.45, tube: 0.022, c: 0xff2ea6, tx: 1.25, tz: 0.2,  sp: 0.00028 },
+      { r: 3.85, tube: 0.016, c: 0x2ee6ff, tx: 1.05, tz: -0.5, sp: -0.00021 },
+      { r: 3.15, tube: 0.014, c: 0x8f6bff, tx: 1.45, tz: 0.9,  sp: 0.00016 }
+    ].map(cfg => {
+      const m = new THREE.Mesh(
+        new THREE.TorusGeometry(cfg.r, cfg.tube, 12, 160),
+        new THREE.MeshBasicMaterial({ color: cfg.c, transparent: true, opacity: 0.75,
+          blending: THREE.AdditiveBlending, depthWrite: false })
+      );
+      m.rotation.x = cfg.tx; m.rotation.z = cfg.tz;
+      m.userData.sp = cfg.sp;
+      scene.add(m); return m;
+    });
+
+    const shards = [];
+    for (let i = 0; i < 6; i++) {
+      const e = new THREE.LineSegments(
+        new THREE.EdgesGeometry(new THREE.BoxGeometry(0.22, 0.22, 0.22)),
+        new THREE.LineBasicMaterial({ color: 0x6d5bd0, transparent: true, opacity: 0.5 })
+      );
+      e.position.set((Math.random()-0.5)*7, (Math.random()-0.5)*4.5, -1 - Math.random()*2);
+      e.userData = { rx: (Math.random()-0.5)*0.0006, ry: (Math.random()-0.5)*0.0006 };
+      scene.add(e); shards.push(e);
+    }
+
+    const pCount = 420;
+    const pPos = new Float32Array(pCount * 3);
+    for (let i = 0; i < pCount; i++) {
+      pPos[i*3]   = (Math.random() - 0.5) * 22;
+      pPos[i*3+1] = (Math.random() - 0.5) * 14;
+      pPos[i*3+2] = -2 - Math.random() * 8;
+    }
+    const pGeo = new THREE.BufferGeometry();
+    pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+    const particles = new THREE.Points(pGeo, new THREE.PointsMaterial({
+      color: 0xb9a5f5, size: 0.05, transparent: true, opacity: 0.7,
+      blending: THREE.AdditiveBlending, depthWrite: false
+    }));
+    scene.add(particles);
+
+    const orbiters = [
+      { c: 0xff5a1f, r: 3.1, sp: 0.00045, ph: 0,    sz: 0.09 },
+      { c: 0x9d7bff, r: 3.7, sp: -0.0003, ph: 2.1,  sz: 0.07 },
+      { c: 0xffffff, r: 2.6, sp: 0.00062, ph: 4.2,  sz: 0.05 }
+    ].map(o => {
+      const m = new THREE.Mesh(
+        new THREE.SphereGeometry(o.sz, 16, 16),
+        new THREE.MeshBasicMaterial({ color: o.c })
+      );
+      m.userData = o; scene.add(m); return m;
+    });
+
+    await document.fonts.load('700 96px Sifonn').catch(() => {});
+    const wordSprite = (text) => {
+      const c = document.createElement('canvas');
+      c.width = 512; c.height = 144;
+      const g = c.getContext('2d');
+      g.font = "700 92px Sifonn, 'Bricolage Grotesque', sans-serif";
+      g.textAlign = 'center'; g.textBaseline = 'middle';
+      g.shadowColor = 'rgba(159,123,255,0.9)'; g.shadowBlur = 22;
+      g.fillStyle = '#efeaff';
+      g.fillText(text, 256, 76);
+      const tex = new THREE.CanvasTexture(c);
+      const s = new THREE.Sprite(new THREE.SpriteMaterial({
+        map: tex, transparent: true, depthTest: true
+      }));
+      s.scale.set(2.6, 0.73, 1);
+      scene.add(s); return s;
+    };
+    const ojeda = wordSprite('Ojeda');
+    const works = wordSprite('Works');
+
+    scene.add(new THREE.AmbientLight(0xb9a5f5, 0.55));
+    const l1 = new THREE.PointLight(0x9d7bff, 130); l1.position.set(4, 3, 4); scene.add(l1);
+    const l2 = new THREE.PointLight(0xff7a9e, 80); l2.position.set(-4, -2, 3); scene.add(l2);
+    const l3 = new THREE.PointLight(0xffffff, 60); l3.position.set(0, 4, -3); scene.add(l3);
+
+    let mx = 0, my = 0;
+    addEventListener('pointermove', e => {
+      mx = (e.clientX / innerWidth - 0.5) * 0.6;
+      my = (e.clientY / innerHeight - 0.5) * 0.4;
+    }, {passive: true});
+
+    function size() {
+      const r = stage.getBoundingClientRect();
+      const w = Math.max(r.width, 1), h = Math.max(r.height, 1);
+      renderer.setSize(w, h, false);
+      cam.aspect = w / h; cam.updateProjectionMatrix();
+    }
+    size(); addEventListener('resize', size);
+
+    document.querySelector('.hero-fallback').style.display = 'none';
+    renderer.setAnimationLoop(t => {
+      oMesh.rotation.y = Math.sin(t * 0.0004) * 0.55 + mx;
+      oMesh.rotation.x = Math.sin(t * 0.00027) * 0.22 + my;
+      oMesh.position.y = 0.35 + Math.sin(t * 0.0006) * 0.22;
+      wGroup.rotation.y = -Math.sin(t * 0.00034) * 0.5 - mx * 0.7;
+      wGroup.rotation.x = Math.cos(t * 0.0003) * 0.16 + my * 0.5;
+      wGroup.position.y = -0.25 + Math.cos(t * 0.0005) * 0.2;
+      particles.rotation.y = t * 0.00002;
+      particles.position.y = Math.sin(t * 0.0002) * 0.3;
+      for (const m of orbiters) {
+        const o = m.userData, a = t * o.sp + o.ph;
+        m.position.set(Math.cos(a) * o.r, Math.sin(a * 1.3) * 1.6, Math.sin(a) * 1.2);
+      }
+      for (const r of rings) r.rotation.y = t * r.userData.sp;
+      for (const s of shards) { s.rotation.x += s.userData.rx * 16; s.rotation.y += s.userData.ry * 16; }
+      const a1 = t * 0.00016;
+      ojeda.position.set(Math.cos(a1) * 2.7, Math.sin(a1 * 0.8) * 1.0 + 0.4, Math.sin(a1) * 2.4);
+      ojeda.material.opacity = 0.2 + 0.35 * ((Math.sin(a1) + 1) / 2);
+      const a2 = -t * 0.00013 + 2.6;
+      works.position.set(Math.cos(a2) * 2.9, Math.sin(a2 * 0.9) * 1.1 - 0.4, Math.sin(a2) * 2.6);
+      works.material.opacity = 0.2 + 0.35 * ((Math.sin(a2) + 1) / 2);
+      renderer.render(scene, cam);
+    });
+  } catch (e) { /* WebGL or CDN unavailable: CSS glow fallback stays visible */ }
+}
+</script>
 
 </body>
 </html>
