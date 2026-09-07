@@ -29,6 +29,12 @@ nav.links{display:flex;gap:1.7rem;flex-wrap:wrap;align-items:center}
 nav.links a{color:var(--ink);text-decoration:none;font-size:1.08rem}
 nav.links a:hover{color:var(--accent)}
 nav.links a.current{color:var(--accent-deep);font-weight:600}
+@media (max-width:760px){
+  header.site .wrap{flex-direction:column;align-items:flex-start;gap:.75rem;padding:1rem 1.5rem}
+  .mark .word{font-size:1.15rem}
+  nav.links{gap:.6rem 1.1rem}
+  nav.links a{font-size:.95rem;padding:.35rem 0;display:inline-block}
+}
 
 /* hero */
 .hero{padding:4.5rem 0 3rem}
@@ -38,10 +44,10 @@ nav.links a.current{color:var(--accent-deep);font-weight:600}
 
 /* buttons */
 .btn{display:inline-block;padding:.85rem 1.5rem;border-radius:.4rem;text-decoration:none;font-weight:600;font-size:.98rem}
-.btn.primary{background:linear-gradient(135deg,#ff5a1f,#f43d00);color:#fff}
-.btn.primary:hover{background:linear-gradient(135deg,#ff6d38,#ff5a1f);color:#fff}
-.btn.ghost{border:1.5px solid #f43d00;color:#f43d00}
-.btn.ghost:hover{border-color:#ff5a1f;color:#ff5a1f;background:rgba(244,61,0,.06)}
+.btn.primary{background:linear-gradient(135deg,#db3a00,#c53000);color:#fff}
+.btn.primary:hover{background:linear-gradient(135deg,#c53000,#ad2a00);color:#fff}
+.btn.ghost{border:1.5px solid #cc3300;color:#cc3300}
+.btn.ghost:hover{border-color:#a82a00;color:#a82a00;background:rgba(204,51,0,.06)}
 
 /* cards / grid */
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:1.25rem;margin:2rem 0}
