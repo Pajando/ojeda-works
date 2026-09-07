@@ -85,6 +85,21 @@ section.tint{background:var(--accent-tint)}
 section h2{font-size:clamp(1.6rem,3.4vw,2.2rem);margin:0 0 1rem}
 section p.lede{color:var(--dim);max-width:38rem;margin:0 0 1.5rem}
 
+/* founder band — the dark stage returns mid-page */
+section.founder{background:linear-gradient(160deg,#0b0e1a 0%,#131033 60%,#0b0e1a 100%);color:#f2f0fb}
+.founder h2{color:#ffffff}
+.founder p.lede{color:#c9c4dd}
+.founder a{color:#ffa07e}
+.founder a:hover{color:#ffc4ab}
+.founder-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:2rem;align-items:center}
+.founder-photo{margin:0}
+.founder-photo img{width:100%;max-width:20rem;display:block;margin-left:auto;border-radius:.75rem;
+  box-shadow:0 0 48px rgba(219,58,0,.35)}
+@media (max-width:760px){
+  .founder-grid{grid-template-columns:1fr}
+  .founder-photo img{margin:1rem auto 0;max-width:16rem}
+}
+
 /* footer */
 footer.site{border-top:1px solid var(--line);padding:2.5rem 0;color:var(--dim);font-size:.9rem}
 footer.site .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
