@@ -93,11 +93,11 @@ section.founder{background:linear-gradient(160deg,#0b0e1a 0%,#131033 60%,#0b0e1a
 .founder a:hover{color:#ffc4ab}
 .founder-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:2rem;align-items:center}
 .founder-photo{margin:0}
-.founder-photo img{width:100%;max-width:20rem;display:block;margin-left:auto;border-radius:.75rem;
+.founder-photo img{width:100%;max-width:20rem;height:auto;display:block;margin-left:auto;border-radius:.75rem;
   box-shadow:0 0 48px rgba(219,58,0,.35)}
 @media (max-width:760px){
   .founder-grid{grid-template-columns:1fr}
-  .founder-photo img{margin:1rem auto 0;max-width:16rem}
+  .founder-photo img{margin:1rem auto 0;max-width:13rem}
 }
 
 /* footer */
