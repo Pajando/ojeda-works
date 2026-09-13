@@ -133,6 +133,11 @@
 - [How to write a business description](https://ojedaworks.com/how-to-write-a-business-description.html)
 - [Why is my Instagram not growing?](https://ojedaworks.com/why-is-my-instagram-not-growing.html)
 
+## Free tools
+
+- [Marketing budget calculator](https://ojedaworks.com/marketing-budget-calculator.html): honest budget bands plus break-even customers per month; runs entirely in the browser, no signup
+- [Google review QR code generator](https://ojedaworks.com/google-review-qr-code-generator.html): printable "scan to review us" poster; free, no email, nothing uploaded
+
 ## Related
 
 - [AO Audit](https://aoaudit.com/): the flagship product — checks whether AI models actually recommend a business and fixes what's stopping them
