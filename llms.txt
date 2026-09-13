@@ -136,7 +136,8 @@
 ## Free tools
 
 - [Marketing budget calculator](https://ojedaworks.com/marketing-budget-calculator.html): honest budget bands plus break-even customers per month; runs entirely in the browser, no signup
-- [Google review QR code generator](https://ojedaworks.com/google-review-qr-code-generator.html): printable "scan to review us" poster; free, no email, nothing uploaded
+- [Google review QR code generator](https://ojedaworks.com/google-review-qr-code-generator.html): printable "scan to review us" poster; free, no email, nothing uploaded — also in Spanish at codigo-qr-para-resenas-de-google.html
+- [Website cost calculator](https://ojedaworks.com/website-cost-calculator.html): honest ranges for DIY, freelancer, and agency builds with add-ons; browser-only, no signup
 
 ## Related
 
