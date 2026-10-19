@@ -6,6 +6,7 @@
 
 - [Home](https://ojedaworks.com/): what Ojeda Works is and the four divisions
 - [Video](https://ojedaworks.com/video.html): explainers, short-form ads, and social video built around one true point
+- [Car videos for used car lots](https://ojedaworks.com/car-videos.html): a 30-second vertical video of one car, made from the listing photos a lot already has; free sample of one car (Spanish: https://ojedaworks.com/videos-de-carros.html)
 - [Website Development](https://ojedaworks.com/web-development.html): fast static sites with schema markup AI models can read
 - [Content & Social](https://ojedaworks.com/content-social.html): copy and social content in English and Spanish, written to answer real customer questions
 - [Advertising](https://ojedaworks.com/advertising.html): campaigns built around one real offer with tracked results
