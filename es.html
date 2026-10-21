@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ojeda Works — Sé la respuesta, no solo una opción</title>
+<title>Ojeda Works: Más clientes para tu negocio local | Napa, CA</title>
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<meta name="description" content="Sé la respuesta, no solo una opción — Answer Optimization Audit, video, desarrollo web, contenido y publicidad, todo bajo un solo nombre: Ojeda Works.">
+<meta name="description" content="¿Tus clientes no te encuentran? Ojeda Works hace el video, el desarrollo web, el contenido y la publicidad que te traen clientes. Napa, CA. En español.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -43,6 +43,138 @@ section.hero-3d p.lede{color:#f2f0fb;font-size:1.22rem;font-weight:500;line-heig
   .hero-3d{padding:4rem 0 3.5rem}
 }
 @media (prefers-reduced-motion: reduce){ #hero-canvas{display:none} }
+section.hero-3d p.small{color:#c9c4dd;max-width:34rem;margin:.75rem 0 0}
+section.hero-3d p.hero-honest{margin-top:.5rem}
+.songs-line{margin:0;color:var(--dim)}
+</style>
+<script>
+/* walk-through gate: decide BEFORE first paint so the layout never shifts.
+   No JS, reduced motion, save-data, no WebGL or a very weak device = the plain page. */
+(function(){try{var d=document.documentElement,n=navigator,c=n.connection;
+if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+if(c&&c.saveData)return;
+if(!('WebGLRenderingContext' in window))return;
+if((n.hardwareConcurrency||4)<3)return;
+if(n.deviceMemory&&n.deviceMemory<2)return;
+if(/[?&]walk=0\b/.test(location.search))return;
+d.classList.add('walk');}catch(e){}})();
+</script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<style>
+/* ===== 3D walk-through layer (only when html.walk is set by the gate above) =====
+   Style borrowed (not copied) from the apple.com taste notes, in Ojeda Works tokens:
+   two surfaces only (ink panels + cream footer), the 3D scene carries the color,
+   one accent (CTA orange-red) for everything clickable, pill buttons, small chrome,
+   12px gaps, no shadows, cubic-bezier(.4,0,.6,1) at .24-.32s. */
+#walk-canvas,.walk-sky{display:none}
+html.walk{--w-ink:rgba(15,20,32,.88);--w-ink-solid:#0f1420;--w-cream:#f2eee4;
+  --w-acc:#db3a00;--w-acc-on-dark:#ff7a45;--w-acc-on-light:#b83000;--w-ease:cubic-bezier(.4,0,.6,1);
+  --w-text:#f2eee4;--w-text-2:rgba(242,238,228,.78);--w-text-3:rgba(242,238,228,.62);
+  background:#0a0d18;color-scheme:dark}
+html.walk body{background:transparent;color:var(--w-text)}
+html.walk .walk-sky{display:block;position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background:linear-gradient(180deg,#070a14 0%,#0d1124 48%,#151633 62%,#0c0e18 63%,#0a0d16 100%)}
+html.walk #walk-canvas{display:block;position:fixed;inset:0;width:100%;height:100%;z-index:-1;
+  opacity:0;transition:opacity .9s var(--w-ease);pointer-events:none}
+html.walk-live #walk-canvas{opacity:1}
+
+/* small chrome: the content is the loudest thing */
+html.walk header.site{background:var(--w-ink);border-bottom:1px solid rgba(242,238,228,.08)}
+html.walk header.site .wrap{padding:.6rem 1.5rem;gap:1rem}
+html.walk .mark{color:var(--w-text)}
+html.walk .mark .word{font-size:1rem}
+html.walk nav.links{gap:.25rem 1.25rem}
+html.walk nav.links a{color:var(--w-text-2);font-size:.8rem;transition:color .32s var(--w-ease)}
+html.walk nav.links a:hover{color:var(--w-acc-on-dark)}
+html.walk footer.site{background:var(--w-cream);border-top:0;color:rgba(15,20,32,.66);font-size:.75rem}
+html.walk footer.site a{color:var(--w-acc-on-light);transition:color .32s var(--w-ease)}
+html.walk footer.site a:hover{color:#8f2500}
+
+/* sections become transparent; words sit on ink panels on the left */
+html.walk section,html.walk section.tint,html.walk section.founder,html.walk .hero-3d{background:transparent}
+html.walk section[data-station]{padding:22vh 0}
+html.walk .hero-3d[data-station]{padding:0;min-height:calc(100svh - 4rem);display:flex;align-items:center}
+html.walk .hero-3d .wrap{display:block;width:100%}
+html.walk #hero-stage{display:none}
+html.walk section.car-promo{padding:16vh 0}
+html.walk .hero-3d .wrap>div:first-child,
+html.walk section.car-promo .card,
+html.walk .walk-svc>.card,
+html.walk section:not(.hero-3d):not(.car-promo):not(.walk-svc-sec)>.wrap{
+  background:var(--w-ink);border:0;border-radius:18px;box-shadow:none;
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+html.walk .hero-3d .wrap>div:first-child{padding:2.25rem;max-width:38rem}
+html.walk section:not(.hero-3d):not(.car-promo):not(.walk-svc-sec)>.wrap{padding:2.25rem;max-width:40rem;margin-left:max(1rem,calc(50% - 32rem));margin-right:auto}
+html.walk .hero-3d .wrap,html.walk .walk-svc-sec>.wrap,html.walk section.car-promo>.wrap{max-width:var(--max)}
+html.walk section.car-promo .card{max-width:40rem;column-gap:1.5rem}
+html.walk .walk-svc-sec>.wrap>h2,html.walk .walk-svc-sec>.wrap>p.lede{background:var(--w-ink);max-width:36rem;margin:0;
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+html.walk .walk-svc-sec>.wrap>h2{padding:2rem 2.25rem .5rem;border-radius:18px 18px 0 0}
+html.walk .walk-svc-sec>.wrap>p.lede{padding:0 2.25rem 2rem;border-radius:0 0 18px 18px}
+html.walk .grid{grid-template-columns:1fr;gap:12px;margin:1.5rem 0 0}
+html.walk .grid.walk-svc{grid-template-columns:minmax(0,34rem);gap:62vh;margin:62vh 0 62vh}
+html.walk .walk-svc-sec .songs-line{background:var(--w-ink);max-width:34rem;padding:1.5rem 2rem;border-radius:18px;margin:0 0 30vh;color:var(--w-text-2);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+html.walk section.hero-3d p.small{color:var(--w-text-3);font-size:.9rem}
+html.walk section.hero-3d p.hero-honest{color:var(--w-text-2);border-top:1px solid rgba(242,238,228,.12);padding-top:.75rem;margin-top:1rem}
+/* cards inside a panel: same ink surface, separated by a hairline, no third tint */
+html.walk section .wrap .card{background:transparent;border:0;border-top:1px solid rgba(242,238,228,.12);border-radius:0;padding:1.1rem 0 0}
+html.walk section .wrap .walk-svc>.card,html.walk section.car-promo .wrap .card{background:var(--w-ink);border:0;border-radius:18px;padding:1.75rem 2rem}
+html.walk a.card{transition:background-color .24s var(--w-ease)}
+html.walk a.card:hover{border-color:transparent}
+html.walk section .wrap .walk-svc>a.card:hover{background:rgba(15,20,32,.97)}
+html.walk a.card:hover h3{color:var(--w-acc-on-dark)}
+html.walk .founder-grid{grid-template-columns:1fr}
+html.walk .founder-photo img{margin:1rem 0 0;max-width:12rem;box-shadow:none;border-radius:12px}
+html.walk .car-promo .thumb{border-radius:12px}
+
+/* type: station title big and 600, one supporting line, then actions.
+   Brand fonts kept (Sifonn / Bricolage Grotesque / IBM Plex Sans), not Apple's. */
+html.walk h1,html.walk h2,html.walk h3{color:var(--w-text)}
+html.walk .hero-3d h1{background:none;-webkit-background-clip:border-box;background-clip:border-box;color:var(--w-text);
+  font-size:clamp(2.5rem,5.2vw,3.5rem);line-height:1.07}
+html.walk section h2{font-weight:600;font-size:clamp(1.9rem,4vw,3.5rem);line-height:1.07;letter-spacing:-.01em}
+html.walk .car-promo h2{font-size:clamp(1.5rem,2.6vw,2.25rem)}
+html.walk .walk-svc .card h3{font-size:clamp(1.5rem,2.4vw,1.75rem);font-weight:600;margin-bottom:.4rem}
+html.walk section p.lede,html.walk .founder p.lede,html.walk section.hero-3d p.lede{color:var(--w-text-2);font-size:clamp(1.1rem,1.6vw,1.3rem);font-weight:400;line-height:1.45;text-shadow:none}
+html.walk .card p{color:var(--w-text-2)}
+html.walk .car-promo .card p{color:var(--w-text-2)}
+html.walk .eyebrow,html.walk .card .tag,html.walk .hero-3d .eyebrow{color:var(--w-text-3);letter-spacing:.08em}
+html.walk .small{color:var(--w-text-3)}
+
+/* one accent for every clickable thing: fill = primary, outline = secondary, text = links */
+html.walk .btn{border-radius:980px;padding:.7rem 1.4rem;font-weight:500;transition:background-color .32s var(--w-ease),color .32s var(--w-ease),border-color .32s var(--w-ease),transform .24s var(--w-ease)}
+html.walk .btn.primary,html.walk .hero-3d .btn.primary{background:var(--w-acc);color:#fff;border:1.5px solid var(--w-acc);box-shadow:none}
+html.walk .btn.primary:hover,html.walk .hero-3d .btn.primary:hover{background:var(--cta-deep);border-color:var(--cta-deep);box-shadow:none;color:#fff}
+html.walk .btn.ghost,html.walk .hero-3d .btn.ghost{background:transparent;border:1.5px solid var(--w-acc-on-dark);color:var(--w-acc-on-dark);box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+html.walk .btn.ghost:hover,html.walk .hero-3d .btn.ghost:hover{background:rgba(255,122,69,.1);border-color:var(--w-acc-on-dark);color:var(--w-acc-on-dark);box-shadow:none}
+html.walk section p:has(> .btn){display:flex;flex-wrap:wrap;gap:12px}
+html.walk section a:not(.btn):not(.card){color:var(--w-acc-on-dark);transition:color .32s var(--w-ease)}
+html.walk section a:not(.btn):not(.card):hover{color:#ffa07e}
+html.walk .skip{transition:top .24s var(--w-ease)}
+
+@media (max-width:760px){
+  html.walk header.site .wrap{flex-direction:row;flex-wrap:wrap;align-items:center;padding:.6rem 1rem;gap:.35rem 1rem}
+  html.walk nav.links{gap:0 .9rem}
+  html.walk nav.links a{font-size:.78rem;padding:.4rem 0}
+  /* phones: the 3D object sits in the top part of the screen; text starts below it */
+  html.walk section[data-station]{padding:30svh 0 8svh}
+  html.walk .hero-3d[data-station]{padding:33svh 0 2rem;min-height:0;display:block}
+  html.walk section.walk-svc-sec{padding-top:55svh}
+  html.walk section[data-station="open"]{padding-top:42svh}
+  html.walk .hero-3d .wrap>div:first-child,
+  html.walk section:not(.hero-3d):not(.car-promo):not(.walk-svc-sec)>.wrap{padding:1.5rem 1.25rem;margin:0 .75rem;max-width:none}
+  html.walk .hero-3d .wrap,html.walk .walk-svc-sec>.wrap,html.walk section.car-promo>.wrap{padding:0 .75rem}
+  html.walk .walk-svc-sec>.wrap>h2{padding:1.5rem 1.25rem .4rem}
+  html.walk .walk-svc-sec>.wrap>p.lede{padding:0 1.25rem 1.5rem}
+  html.walk section .wrap .walk-svc>.card,html.walk section.car-promo .wrap .card{padding:1.5rem 1.25rem}
+  html.walk .grid.walk-svc{gap:52svh;margin:52svh 0 52svh;grid-template-columns:minmax(0,1fr)}
+  html.walk .walk-svc-sec .songs-line{padding:1.25rem;margin-bottom:20svh;background:rgba(15,20,32,.93);-webkit-backdrop-filter:none;backdrop-filter:none}
+  /* blur is costly on phones: a more opaque ink panel instead */
+  html.walk .hero-3d .wrap>div:first-child,html.walk section.car-promo .wrap .card,
+  html.walk section .wrap .walk-svc>.card,html.walk .walk-svc-sec>.wrap>h2,html.walk .walk-svc-sec>.wrap>p.lede,
+  html.walk section:not(.hero-3d):not(.car-promo):not(.walk-svc-sec)>.wrap{
+    -webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(15,20,32,.93)}
+}
 </style>
 <link rel="canonical" href="https://ojedaworks.com/es.html">
 <link rel="alternate" hreflang="en" href="https://ojedaworks.com/">
@@ -50,14 +182,14 @@ section.hero-3d p.lede{color:#f2f0fb;font-size:1.22rem;font-weight:500;line-heig
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Ojeda Works">
-<meta property="og:title" content="Ojeda Works — Sé la respuesta, no solo una opción">
-<meta property="og:description" content="Sé la respuesta, no solo una opción — Answer Optimization Audit, video, desarrollo web, contenido y publicidad, todo bajo un solo nombre: Ojeda Works.">
+<meta property="og:title" content="Ojeda Works: Más clientes para tu negocio local | Napa, CA">
+<meta property="og:description" content="¿Tus clientes no te encuentran? Ojeda Works hace el video, el desarrollo web, el contenido y la publicidad que te traen clientes. Napa, CA. En español.">
 <meta property="og:url" content="https://ojedaworks.com/es.html">
 <meta property="og:image" content="https://ojedaworks.com/assets/og-card.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://ojedaworks.com/assets/og-card.jpg">
-<meta name="twitter:title" content="Ojeda Works — Sé la respuesta, no solo una opción">
-<meta name="twitter:description" content="Sé la respuesta, no solo una opción — Answer Optimization Audit, video, desarrollo web, contenido y publicidad, todo bajo un solo nombre: Ojeda Works.">
+<meta name="twitter:title" content="Ojeda Works: Más clientes para tu negocio local | Napa, CA">
+<meta name="twitter:description" content="¿Tus clientes no te encuentran? Ojeda Works hace el video, el desarrollo web, el contenido y la publicidad que te traen clientes. Napa, CA. En español.">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -68,7 +200,7 @@ section.hero-3d p.lede{color:#f2f0fb;font-size:1.22rem;font-weight:500;line-heig
       "name": "Ojeda Works",
       "url": "https://ojedaworks.com/",
       "logo": "https://ojedaworks.com/assets/logo-512.png",
-      "description": "Ojeda Works is the parent brand over the Answer Optimization Audit, video, website development, content and social, and advertising.",
+      "description": "Ojeda Works makes the video, websites, content and ads that help local businesses get found and called, plus the Answer Optimization Audit and custom songs. Napa, CA.",
       "founder": {
         "@type": "Person",
         "name": "Alejandro Ojeda",
@@ -113,8 +245,8 @@ section.hero-3d p.lede{color:#f2f0fb;font-size:1.22rem;font-weight:500;line-heig
       "@type": "WebPage",
       "@id": "https://ojedaworks.com/es.html#webpage",
       "url": "https://ojedaworks.com/es.html",
-      "name": "Ojeda Works — Sé la respuesta, no solo una opción",
-      "description": "Sé la respuesta, no solo una opción — Answer Optimization Audit, video, desarrollo web, contenido y publicidad, todo bajo un solo nombre: Ojeda Works.",
+      "name": "Ojeda Works: Más clientes para tu negocio local | Napa, CA",
+      "description": "¿Tus clientes no te encuentran? Ojeda Works hace el video, el desarrollo web, el contenido y la publicidad que te traen clientes. Napa, CA. En español.",
       "isPartOf": {
         "@id": "https://ojedaworks.com/#website"
       },
@@ -139,7 +271,15 @@ section.hero-3d p.lede{color:#f2f0fb;font-size:1.22rem;font-weight:500;line-heig
           "name": "¿Qué es Ojeda Works?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Ojeda Works es la marca principal sobre el Answer Optimization Audit y todo lo demás que se construye aquí — video, desarrollo web, contenido y redes, y publicidad. Una sola persona hace el trabajo en todas las divisiones, así nada se pierde entre departamentos."
+            "text": "Recibes un solo lugar para lo que trae clientes: video, desarrollo web, contenido y redes, y publicidad. Una sola persona lo hace todo. También incluye una revisión gratis de si Google y la IA pueden leer tu página."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Esto me va a poner en el primer lugar de Google?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No, y ten cuidado con quien te diga que sí. La página de ayuda de Google dice que no hay forma de pedir ni pagar por un mejor lugar en los resultados locales. Dependen sobre todo de qué tan relevante eres, la distancia y qué tan conocido es tu negocio. Nadie te puede prometer un lugar. Lo que recibes es el trabajo que te da una oportunidad real: un sitio claro, un perfil de Google al día y contenido que responde lo que preguntan los clientes. Fuente: Ayuda de Google Business Profile, \"Cómo mejorar tu posición en las búsquedas locales de Google\""
           }
         },
         {
@@ -147,7 +287,7 @@ section.hero-3d p.lede{color:#f2f0fb;font-size:1.22rem;font-weight:500;line-heig
           "name": "¿Cuál es la relación entre Ojeda Works y Answer Optimization Audit?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Answer Optimization Audit fue lo primero — una herramienta que revisa si los modelos de IA como ChatGPT realmente recomiendan un negocio, y arregla lo que lo impide. Es la prueba de que este enfoque funciona. Ojeda Works es el nombre sobre el Answer Optimization Audit y todo lo que se construye después."
+            "text": "El audit es como te enteras si la IA recomienda tu negocio y qué se lo impide. Fue lo primero y ya está funcionando. Ojeda Works es el nombre sobre el audit y sobre el video, la web, el contenido y los anuncios que arreglan lo que el audit encuentra."
           }
         },
         {
@@ -155,7 +295,15 @@ section.hero-3d p.lede{color:#f2f0fb;font-size:1.22rem;font-weight:500;line-heig
           "name": "¿Usan reseñas falsas o estadísticas inventadas?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "No. Ni reseñas fabricadas, ni números inventados, ni credenciales prestadas. Si una afirmación está en este sitio, es verdadera y se puede comprobar."
+            "text": "No. No hay reseñas fabricadas, ni números inventados, ni credenciales prestadas. Si algo está en este sitio, es verdad y lo puedes comprobar."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Qué cambia al trabajar con una sola persona en vez de una agencia?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No esperas una cadena de aprobaciones y no explicas tu negocio dos veces. En mi experiencia, eso se traduce en respuestas directas y entregas más rápidas, y un trabajo parejo porque una sola persona tiene todo el panorama. Muchos negocios pequeños terminan pasando de un gerente de cuenta a un diseñador junior y a un freelancer que no se hablan entre sí. Aquí, quien entiende tu negocio es quien lo construye."
           }
         },
         {
@@ -163,7 +311,7 @@ section.hero-3d p.lede{color:#f2f0fb;font-size:1.22rem;font-weight:500;line-heig
           "name": "¿Atienden en español?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Sí, completamente. Contenido, sitios web y campañas en español hechos como versiones propias, no traducciones de máquina. Puedes escribir en español y recibes respuesta en español, de la misma persona que hace el trabajo."
+            "text": "Sí, completamente. Puedes escribir en español y te contesta en español la misma persona que hace el trabajo. Tu contenido, tu sitio y tus campañas se escriben en español desde el principio, no los pasamos por un traductor automático."
           }
         }
       ]
@@ -174,6 +322,8 @@ section.hero-3d p.lede{color:#f2f0fb;font-size:1.22rem;font-weight:500;line-heig
 </head>
 <body>
 <a class="skip" href="#main">Saltar al contenido</a>
+<div class="walk-sky" aria-hidden="true"></div>
+<canvas id="walk-canvas" aria-hidden="true"></canvas>
 
 <header class="site">
   <div class="wrap">
@@ -193,27 +343,27 @@ section.hero-3d p.lede{color:#f2f0fb;font-size:1.22rem;font-weight:500;line-heig
   </div>
 </header>
 
-<section id="main" class="hero hero-3d">
+<section id="main" class="hero hero-3d" data-station="street">
   <div class="wrap">
     <div>
-      <span class="eyebrow">La marca principal</span>
-      <h1>Sé la respuesta, no solo una opción.</h1>
-      <p class="lede">Más clientes, en el momento exacto en que buscan lo que tú haces. Esa es la única meta detrás de todo lo que hay aquí &mdash; los videos, los sitios web, el contenido, los anuncios. Un solo nombre, una sola persona, sin movimientos de más.</p>
+      <span class="eyebrow">Para negocios locales en Napa y el Bay Area. En español o en inglés.</span>
+      <h1>Si los clientes no te encuentran, le llaman a otro.</h1>
+      <p class="lede">Recibes los videos, la página web, las publicaciones y los anuncios para que te encuentren y te llamen. Una sola persona lo hace todo.</p>
       <p>
-        <a class="btn primary" href="https://aoaudit.com/es.html" target="_blank" rel="noopener">Ver el Answer Optimization Audit</a>
-        <a class="btn ghost" href="contacto.html">Escríbenos</a>
+        <a class="btn primary" href="https://aoaudit.com/es.html" target="_blank" rel="noopener">Mira lo que Google y la IA ven en tu página. Gratis.</a>
+        <a class="btn ghost" href="contacto.html">Escríbele a Alejandro</a>
       </p>
+      <p class="small hero-small">Como 60 segundos. ¿No tienes página? Escríbele a Alejandro.</p>
+      <p class="small hero-honest">También nos revisamos a nosotros mismos: la IA todavía no nombra a Ojeda Works (20 de oct. de 2026). Hacemos el mismo trabajo que haríamos para ti, y lo actualizamos cada mes.</p>
     </div>
-    <div id="hero-stage">
     <div id="hero-stage">
       <div class="hero-fallback"></div>
       <canvas id="hero-canvas" aria-hidden="true"></canvas>
     </div>
-    </div>
   </div>
 </section>
 
-<section class="car-promo" aria-labelledby="car-promo-h">
+<section class="car-promo" aria-labelledby="car-promo-h" data-station="car">
   <div class="wrap">
     <div class="card">
       <a class="thumb" href="videos-de-carros.html">
@@ -222,88 +372,148 @@ section.hero-3d p.lede{color:#f2f0fb;font-size:1.22rem;font-weight:500;line-heig
       </a>
       <div class="body">
         <span class="tag">Nuevo &middot; Lotes de autos</span>
-        <h2 id="car-promo-h">¿Tiene un carro que no se vende en el lote?</h2>
-        <p>Hagamos que la gente sí se pare a verlo. El video del primero es gratis.</p>
+        <h2 id="car-promo-h">Un carro que lleva tiempo parado es dinero que no se mueve.</h2>
+        <p>La gente pasa de largo. Tú recibes un video corto que les da una razón para parar y preguntar. El video de tu primer carro es gratis.</p>
       </div>
       <p class="cta"><a class="btn primary" href="videos-de-carros.html">Que se paren a ver mi carro</a></p>
     </div>
   </div>
 </section>
 
-<section>
+<section class="walk-svc-sec">
   <div class="wrap">
-    <h2>Qué hacemos</h2>
-    <p class="lede">Cuatro formas de trabajar, todas bajo un mismo nombre y con una sola persona haciendo el trabajo real &mdash; en inglés y en español.</p>
-    <div class="grid grid-2">
-      <a class="card" href="video.html" hreflang="en">
+    <h2 data-station="found">Lo que recibes</h2>
+    <p class="lede">Empieza por lo que más te urge. Una sola persona hace el trabajo, en español o en inglés.</p>
+    <div class="grid grid-2 walk-svc">
+      <a class="card" data-station="video" href="video.html" hreflang="en">
         <span class="tag">Video</span>
         <h3>Video</h3>
-        <p>Video que te convierte en la respuesta, no en más ruido.</p>
+        <p>La gente pasa de largo frente a negocios como el tuyo. Recibes video que les da una razón para parar, acordarse de ti y llamar.</p>
         <p class="small">Página en inglés.</p>
       </a>
-      <a class="card" href="web-development.html" hreflang="en">
+      <a class="card" data-station="web" href="web-development.html" hreflang="en">
         <span class="tag">Web</span>
         <h3>Desarrollo Web</h3>
-        <p>Sitios que la IA y Google pueden leer y recomendar.</p>
+        <p>Tu sitio existe pero los clientes no entienden qué haces. Recibes un sitio claro para la gente, y que Google y la IA pueden leer con claridad.</p>
         <p class="small">Página en inglés.</p>
       </a>
-      <a class="card" href="content-social.html" hreflang="en">
+      <a class="card" data-station="content" href="content-social.html" hreflang="en">
         <span class="tag">Contenido</span>
         <h3>Contenido y Redes</h3>
-        <p>Palabras que responden la pregunta, no relleno de calendario.</p>
+        <p>Las publicaciones que nadie ve no traen a nadie. Recibes publicaciones que responden lo que tus clientes de verdad preguntan.</p>
         <p class="small">Página en inglés.</p>
       </a>
-      <a class="card" href="advertising.html" hreflang="en">
+      <a class="card" data-station="ads" href="advertising.html" hreflang="en">
         <span class="tag">Publicidad</span>
         <h3>Publicidad</h3>
-        <p>Anuncios que ponen la respuesta frente a quien pregunta.</p>
+        <p>La gente pregunta y aparece alguien más. Recibes anuncios frente a la persona que pregunta, justo cuando pregunta.</p>
         <p class="small">Página en inglés.</p>
+      </a>
+    </div>
+    <p class="songs-line" data-station="songs">También: canciones personalizadas para cumpleaños y bodas en <a href="https://myownhit.com" target="_blank" rel="noopener">My Own Hit (myownhit.com)</a>.</p>
+  </div>
+</section>
+
+<section class="tint" data-station="audit">
+  <div class="wrap">
+    <span class="eyebrow">Lo sabes en como 60 segundos</span>
+    <h2>Cuando alguien le pregunta a la IA a quién llamar, ¿puede leer tu página?</h2>
+    <p class="lede">Pones tu página y tu correo, y en como 60 segundos recibes gratis tu resultado de lo que Google y la IA pueden leer en tu página, más tu lista de qué arreglar por correo. Más dos pruebas rápidas en ChatGPT que haces tú para ver si te nombra.</p>
+    <p><a class="btn primary" href="https://aoaudit.com/es.html" target="_blank" rel="noopener">Revisa mi página. Gratis.</a></p>
+    <div class="card" style="margin-top:2rem">
+      <span class="tag">La prueba honesta</span>
+      <h3>Corrimos nuestro propio audit sobre nosotros mismos.</h3>
+      <p>El 13 de octubre de 2026, preguntamos qué sabe la IA sobre un negocio de Napa con seis semanas de vida llamado Ojeda Works, y la respuesta honesta fue: todavía nada. 0 menciones en 3 revisiones; cuatro servicios nacionales nombrados en nuestro lugar. Ese es el punto de partida real en el que están muchos negocios &mdash; y es exactamente lo que el audit te muestra del tuyo, sin endulzar nada. Publicamos nuestro propio resultado porque ese es el estándar al que se somete tu reporte.</p>
+      <p class="small" style="margin-top:.75rem">Revisado el 20 de octubre de 2026: 0 menciones en 4 revisiones &middot; se revisa cada mes</p>
+    </div>
+  </div>
+</section>
+
+<section data-station="steps">
+  <div class="wrap">
+    <h2>Cómo funciona: sin formularios ni vueltas</h2>
+    <div class="grid">
+      <div class="card">
+        <span class="tag">01</span>
+        <h3>Mandas un correo.</h3>
+        <p>Le llega directo a Alejandro, la persona que hace el trabajo. Sin formulario, sin gerente de cuenta.</p>
+      </div>
+      <div class="card">
+        <span class="tag">02</span>
+        <h3>Me cuentas qué no está funcionando.</h3>
+        <p>Te digo claro qué está fallando, antes de construir nada.</p>
+      </div>
+      <div class="card">
+        <span class="tag">03</span>
+        <h3>Lo recibes hecho y entregado.</h3>
+        <p>La misma persona lo hace de principio a fin, y tú explicas tu negocio una sola vez.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-station="tools">
+  <div class="wrap">
+    <h2>Herramientas gratis. Sin correo, sin trampa.</h2>
+    <p class="lede">¿No sabes cuánto gastar ni cuál es un precio justo? Úsalas en tu navegador. Nada de lo que escribas se envía a ningún lado.</p>
+    <div class="grid">
+      <a class="card" href="marketing-budget-calculator.html" hreflang="en">
+        <h3>Presupuesto de marketing</h3>
+        <p>¿No sabes cuánto gastar? Recibes rangos de presupuesto honestos según tus ventas y tu meta, y cuántos clientes al mes tiene que traerte para recuperar lo que inviertes.</p>
+        <p class="small">Página en inglés.</p>
+      </a>
+      <a class="card" href="website-cost-calculator.html" hreflang="en">
+        <h3>Costo del sitio web</h3>
+        <p>¿Te da miedo que te salgan con un precio loco? Ves cuánto cuesta de verdad un sitio, hecho por ti, por un freelancer o por una agencia, desde una página hasta una tienda en línea.</p>
+        <p class="small">Página en inglés.</p>
+      </a>
+      <a class="card" href="codigo-qr-para-resenas-de-google.html">
+        <h3>Código QR para reseñas</h3>
+        <p>¿Tus clientes contentos se van sin dejar reseña? Recibes un cartel para imprimir con "escanea y déjanos tu reseña" para el mostrador. Sin registro, sin marca de agua.</p>
       </a>
     </div>
   </div>
 </section>
 
-<section>
-  <div class="wrap">
-    <div class="card">
-      <span class="tag">La prueba honesta</span>
-      <h3>Corrimos nuestro propio audit sobre nosotros mismos.</h3>
-      <p>Preguntamos qué sabe la IA sobre un negocio de Napa con seis semanas de vida llamado Ojeda Works, y la respuesta honesta fue: todavía nada. 0 menciones en 3 revisiones; cuatro servicios nacionales nombrados en nuestro lugar. Ese es el punto de partida real en el que están la mayoría de los negocios &mdash; y es exactamente lo que el audit te muestra del tuyo, sin endulzar nada. Publicamos nuestro propio resultado porque ese es el estándar al que se somete tu reporte.</p>
-      <p class="small" style="margin-top:.75rem">Revisado el 13 de octubre de 2026 &middot; se revisa cada mes</p>
-    </div>
-  </div>
-</section>
-
-<section class="tint">
+<section class="tint" data-station="faq">
   <div class="wrap">
     <h2>Preguntas frecuentes</h2>
     <div class="grid" style="grid-template-columns:1fr">
       <div class="card">
         <h3>¿Qué es Ojeda Works?</h3>
-        <p>Ojeda Works es la marca principal sobre el Answer Optimization Audit y todo lo demás que se construye aquí — video, desarrollo web, contenido y redes, y publicidad. Una sola persona hace el trabajo en todas las divisiones, así nada se pierde entre departamentos.</p>
+        <p>Recibes un solo lugar para lo que trae clientes: video, desarrollo web, contenido y redes, y publicidad. Una sola persona lo hace todo. También incluye una revisión gratis de si Google y la IA pueden leer tu página.</p>
+      </div>
+      <div class="card">
+        <h3>¿Esto me va a poner en el primer lugar de Google?</h3>
+        <p>No, y ten cuidado con quien te diga que sí. La página de ayuda de Google dice que no hay forma de pedir ni pagar por un mejor lugar en los resultados locales. Dependen sobre todo de qué tan relevante eres, la distancia y qué tan conocido es tu negocio. Nadie te puede prometer un lugar. Lo que recibes es el trabajo que te da una oportunidad real: un sitio claro, un perfil de Google al día y contenido que responde lo que preguntan los clientes.</p>
+        <p class="small" style="margin-top:.75rem">Fuente: <a href="https://support.google.com/business/answer/7091" target="_blank" rel="noopener">Ayuda de Google Business Profile, "Cómo mejorar tu posición en las búsquedas locales de Google"</a></p>
       </div>
       <div class="card">
         <h3>¿Cuál es la relación entre Ojeda Works y Answer Optimization Audit?</h3>
-        <p>Answer Optimization Audit fue lo primero — una herramienta que revisa si los modelos de IA como ChatGPT realmente recomiendan un negocio, y arregla lo que lo impide. Es la prueba de que este enfoque funciona. Ojeda Works es el nombre sobre el Answer Optimization Audit y todo lo que se construye después.</p>
+        <p>El audit es como te enteras si la IA recomienda tu negocio y qué se lo impide. Fue lo primero y ya está funcionando. Ojeda Works es el nombre sobre el audit y sobre el video, la web, el contenido y los anuncios que arreglan lo que el audit encuentra.</p>
       </div>
       <div class="card">
         <h3>¿Usan reseñas falsas o estadísticas inventadas?</h3>
-        <p>No. Ni reseñas fabricadas, ni números inventados, ni credenciales prestadas. Si una afirmación está en este sitio, es verdadera y se puede comprobar.</p>
+        <p>No. No hay reseñas fabricadas, ni números inventados, ni credenciales prestadas. Si algo está en este sitio, es verdad y lo puedes comprobar.</p>
+      </div>
+      <div class="card">
+        <h3>¿Qué cambia al trabajar con una sola persona en vez de una agencia?</h3>
+        <p>No esperas una cadena de aprobaciones y no explicas tu negocio dos veces. En mi experiencia, eso se traduce en respuestas directas y entregas más rápidas, y un trabajo parejo porque una sola persona tiene todo el panorama. Muchos negocios pequeños terminan pasando de un gerente de cuenta a un diseñador junior y a un freelancer que no se hablan entre sí. Aquí, quien entiende tu negocio es quien lo construye.</p>
       </div>
       <div class="card">
         <h3>¿Atienden en español?</h3>
-        <p>Sí, completamente. Contenido, sitios web y campañas en español hechos como versiones propias, no traducciones de máquina. Puedes escribir en español y recibes respuesta en español, de la misma persona que hace el trabajo.</p>
+        <p>Sí, completamente. Puedes escribir en español y te contesta en español la misma persona que hace el trabajo. Tu contenido, tu sitio y tus campañas se escriben en español desde el principio, no los pasamos por un traductor automático.</p>
       </div>
     </div>
   </div>
 </section>
 
-<section class="founder">
+<section class="founder" data-station="door">
   <div class="wrap founder-grid">
     <div>
-      <h2>Hecho por una sola persona que hace el trabajo.</h2>
-      <p class="lede">Sin gerentes de cuenta, sin traspasos, sin un equipo junior aprendiendo con tu proyecto. Solo la persona cuyo nombre está en la puerta.</p>
-      <p><a href="about.html" hreflang="en">Lee la historia (EN) &rarr;</a></p>
+      <h2>Una sola persona hace tu trabajo y contesta tu correo.</h2>
+      <p class="lede">Sin pasarte de mano en mano. Sin explicar tu negocio dos veces. Cuando escribes, te contesta Alejandro Ojeda.</p>
+      <p><a href="about.html" hreflang="en">Conoce a Alejandro (EN) &rarr;</a></p>
     </div>
     <figure class="founder-photo">
       <img src="assets/alejandro.jpg" alt="Alejandro Ojeda" width="480" height="659" loading="lazy">
@@ -311,13 +521,13 @@ section.hero-3d p.lede{color:#f2f0fb;font-size:1.22rem;font-weight:500;line-heig
   </div>
 </section>
 
-<section>
+<section data-station="open">
   <div class="wrap">
-    <h2>¿Listo para ser la respuesta?</h2>
-    <p class="lede">Un correo, directo a la persona que haría el trabajo. O empieza con el audit y ve dónde está tu negocio hoy.</p>
+    <h2>Hoy hay gente buscándote. Que te encuentre fácil.</h2>
+    <p class="lede">Empieza con la revisión gratis. O manda un correo y Alejandro te contesta él mismo.</p>
     <p>
-      <a class="btn primary" href="contacto.html">Escríbenos</a>
-      <a class="btn ghost" href="https://aoaudit.com/es.html" target="_blank" rel="noopener">Ver el Answer Optimization Audit</a>
+      <a class="btn primary" href="https://aoaudit.com/es.html" target="_blank" rel="noopener">Mira lo que Google y la IA ven en tu página. Gratis.</a>
+      <a class="btn ghost" href="contacto.html">Escríbele a Alejandro</a>
     </p>
   </div>
 </section>
@@ -337,7 +547,24 @@ section.hero-3d p.lede{color:#f2f0fb;font-size:1.22rem;font-weight:500;line-heig
 
 
 <script type="module">
-if (!matchMedia('(prefers-reduced-motion: reduce)').matches && matchMedia('(min-width: 761px)').matches) {
+if (document.documentElement.classList.contains('walk')) {
+  // after first paint + idle, same pattern as the old hero; the CSS night sky covers the wait
+  await new Promise(r => 'requestIdleCallback' in window ? requestIdleCallback(r, {timeout: 1500}) : setTimeout(r, 200));
+  try {
+    const [{ startWalk }, { buildOjedaWorks, POSES }] = await Promise.all([
+      import('./assets/walk3d/walk-engine.js'), import('./assets/walk3d/scene-ojedaworks.js')]);
+    const els = [...document.querySelectorAll('[data-station]')];
+    if (els.length !== POSES.length) throw new Error('station count ' + els.length + ' != ' + POSES.length);
+    await startWalk({
+      canvas: document.getElementById('walk-canvas'),
+      stations: els.map((el, i) => ({ el, ...POSES[i] })),
+      build: buildOjedaWorks,
+      shift: 0.42,   // desktop: object sits ~71% across, clear of the text panel
+      onReady: () => document.documentElement.classList.add('walk-live'),
+      onFail: e => console.warn('walk-through off:', e)
+    });
+  } catch (e) { console.warn('walk-through off:', e); /* night-sky CSS stays; page still reads fine */ }
+} else if (!matchMedia('(prefers-reduced-motion: reduce)').matches && matchMedia('(min-width: 761px)').matches) {
   try {
     // let critical content render/settle first; the hero glow fallback covers the wait
     await new Promise(r => 'requestIdleCallback' in window ? requestIdleCallback(r, {timeout: 1500}) : setTimeout(r, 200));
