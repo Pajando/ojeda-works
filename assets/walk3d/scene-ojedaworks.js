@@ -31,13 +31,27 @@ export async function buildOjedaWorks(THREE, ctx) {
   const DOOR = ['door', 'faq', 'open'];
   const doorRank = name => DOOR.map(at).sort((a, b) => a - b).indexOf(at(name));
   const DIST = { street: 6.6, car: 6.2, found: 6.4, video: 6.0, web: 6.4, content: 6.4, ads: 8.2, songs: 5.4, steps: 6.2, tools: 5.6, audit: 5.6 };
-  const zOf = i => -Math.min(i, 11) * GAP;
+  // optional laptop intro (index-laptop-preview): stops 'intro' + 'fill' come before 'street'
+  const INTRO = ['intro', 'fill'].filter(n => NAMES.includes(n));
+  const walkRank = i => i - INTRO.length;
+  const zOf = i => -Math.min(Math.max(0, walkRank(i)), NAMES.length - INTRO.length - 3) * GAP;
+  const LZ = GAP;                                      // the laptop sits one gap before the first page
+  // laptop screen geometry (see buildLaptop): centre + facing direction after the lid tilt
+  const LID_TILT = -0.26, SCREEN_C = new THREE.Vector3(0, 1.093, LZ - 1.281), SCREEN_N = new THREE.Vector3(0, 0.257, 0.966);
   // phones, first stop: the page must clear the site header, whose height differs by language
   // (the Spanish nav wraps to an extra line). ~65px per scene unit at this distance; 95px = EN header.
   const hdr = document.querySelector('header.site')?.offsetHeight || 95;
   const heroLift = 0.35 + Math.max(0, hdr - 95) / 65;
   stations.forEach((st, i) => {
     const n = NAMES[i], isDoor = DOOR.includes(n);
+    if (n === 'intro') {                                   // the laptop on the stage, a little turned
+      // desktop: laptop ~75% of the width; phones: ~95%
+      st.cam = hi ? [0, 1.62, LZ + 2.05] : [0, 2.15, LZ + 5.0]; st.look = hi ? [0, 1.0, LZ - 0.6] : [0, 1.22, LZ - 0.6]; return;
+    }
+    if (n === 'fill') {                                    // square to the screen, close enough that it covers the view
+      const c = SCREEN_C.clone().addScaledVector(SCREEN_N, hi ? 1.5 : 2.3);
+      st.cam = c.toArray(); st.look = SCREEN_C.toArray(); return;
+    }
     // phones: further back = smaller object, so it fits the strip above the text
     const k = hi ? 1.1 : (isDoor ? 2.2 : n === 'street' ? 2.25 : 1.75);
     const d = (isDoor ? [9.2, 7.4, 5.6][doorRank(n)] : DIST[n]) * k;
@@ -521,9 +535,137 @@ export async function buildOjedaWorks(THREE, ctx) {
     } });
   }
 
+  // ---------- optional intro: a laptop showing a local search where "your" business is missing ----------
+  // The camera pushes in until the screen covers the view, the result card appears at the top
+  // with a green check, then the laptop dissolves and the walk continues at the hero page.
+  let laptop = null;
+  if (INTRO.length) {
+    const lg = new THREE.Group();
+    const alu = new THREE.MeshStandardMaterial({ color: 0x5a5f69, metalness: 0.35, roughness: 0.38, transparent: true });
+    const dark = new THREE.MeshStandardMaterial({ color: 0x2a2d34, metalness: 0.2, roughness: 0.5, transparent: true });
+    const base = new THREE.Mesh(new THREE.BoxGeometry(3.1, 0.1, 2.1), alu); base.position.set(0, 0.05, 0); lg.add(base);
+    const keysTex = tex(512, 256, (c, w, h) => {
+      c.fillStyle = '#121419'; c.fillRect(0, 0, w, h);
+      c.fillStyle = '#1d2027';
+      for (let r = 0; r < 5; r++) for (let k = 0; k < 14; k++) rr(c, 12 + k * 35.5, 12 + r * 34, 30, 28, 4);
+      rr(c, 130, 12 + 5 * 34, 250, 28, 4);
+    });
+    const keys = new THREE.Mesh(new THREE.PlaneGeometry(2.7, 1.0), new THREE.MeshStandardMaterial({ map: keysTex, roughness: 0.7, transparent: true }));
+    keys.rotation.x = -Math.PI / 2; keys.position.set(0, 0.102, -0.3); lg.add(keys);
+    const pad = new THREE.Mesh(new THREE.PlaneGeometry(1.0, 0.6), dark); pad.rotation.x = -Math.PI / 2; pad.position.set(0, 0.102, 0.62); lg.add(pad);
+    const pivot = new THREE.Group(); pivot.position.set(0, 0.1, -1.05); pivot.rotation.x = LID_TILT; lg.add(pivot);
+    const lid = new THREE.Mesh(new THREE.BoxGeometry(3.1, 2.0, 0.06), alu); lid.position.set(0, 1.0, 0); pivot.add(lid);
+    const bezel = new THREE.Mesh(new THREE.PlaneGeometry(3.04, 1.94), new THREE.MeshBasicMaterial({ color: 0x050608, transparent: true })); bezel.position.set(0, 1.0, 0.031); pivot.add(bezel);
+    // the screen: a local search, readable at first frame. MISSING: your slot is empty.
+    // GAIN: your business fills the slot with a Call button. Generic names only, no logos.
+    // words on the screen follow the page language (index.html = en, es.html = es; Spanish uses tú)
+    const ES = (document.documentElement.lang || '').startsWith('es');
+    const T = ES ? {
+      queries: [['tacos cerca de mí', 'Taquería'], ['plomero cerca de mí', 'Plomería'], ['salón de belleza abierto ahora', 'Salón de belleza'], ['carros usados Napa', 'Carros usados']],
+      biz: 'Negocio', missing: 'Tu negocio no aparece aquí.', you: 'Tu Negocio', open: '· Abierto ahora', call: 'Llamar',
+      gain: 'Esto es lo que recibes: los clientes te encuentran y te llaman.',
+    } : {
+      queries: [['best tacos near me', 'Taquería'], ['plumber near me', 'Plumber'], ['hair salon open now', 'Hair salon'], ['tacos near me', 'Taquería'], ['used cars Napa', 'Used car dealer']],
+      biz: 'Business', missing: "Your business isn't here.", you: 'Your Business', open: '· Open now', call: 'Call',
+      gain: 'This is what you get: customers find you, and call.',
+    };
+    const [query, cat] = T.queries[Math.floor(Math.random() * T.queries.length)];
+    await Promise.all(['600 40px "IBM Plex Sans"', '400 40px "IBM Plex Sans"', '700 40px "Bricolage Grotesque"']
+      .map(f => document.fonts.load(f).catch(() => {})));
+    const W = 2048, H = 1280;
+    const colW = hi ? W * 0.62 : W * 0.9, x0 = (W - colW) / 2, u = colW / 1000;    // u: layout unit
+    const FS = hi ? 1 : 1.15;                                                      // bigger type on phones
+    const F = (wt, px, fam = 'IBM Plex Sans') => `${wt} ${Math.round(px * u * FS)}px "${fam}", system-ui, sans-serif`;
+    const page = (found) => tex(W, H, (c) => {
+      c.fillStyle = '#f4f2fb'; c.fillRect(0, 0, W, H);
+      c.fillStyle = '#e1ddef'; c.fillRect(0, 0, W, 44);
+      ['#c9c4d8', '#c9c4d8', '#c9c4d8'].forEach((f, i) => { c.fillStyle = f; c.beginPath(); c.arc(26 + i * 24, 22, 8, 0, Math.PI * 2); c.fill(); });
+      // search bar with the typed query
+      const sy = 80 * u + 40, sh = 96 * u;
+      c.fillStyle = '#ffffff'; rr(c, x0, sy, colW, sh, sh / 2);
+      c.strokeStyle = '#5b21e0'; c.lineWidth = 7 * u; c.beginPath(); c.arc(x0 + 52 * u, sy + sh / 2, 17 * u, 0, Math.PI * 2); c.stroke();
+      c.beginPath(); c.moveTo(x0 + 64 * u, sy + sh / 2 + 12 * u); c.lineTo(x0 + 78 * u, sy + sh / 2 + 26 * u); c.stroke();
+      c.fillStyle = '#0f1420'; c.font = F(500, 44); c.textBaseline = 'middle'; c.fillText(query, x0 + 100 * u, sy + sh / 2 + 2);
+      let y = sy + sh + 40 * u;
+      const rowH = 150 * u;
+      const result = (name, meta) => {
+        c.fillStyle = '#ffffff'; rr(c, x0, y, colW, rowH, 18 * u);
+        c.fillStyle = '#c3c8d6'; c.beginPath(); c.arc(x0 + 64 * u, y + rowH / 2, 34 * u, 0, Math.PI * 2); c.fill();
+        c.fillStyle = '#2a3045'; c.font = F(600, 44); c.fillText(name, x0 + 124 * u, y + rowH * 0.36);
+        c.fillStyle = '#6b7286'; c.font = F(400, 36); c.fillText(meta, x0 + 124 * u, y + rowH * 0.68);
+        y += rowH + 22 * u;
+      };
+      if (!found) {
+        c.strokeStyle = '#c86a6a'; c.lineWidth = 6 * u; c.setLineDash([22 * u, 14 * u]);
+        c.beginPath(); c.roundRect(x0, y, colW, rowH, 18 * u); c.stroke(); c.setLineDash([]);
+        c.fillStyle = '#b85656'; c.font = F(600, 44); c.textAlign = 'center'; c.fillText(T.missing, x0 + colW / 2, y + rowH / 2 + 2); c.textAlign = 'left';
+        y += rowH + 22 * u;
+      } else {
+        const ch = rowH + 20 * u;
+        c.fillStyle = '#ffffff'; rr(c, x0 - 10 * u, y - 10 * u, colW + 20 * u, ch, 20 * u);
+        c.fillStyle = '#5b21e0'; rr(c, x0 - 10 * u, y - 10 * u, 14 * u, ch, 7 * u);
+        c.fillStyle = '#0f1420'; c.beginPath(); c.arc(x0 + 70 * u, y + rowH / 2, 38 * u, 0, Math.PI * 2); c.fill();
+        c.fillStyle = '#0f1420'; c.font = F(700, 50, 'Bricolage Grotesque'); c.fillText(T.you, x0 + 132 * u, y + rowH * 0.34);
+        c.fillStyle = '#c99400'; c.font = F(400, 36); c.fillText('★★★★★', x0 + 132 * u, y + rowH * 0.7);
+        c.fillStyle = '#1f8f4e'; c.font = F(600, 36); c.fillText(T.open, x0 + 132 * u + c.measureText('★★★★★ ').width + 8 * u, y + rowH * 0.7);
+        const bw = (ES ? 220 : 190) * u, bh = 78 * u, bx = x0 + colW - bw - 30 * u, by = y + rowH / 2 - bh / 2;
+        c.fillStyle = '#db3a00'; rr(c, bx, by, bw, bh, bh / 2);
+        c.fillStyle = '#ffffff'; c.font = F(600, 40); c.textAlign = 'center'; c.font = F(600, ES ? 34 : 40); c.fillText(T.call, bx + bw / 2, by + bh / 2 + 2); c.textAlign = 'left';
+        c.fillStyle = '#22c55e'; c.beginPath(); c.arc(x0 + colW + 4 * u, y - 4 * u, 40 * u, 0, Math.PI * 2); c.fill();
+        c.strokeStyle = '#fff'; c.lineWidth = 11 * u; c.lineCap = 'round'; c.lineJoin = 'round';
+        c.beginPath(); c.moveTo(x0 + colW - 14 * u, y - 2 * u); c.lineTo(x0 + colW - 1 * u, y + 11 * u); c.lineTo(x0 + colW + 22 * u, y - 18 * u); c.stroke();
+        y += ch + 22 * u;
+      }
+      result(`${T.biz} A`, `${cat} · 4.1 ★ · 2.3 mi`);
+      result(`${T.biz} B`, `${cat} · 4.4 ★ · 0.9 mi`);
+      if (found) {
+        c.fillStyle = '#3f1499'; c.font = F(700, 44, 'Bricolage Grotesque'); c.textAlign = 'center';
+        c.font = F(700, ES ? 38 : 44, 'Bricolage Grotesque'); c.fillText(T.gain, W / 2, Math.min(H - 60 * u, y + 50 * u)); c.textAlign = 'left';
+      } else result(`${T.biz} C`, `${cat} · 3.9 ★ · 3.1 mi`);
+    });
+    const scrA = new THREE.MeshBasicMaterial({ map: page(false), toneMapped: false, transparent: true });
+    const scrB = new THREE.MeshBasicMaterial({ map: page(true), toneMapped: false, transparent: true, opacity: 0, depthWrite: false });
+    for (const m of [scrA, scrB]) { m.map.anisotropy = hi ? 8 : 4; m.map.generateMipmaps = true; }
+    const sa = new THREE.Mesh(new THREE.PlaneGeometry(2.86, 1.79), scrA); sa.position.set(0, 1.02, 0.032); pivot.add(sa);
+    const sb = new THREE.Mesh(new THREE.PlaneGeometry(2.86, 1.79), scrB); sb.position.set(0, 1.02, 0.034); pivot.add(sb);
+    lg.position.set(0, 0, LZ);
+    scene.add(lg);
+    // a soft reflection: the same laptop mirrored under a slightly see-through floor
+    const mirror = lg.clone(); mirror.scale.y = -1; mirror.position.y = -0.002; scene.add(mirror);
+    floor.material.transparent = true; floor.material.opacity = 0.84;
+    const pm = new THREE.MeshBasicMaterial({ map: poolTex, color: 0x6a5aa0, transparent: true, opacity: 0.35, depthWrite: false, blending: THREE.AdditiveBlending, fog: false });
+    const lpool = new THREE.Mesh(new THREE.PlaneGeometry(6, 6), pm); lpool.rotation.x = -Math.PI / 2; lpool.position.set(0, 0.01, LZ + 0.6); scene.add(lpool);
+    const mats = [alu, dark, keys.material, bezel.material, scrA, scrB];
+    const iIntro = at('intro'), iFill = INTRO.includes('fill') ? at('fill') : iIntro + 1;
+    laptop = {
+      update(t, st) {
+        const s = st.s - iIntro, span = iFill - iIntro;           // 0 at intro, `span` at fill, span+1 at the hero page
+        const turn = sstep(s / (0.6 * span));
+        lg.rotation.y = mirror.rotation.y = (hi ? 0.16 : 0) * (1 - turn);
+        const found = sstep((s - 0.3 * span) / (0.18 * span));      // quick swap, no ghosting
+        scrB.opacity = found; sb.visible = found > 0.003;
+        const fade = sstep((s - span - 0.04) / 0.09);             // through the glass: gone before the text blurs
+        const vis = 1 - fade;
+        lg.visible = mirror.visible = vis > 0.003;
+        for (const m of mats) { if (m === scrB || m === scrA) continue; m.opacity = vis; m.depthWrite = vis > 0.98; }
+        // the 'missing' page goes away as the 'found' page arrives, so it can't ghost through while fading
+        scrA.opacity = vis * (1 - found); sa.visible = scrA.opacity > 0.003;
+        scrB.opacity *= vis;
+        lpool.material.opacity = 0.35 * vis;
+        // hold the hero panel while the screen is still on view, reveal once it has cleared.
+        // Outside this window the variable is 1 (e.g. at the top of the page, where crawlers render).
+        const hv = (s < span - 0.02 || s > span + 0.6) ? 1 : sstep((s - span - 0.14) / 0.14);
+        if (hv !== laptop._hv) { laptop._hv = hv; document.documentElement.style.setProperty('--lp-hero', hv.toFixed(3)); }
+        return lg.visible;
+      },
+      viewFactor(sv) { return sstep(sv - iFill); }                // centred during the intro, normal framing at the hero
+    };
+  }
+
   // ---------- per frame ----------
   const ease = x => 1 - Math.pow(1 - x, 3);
   return {
+    viewFactor: laptop ? laptop.viewFactor : undefined,
     update(dt, t, st) {
       let moving = false;
       for (const o of objects) {
@@ -545,6 +687,7 @@ export async function buildOjedaWorks(THREE, ctx) {
         if (o.update) o.update(o, t, dt, st, k);
         moving = true;
       }
+      if (laptop && laptop.update(t, st)) moving = true;
       // key light rides just above-right of the camera; rim sits behind the object
       key.position.set(cam.position.x + 2.2, cam.position.y + 2.4, cam.position.z - 1.5);
       const zi = Math.round(-cam.position.z / GAP) * -GAP;

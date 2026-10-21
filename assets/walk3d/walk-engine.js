@@ -102,22 +102,31 @@ export async function startWalk(opts) {
     const state = { s: 0, lit, tier, near: new Float32Array(n) };
 
     // ---- sizing (ignore mobile URL-bar height wobble) ----
+    // Framing. Wide screens: text sits on the left, so frame the subject right of
+    // centre by rendering the left part of a wider virtual frame. Narrow screens:
+    // text panels sit mid-screen, so lift the subject into the top part of the view.
+    // A scene may scale both with world.viewFactor(s) (0 = centred, 1 = full), e.g.
+    // a full-screen intro before the text panels start.
+    let viewF = 1;
+    function applyView(f, force) {
+      if (!force && Math.abs(f - viewF) < 0.002) return false;
+      viewF = f;
+      const w = lastW || innerWidth, h = lastH || innerHeight;
+      const shift = (w >= 980 ? (opts.shift ?? 0.3) : 0) * f;
+      const lift = (w < 761 ? (opts.lift ?? 0.44) : 0) * f;
+      const fw = w * (1 + shift), fh = h * (1 + lift);
+      cam.aspect = fw / fh;
+      if (shift || lift) cam.setViewOffset(fw, fh, 0, h * lift, w, h); else cam.clearViewOffset();
+      cam.updateProjectionMatrix();
+      return true;
+    }
     let lastW = 0, lastH = 0;
     function size(force) {
       const w = innerWidth, h = innerHeight;
       if (!force && w === lastW && Math.abs(h - lastH) < 120) return;
       lastW = w; lastH = h;
       renderer.setSize(w, h, false);
-      // wide screens: text sits on the left, so frame the subject right of
-      // centre by rendering the left part of a wider virtual frame
-      const shift = w >= 980 ? (opts.shift ?? 0.3) : 0;
-      // narrow screens: text panels sit mid-screen, so lift the subject into
-      // the top part of the view instead
-      const lift = w < 761 ? (opts.lift ?? 0.44) : 0;
-      const fw = w * (1 + shift), fh = h * (1 + lift);
-      cam.aspect = fw / fh;
-      if (shift || lift) cam.setViewOffset(fw, fh, 0, h * lift, w, h); else cam.clearViewOffset();
-      cam.updateProjectionMatrix();
+      applyView(viewF, true);
       measure();
       dirty = true;
     }
@@ -161,6 +170,7 @@ export async function startWalk(opts) {
         state.near[i] = Math.max(0, 1 - Math.abs(sc - i));
       }
       if (world.update(dt, t, state)) changed = true;
+      if (world.viewFactor && applyView(world.viewFactor(state.s))) changed = true;
       if (changed) {
         renderer.render(scene, cam); renders++;
         stats.ms.push(performance.now() - t0); if (stats.ms.length > 240) stats.ms.shift();

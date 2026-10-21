@@ -176,6 +176,34 @@ html.walk .skip{transition:top .24s var(--w-ease)}
     -webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(15,20,32,.93)}
 }
 </style>
+<style>
+/* laptop intro (walk mode only): an empty scroll runway before the hero, a short HTML guide,
+   and an invisible "Step inside" button over the laptop. Without JS / with reduced motion
+   none of this exists and the hero is first, exactly as on the live page. */
+.laptop-intro,.lp-guide,.lp-enter{display:none}
+html.walk .laptop-intro{display:block;position:relative}
+html.walk .laptop-intro>.lp-run1{height:50vh}
+html.walk .laptop-intro>.lp-run2{height:100vh}
+html.walk .lp-guide{display:block;position:fixed;left:0;right:0;bottom:1.75rem;z-index:5;text-align:center;pointer-events:none;
+  transition:opacity .24s cubic-bezier(.4,0,.6,1);padding:0 1rem}
+html.walk .lp-guide .lp-big{margin:0;font-family:"Bricolage Grotesque","IBM Plex Sans",sans-serif;font-weight:700;
+  font-size:clamp(1.6rem,3.4vw,2.6rem);line-height:1.1;color:#fff;text-shadow:0 2px 18px rgba(10,13,24,.9)}
+html.walk .lp-guide .lp-small{margin:.6rem 0 0;font-size:1.05rem;color:rgba(242,238,228,.85);text-shadow:0 1px 10px rgba(10,13,24,.9)}
+html.walk .lp-guide .lp-arrow{display:inline-block;animation:lp-bounce 1.6s cubic-bezier(.4,0,.6,1) infinite}
+@keyframes lp-bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+html.walk .lp-enter{display:block;position:fixed;left:12%;right:12%;top:14%;bottom:26%;z-index:4;background:transparent;border:0;
+  border-radius:18px;cursor:pointer;padding:0}
+html.walk .lp-enter:focus-visible{outline:2px solid #ffa07e;outline-offset:4px}
+@media (max-width:760px){
+  html.walk .laptop-intro>.lp-run1{height:33svh}
+  html.walk .laptop-intro>.lp-run2{height:67svh}
+  html.walk .lp-enter{left:2%;right:2%;top:24%;bottom:34%}
+  html.walk .lp-guide{bottom:2.5rem}
+}
+@media (prefers-reduced-motion: reduce){ html.walk .lp-guide .lp-arrow{animation:none} }
+/* the scene holds the hero panel only while the giant screen is still on view (var is 1 otherwise) */
+html.walk .hero-3d .wrap>div:first-child{opacity:var(--lp-hero,1)}
+</style>
 <link rel="canonical" href="https://ojedaworks.com/es.html">
 <link rel="alternate" hreflang="en" href="https://ojedaworks.com/">
 <link rel="alternate" hreflang="es" href="https://ojedaworks.com/es.html">
@@ -342,6 +370,30 @@ html.walk .skip{transition:top .24s var(--w-ease)}
     </nav>
   </div>
 </header>
+<div class="laptop-intro">
+  <div class="lp-run1" data-station="intro" aria-hidden="true"></div><div class="lp-run2" data-station="fill" aria-hidden="true"></div>
+  <div class="lp-guide">
+    <p class="lp-big">Tus clientes están buscando ahora mismo.</p>
+    <p class="lp-small">Desliza para entrar <span class="lp-arrow">&darr;</span></p>
+  </div>
+  <button class="lp-enter" type="button" aria-label="Entrar"></button>
+  <script>
+  (function () {
+    var g = document.querySelector('.lp-guide'), b = document.querySelector('.lp-enter');
+    function u() {
+      var k = Math.max(0, 1 - scrollY / (innerHeight * 0.25));
+      g.style.opacity = k; g.style.visibility = k < 0.02 ? 'hidden' : 'visible';
+      b.style.visibility = k < 0.5 ? 'hidden' : 'visible';
+    }
+    addEventListener('scroll', u, { passive: true }); u();
+    b.addEventListener('click', function () {
+      var a = window.__walk && window.__walk.anchors(), main = document.getElementById('main');
+      var y = a && a.length > 2 ? a[2] : main.getBoundingClientRect().top + scrollY;
+      scrollTo({ top: y, behavior: 'smooth' });
+    });
+  })();
+  </script>
+</div>
 
 <section id="main" class="hero hero-3d" data-station="street">
   <div class="wrap">
@@ -552,12 +604,11 @@ if (document.documentElement.classList.contains('walk')) {
   await new Promise(r => 'requestIdleCallback' in window ? requestIdleCallback(r, {timeout: 1500}) : setTimeout(r, 200));
   try {
     const [{ startWalk }, { buildOjedaWorks, POSES }] = await Promise.all([
-      import('./assets/walk3d/walk-engine.js'), import('./assets/walk3d/scene-ojedaworks.js')]);
+      import('./assets/walk3d/walk-engine.js?v=20261021'), import('./assets/walk3d/scene-ojedaworks.js?v=20261021')]);
     const els = [...document.querySelectorAll('[data-station]')];
-    if (els.length !== POSES.length) throw new Error('station count ' + els.length + ' != ' + POSES.length);
     await startWalk({
       canvas: document.getElementById('walk-canvas'),
-      stations: els.map((el, i) => ({ el, ...POSES[i] })),
+      stations: els.map(el => ({ el, cam: [0, 0, 0], look: [0, 0, 0] })),
       build: buildOjedaWorks,
       shift: 0.42,   // desktop: object sits ~71% across, clear of the text panel
       onReady: () => document.documentElement.classList.add('walk-live'),
