@@ -337,6 +337,8 @@ nav.dir button:focus-visible { box-shadow: 0 0 0 2px var(--violet); }
   let shown = null;
   function showCard(key) {
     if (shown === key) return; shown = key;
+    const about = document.getElementById('about');
+    if (about) about.hidden = !!key;   // the door card takes the bottom of the screen
     if (!key) { card.hidden = true; hint.hidden = false; return; }
     const s = SITES[key];
     card.style.setProperty('--c', s.color);
