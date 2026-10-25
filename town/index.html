@@ -46,7 +46,7 @@ nav.dir button:focus-visible { box-shadow: 0 0 0 2px var(--violet); }
 .bottom { display: flex; justify-content: center; }
 .hint { pointer-events: none; background: rgba(15,20,32,.78); color: #fff; border-radius: 999px; padding: 9px 16px; font-size: 13.5px; text-align: center; max-width: 100%; }
 .hint kbd { font: 600 12px var(--body); background: rgba(255,255,255,.18); border-radius: 5px; padding: 1px 6px; }
-.card { pointer-events: auto; width: min(460px, 100%); background: var(--paper); border-radius: 18px; padding: 16px 18px 18px; box-shadow: 0 14px 40px rgba(15,20,32,.28); border-top: 6px solid var(--c, var(--violet)); }
+.card { pointer-events: auto; width: min(460px, 100%); max-height: calc(100% - 96px); overflow-y: auto; overscroll-behavior: contain; background: var(--paper); border-radius: 18px; padding: 16px 18px 18px; box-shadow: 0 14px 40px rgba(15,20,32,.28); border-top: 6px solid var(--c, var(--violet)); }
 .card .kick { font: 600 11.5px var(--body); letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); margin: 0; }
 .card h2 { margin: 4px 0 6px; font: 700 26px/1.05 var(--display); text-wrap: balance; }
 .card p.desc { margin: 0 0 10px; font-size: 15px; line-height: 1.45; }
@@ -65,6 +65,8 @@ nav.dir button:focus-visible { box-shadow: 0 0 0 2px var(--violet); }
 .about ul { padding-left: 18px; margin: 6px 0; }
 .about a { color: var(--violet); font-weight: 600; }
 .about[open] ~ .bottom .card { display: none; }
+html.embed #scene { touch-action: pan-y; }
+html.embed .chip p { display: none; }
 @media (max-width: 520px) {
   .chip h1 { font-size: 19px; }
   nav.dir button { padding: 7px 9px; font-size: 13px; }
@@ -123,6 +125,14 @@ nav.dir button:focus-visible { box-shadow: 0 0 0 2px var(--violet); }
 
   const canvas = document.getElementById('scene');
   const card = document.getElementById('card'), hint = document.getElementById('hint');
+  // Embedded on the homepage (?embed=1): links leave the frame, vertical swipes scroll the page
+  const EMBED = /[?&]embed=1/.test(location.search);
+  if (EMBED) {
+    document.documentElement.classList.add('embed');
+    SITES.ow.url = '/#after-town'; SITES.ow.cta = 'See what Ojeda Works does ↓'; SITES.ow.top = true;
+    document.querySelectorAll('a').forEach((a) => { if (!a.target) a.target = '_top'; });
+    hint.innerHTML = '<kbd>W A S D</kbd> or arrows to walk · tap the ground or a building · scroll down for more';
+  }
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function fallback(msg) {
@@ -348,7 +358,7 @@ nav.dir button:focus-visible { box-shadow: 0 0 0 2px var(--violet); }
     document.getElementById('cDesc').textContent = s.desc;
     document.getElementById('cFacts').innerHTML = s.facts.map(f => '<li>' + f.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</li>').join('');
     const a = document.getElementById('cLink'); a.href = s.url; a.textContent = s.cta || ('Visit ' + s.host + (s.url === '/' ? ' →' : ' ↗'));
-    if (s.url === '/') a.removeAttribute('target'); else a.target = '_blank';
+    if (s.top) a.target = '_top'; else if (s.url === '/') a.removeAttribute('target'); else a.target = '_blank';
     document.getElementById('cUrl').innerHTML = s.cta ? 'or go to <a href="https://' + s.host + '" target="_blank" rel="noopener">' + s.host + '</a>' : 'https://' + s.host;
     card.hidden = false; hint.hidden = true;
   }

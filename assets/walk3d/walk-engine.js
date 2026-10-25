@@ -65,7 +65,7 @@ export async function startWalk(opts) {
         // like the FAQ rest while their top part is being read)
         const h = Math.min(r.height, vh * 0.9);
         let y = top + h / 2 - vh * anchorAt;
-        if (i === 0) y = 0;
+        if (i === 0) y = Math.max(0, top - 100);   // first scene starts where its section starts (the town sits above it on the homepage)
         if (i === n - 1) y = Math.min(y, max);
         y = Math.max(prev, Math.min(max, y));
         anchors[i] = y; prev = y;

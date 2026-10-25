@@ -46,6 +46,12 @@ section.hero-3d p.lede{color:#f2f0fb;font-size:1.22rem;font-weight:500;line-heig
 section.hero-3d p.small{color:#c9c4dd;max-width:34rem;margin:.75rem 0 0}
 section.hero-3d p.hero-honest{margin-top:.5rem}
 .songs-line{margin:0;color:var(--dim)}
+/* Ojeda Works Town is the first screen (Alejandro, 2026-10-24) */
+.town-hero{position:relative;z-index:10;background:#cfd9e6;padding:0!important;margin:0}
+.town-hero iframe{display:block;width:100%;height:calc(100svh - 4rem - 52px);min-height:420px;max-height:880px;border:0}
+.town-more{display:flex;align-items:center;justify-content:center;height:52px;background:#0f1420;color:#fff;font-weight:600;text-decoration:none;letter-spacing:.01em}
+.town-more:hover,.town-more:focus-visible{background:#5b21e0;color:#fff}
+@media (max-width:760px){.town-hero iframe{height:calc(100svh - 52px - 7.6rem);min-height:360px}}
 </style>
 <script>
 /* walk-through gate: decide BEFORE first paint so the layout never shifts.
@@ -371,7 +377,11 @@ html.walk .hero-3d .wrap>div:first-child{opacity:var(--lp-hero,1)}
     </nav>
   </div>
 </header>
-<div class="laptop-intro">
+<section class="town-hero" aria-label="Ojeda Works Town (en inglés): camina a Ojeda Works, AO Audit y My Own Hit">
+  <iframe src="/town/?embed=1" title="Ojeda Works Town (en inglés): camina a Ojeda Works, AO Audit y My Own Hit" loading="eager"></iframe>
+  <a class="town-more" href="#after-town">Mira lo que hace Ojeda Works &darr;</a>
+</section>
+<div class="laptop-intro" id="after-town">
   <div class="lp-run1" data-station="intro" aria-hidden="true"></div><div class="lp-run2" data-station="fill" aria-hidden="true"></div>
   <div class="lp-guide">
     <p class="lp-big">Tus clientes están buscando ahora mismo.</p>
@@ -382,7 +392,9 @@ html.walk .hero-3d .wrap>div:first-child{opacity:var(--lp-hero,1)}
   (function () {
     var g = document.querySelector('.lp-guide'), b = document.querySelector('.lp-enter');
     function u() {
-      var k = Math.max(0, 1 - scrollY / (innerHeight * 0.25));
+      var start = document.getElementById('after-town').offsetTop; /* the town sits above the laptop now */
+      var d = scrollY - start;
+      var k = d < -innerHeight * 0.35 ? 0 : Math.max(0, 1 - Math.max(0, d) / (innerHeight * 0.25));
       g.style.opacity = k; g.style.visibility = k < 0.02 ? 'hidden' : 'visible';
       b.style.visibility = k < 0.5 ? 'hidden' : 'visible';
     }
@@ -607,7 +619,7 @@ if (document.documentElement.classList.contains('walk')) {
   await new Promise(r => 'requestIdleCallback' in window ? requestIdleCallback(r, {timeout: 1500}) : setTimeout(r, 200));
   try {
     const [{ startWalk }, { buildOjedaWorks, POSES }] = await Promise.all([
-      import('./assets/walk3d/walk-engine.js?v=20261021'), import('./assets/walk3d/scene-ojedaworks.js?v=20261021')]);
+      import('./assets/walk3d/walk-engine.js?v=20261024a'), import('./assets/walk3d/scene-ojedaworks.js?v=20261021')]);
     const els = [...document.querySelectorAll('[data-station]')];
     await startWalk({
       canvas: document.getElementById('walk-canvas'),
