@@ -89,11 +89,11 @@ html.embed .chip p { display: none; }
     <summary>What is this?</summary>
     <p>Ojeda Works Town is a small 3D town square in Napa, California. Each building is one of our three sites:</p>
     <ul>
-      <li><a href="/">Ojeda Works</a>: video, web development, content and advertising that get local businesses found and called.</li>
-      <li><a href="https://aoaudit.com">AO Audit</a>: a free 60-second scan of how easily Google and AI tools like ChatGPT, Gemini and Perplexity can read your website. <a href="https://aoaudit.com/lab/">Walk through the 3D lab</a>.</li>
-      <li><a href="https://myownhit.com">My Own Hit</a>: your story made into a real song, in English, Spanish or both. <a href="https://myownhit.com/studio/">Walk through the 3D studio</a>.</li>
+      <li><a href="/" target="_blank" rel="noopener">Ojeda Works</a>: video, web development, content and advertising that get local businesses found and called.</li>
+      <li><a href="https://aoaudit.com" target="_blank" rel="noopener">AO Audit</a>: a free 60-second scan of how easily Google and AI tools like ChatGPT, Gemini and Perplexity can read your website. <a href="https://aoaudit.com/lab/" target="_blank" rel="noopener">Walk through the 3D lab</a>.</li>
+      <li><a href="https://myownhit.com" target="_blank" rel="noopener">My Own Hit</a>: your story made into a real song, in English, Spanish or both. <a href="https://myownhit.com/studio/" target="_blank" rel="noopener">Walk through the 3D studio</a>.</li>
     </ul>
-    <p><a href="/">Back to ojedaworks.com</a></p>
+    <p><a href="/" target="_blank" rel="noopener">Back to ojedaworks.com</a></p>
   </details>
   <div class="bottom">
     <div class="hint" id="hint"><kbd>W A S D</kbd> or arrows to walk · tap the ground to walk there · tap a building to visit</div>
@@ -112,7 +112,7 @@ html.embed .chip p { display: none; }
 (function () {
   // The three sites. Copy comes from each site's own title/description (checked 2026-10-24).
   const SITES = {
-    ow: { name: 'Ojeda Works', kick: 'Main office', url: '/', host: 'ojedaworks.com', color: '#5b21e0',
+    ow: { name: 'Ojeda Works', kick: 'Main office', url: 'https://ojedaworks.com/#main', host: 'ojedaworks.com', cta: 'See what Ojeda Works does ↗', color: '#5b21e0',
           desc: "Customers can't find you? Ojeda Works makes the video, web development, content and advertising that get local businesses found and called.",
           facts: ['Video, web development, content and advertising', 'For local businesses', 'Based in Napa, CA'] },
     ao: { name: 'AO Audit', kick: 'The check-up', url: 'https://aoaudit.com/lab/', host: 'aoaudit.com', cta: 'Step into the AO Audit Lab ↗', color: '#1f3fd1',
@@ -129,8 +129,7 @@ html.embed .chip p { display: none; }
   const EMBED = /[?&]embed=1/.test(location.search);
   if (EMBED) {
     document.documentElement.classList.add('embed');
-    SITES.ow.url = '/#after-town'; SITES.ow.cta = 'See what Ojeda Works does ↓'; SITES.ow.top = true;
-    document.querySelectorAll('a').forEach((a) => { if (!a.target) a.target = '_top'; });
+    document.querySelectorAll('a').forEach((a) => { a.target = '_blank'; a.rel = 'noopener'; });
     hint.innerHTML = '<kbd>W A S D</kbd> or arrows to walk · tap the ground or a building · scroll down for more';
   }
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -358,8 +357,8 @@ html.embed .chip p { display: none; }
     document.getElementById('cDesc').textContent = s.desc;
     document.getElementById('cFacts').innerHTML = s.facts.map(f => '<li>' + f.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</li>').join('');
     const a = document.getElementById('cLink'); a.href = s.url; a.textContent = s.cta || ('Visit ' + s.host + (s.url === '/' ? ' →' : ' ↗'));
-    if (s.top) a.target = '_top'; else if (s.url === '/') a.removeAttribute('target'); else a.target = '_blank';
-    document.getElementById('cUrl').innerHTML = s.cta ? 'or go to <a href="https://' + s.host + '" target="_blank" rel="noopener">' + s.host + '</a>' : 'https://' + s.host;
+    a.target = '_blank'; a.rel = 'noopener';
+    document.getElementById('cUrl').innerHTML = 'Opens in a new tab' + (s.cta && s.host !== 'ojedaworks.com' ? ' · or go to <a href="https://' + s.host + '" target="_blank" rel="noopener">' + s.host + '</a>' : '');
     card.hidden = false; hint.hidden = true;
   }
 
