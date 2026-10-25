@@ -56,7 +56,8 @@ nav.dir button:focus-visible { box-shadow: 0 0 0 2px var(--violet); }
 .card a.go { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font: 700 16px var(--display); color: #fff; background: var(--c, var(--violet)); padding: 11px 18px; border-radius: 12px; }
 .card a.go:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
 .card .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-.card .url { font-size: 13px; color: var(--muted); user-select: all; }
+.card .url { font-size: 13px; color: var(--muted); }
+.card .url a { color: inherit; }
 .fallback { pointer-events: auto; background: var(--paper); border-radius: 16px; padding: 16px; max-width: 460px; margin: auto; box-shadow: 0 10px 30px rgba(15,20,32,.2); }
 .fallback a { color: var(--violet); font-weight: 600; }
 .about { pointer-events: auto; position: fixed; left: max(16px, env(safe-area-inset-left, 0px)); bottom: calc(76px + env(safe-area-inset-bottom, 0px)); max-width: min(360px, calc(100% - 32px)); background: var(--paper); border-radius: 14px; padding: 8px 14px; box-shadow: 0 6px 24px rgba(15,20,32,.16); font-size: 14px; line-height: 1.45; }
@@ -87,8 +88,8 @@ nav.dir button:focus-visible { box-shadow: 0 0 0 2px var(--violet); }
     <p>Ojeda Works Town is a small 3D town square in Napa, California. Each building is one of our three sites:</p>
     <ul>
       <li><a href="/">Ojeda Works</a>: video, web development, content and advertising that get local businesses found and called.</li>
-      <li><a href="https://aoaudit.com">AO Audit</a>: a free 60-second scan of how easily Google and AI tools like ChatGPT, Gemini and Perplexity can read your website.</li>
-      <li><a href="https://myownhit.com">My Own Hit</a>: your story made into a real song, in English, Spanish or both.</li>
+      <li><a href="https://aoaudit.com">AO Audit</a>: a free 60-second scan of how easily Google and AI tools like ChatGPT, Gemini and Perplexity can read your website. <a href="https://aoaudit.com/lab/">Walk through the 3D lab</a>.</li>
+      <li><a href="https://myownhit.com">My Own Hit</a>: your story made into a real song, in English, Spanish or both. <a href="https://myownhit.com/studio/">Walk through the 3D studio</a>.</li>
     </ul>
     <p><a href="/">Back to ojedaworks.com</a></p>
   </details>
@@ -112,12 +113,12 @@ nav.dir button:focus-visible { box-shadow: 0 0 0 2px var(--violet); }
     ow: { name: 'Ojeda Works', kick: 'Main office', url: '/', host: 'ojedaworks.com', color: '#5b21e0',
           desc: "Customers can't find you? Ojeda Works makes the video, web development, content and advertising that get local businesses found and called.",
           facts: ['Video, web development, content and advertising', 'For local businesses', 'Based in Napa, CA'] },
-    ao: { name: 'AO Audit', kick: 'The check-up', url: 'https://aoaudit.com', host: 'aoaudit.com', color: '#1f3fd1',
+    ao: { name: 'AO Audit', kick: 'The check-up', url: 'https://aoaudit.com/lab/', host: 'aoaudit.com', cta: 'Step into the AO Audit Lab ↗', color: '#1f3fd1',
           desc: 'Free Answer Optimization audit: a live scan of your site that checks how easily Google and AI tools like ChatGPT, Gemini and Perplexity can read it.',
-          facts: ['Your AO Score in 60 seconds', 'Free', 'Scans your site live'] },
-    mh: { name: 'My Own Hit', kick: 'The song shop', url: 'https://myownhit.com', host: 'myownhit.com', color: '#e4007c',
+          facts: ['Your AO Score in 60 seconds', 'Free', 'Walk through what it checks in the 3D lab'] },
+    mh: { name: 'My Own Hit', kick: 'The song shop', url: 'https://myownhit.com/studio/', host: 'myownhit.com', cta: 'Step into the studio ↗', color: '#e4007c',
           desc: "Your story, made into a real song in the style you've always wanted: corridos, oldies, R&B, country. In English, Spanish, or both.",
-          facts: ['One song: $47 · two: $87 · three: $127', 'Make one for someone you love', 'English, Spanish, or both'] }
+          facts: ['One song: $47 · two: $87 · three: $127', 'English, Spanish, or both', 'Walk through how it gets made in the 3D studio'] }
   };
 
   const canvas = document.getElementById('scene');
@@ -346,9 +347,9 @@ nav.dir button:focus-visible { box-shadow: 0 0 0 2px var(--violet); }
     document.getElementById('cName').textContent = s.name;
     document.getElementById('cDesc').textContent = s.desc;
     document.getElementById('cFacts').innerHTML = s.facts.map(f => '<li>' + f.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</li>').join('');
-    const a = document.getElementById('cLink'); a.href = s.url; a.textContent = 'Visit ' + s.host + (s.url === '/' ? ' →' : ' ↗');
+    const a = document.getElementById('cLink'); a.href = s.url; a.textContent = s.cta || ('Visit ' + s.host + (s.url === '/' ? ' →' : ' ↗'));
     if (s.url === '/') a.removeAttribute('target'); else a.target = '_blank';
-    document.getElementById('cUrl').textContent = 'https://' + s.host;
+    document.getElementById('cUrl').innerHTML = s.cta ? 'or go to <a href="https://' + s.host + '" target="_blank" rel="noopener">' + s.host + '</a>' : 'https://' + s.host;
     card.hidden = false; hint.hidden = true;
   }
 
