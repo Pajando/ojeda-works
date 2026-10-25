@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ojeda Works Town: walk through Ojeda Works, AO Audit and My Own Hit in 3D</title>
+<meta name="description" content="A little 3D town square in Napa. Walk up to Ojeda Works (video, websites, content and ads for local businesses), AO Audit (free AI-visibility scan) and My Own Hit (custom songs) and step inside.">
+<link rel="canonical" href="https://ojedaworks.com/town/">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<meta property="og:title" content="Ojeda Works Town">
+<meta property="og:description" content="Walk through Ojeda Works, AO Audit and My Own Hit in a little 3D Napa town square.">
+<meta property="og:url" content="https://ojedaworks.com/town/">
+<meta property="og:image" content="https://ojedaworks.com/assets/og-card.jpg">
+<meta property="og:type" content="website">
+<link rel="alternate" hreflang="en" href="https://ojedaworks.com/town/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Figtree:wght@400;500;600&display=swap">
+<style>
+/* Layout: full-bleed 3D town (golden hour, Napa) under a thin UI layer: name chip + directory on top, door card at the bottom. Single look on purpose. */
+:root {
+  --sky-top: #8fb7e6; --sky-low: #f6c99a;
+  --ink: #0f1420; --paper: #fffaf2; --muted: #5b6373;
+  --violet: #5b21e0; --blue: #1f3fd1; --rosa: #e4007c; --marigold: #f6a821; --neon: #e6ff00;
+  --display: "Fredoka", "Avenir Next Rounded", "Arial Rounded MT Bold", system-ui, sans-serif;
+  --body: "Figtree", "Avenir Next", system-ui, sans-serif;
+  color-scheme: light;
+}
+html, body { height: 100%; }
+body { margin: 0; overflow: hidden; background: linear-gradient(180deg, var(--sky-top) 0%, #cfd9e6 55%, var(--sky-low) 100%); color: var(--ink); font-family: var(--body); }
+#scene { position: fixed; inset: 0; display: block; width: 100%; height: 100%; touch-action: none; outline: none; }
+.ui { position: fixed; inset: 0; pointer-events: none; display: flex; flex-direction: column; justify-content: space-between;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: calc(14px + env(safe-area-inset-top, 0px)) calc(14px + env(safe-area-inset-bottom, 0px)); }
+.top { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: flex-start; }
+.chip { pointer-events: auto; background: var(--paper); border-radius: 14px; padding: 10px 14px; box-shadow: 0 6px 24px rgba(15,20,32,.16); max-width: 100%; }
+.chip h1 { margin: 0; font: 700 22px/1.05 var(--display); letter-spacing: .2px; }
+.chip h1 b { color: var(--violet); font-weight: 700; }
+.chip p { margin: 3px 0 0; font-size: 13px; color: var(--muted); }
+nav.dir { pointer-events: auto; display: flex; flex-wrap: wrap; gap: 6px; background: var(--paper); border-radius: 14px; padding: 6px; box-shadow: 0 6px 24px rgba(15,20,32,.16); }
+nav.dir button { font: 600 14px var(--display); border: 0; border-radius: 10px; padding: 8px 12px; cursor: pointer; background: transparent; color: var(--ink); display: flex; align-items: center; gap: 7px; }
+nav.dir button:hover, nav.dir button:focus-visible { background: #efe9ff; outline: none; }
+nav.dir button:focus-visible { box-shadow: 0 0 0 2px var(--violet); }
+.dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+.bottom { display: flex; justify-content: center; }
+.hint { pointer-events: none; background: rgba(15,20,32,.78); color: #fff; border-radius: 999px; padding: 9px 16px; font-size: 13.5px; text-align: center; max-width: 100%; }
+.hint kbd { font: 600 12px var(--body); background: rgba(255,255,255,.18); border-radius: 5px; padding: 1px 6px; }
+.card { pointer-events: auto; width: min(460px, 100%); background: var(--paper); border-radius: 18px; padding: 16px 18px 18px; box-shadow: 0 14px 40px rgba(15,20,32,.28); border-top: 6px solid var(--c, var(--violet)); }
+.card .kick { font: 600 11.5px var(--body); letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); margin: 0; }
+.card h2 { margin: 4px 0 6px; font: 700 26px/1.05 var(--display); text-wrap: balance; }
+.card p.desc { margin: 0 0 10px; font-size: 15px; line-height: 1.45; }
+.card ul { margin: 0 0 14px; padding: 0; list-style: none; display: grid; gap: 5px; }
+.card li { font-size: 14px; display: flex; gap: 8px; align-items: baseline; }
+.card li::before { content: ""; width: 7px; height: 7px; border-radius: 2px; background: var(--c, var(--violet)); flex: none; transform: translateY(-1px); }
+.card a.go { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font: 700 16px var(--display); color: #fff; background: var(--c, var(--violet)); padding: 11px 18px; border-radius: 12px; }
+.card a.go:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+.card .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.card .url { font-size: 13px; color: var(--muted); user-select: all; }
+.fallback { pointer-events: auto; background: var(--paper); border-radius: 16px; padding: 16px; max-width: 460px; margin: auto; box-shadow: 0 10px 30px rgba(15,20,32,.2); }
+.fallback a { color: var(--violet); font-weight: 600; }
+.about { pointer-events: auto; position: fixed; left: max(16px, env(safe-area-inset-left, 0px)); bottom: calc(76px + env(safe-area-inset-bottom, 0px)); max-width: min(360px, calc(100% - 32px)); background: var(--paper); border-radius: 14px; padding: 8px 14px; box-shadow: 0 6px 24px rgba(15,20,32,.16); font-size: 14px; line-height: 1.45; }
+.about summary { cursor: pointer; font: 600 14px var(--display); }
+.about ul { padding-left: 18px; margin: 6px 0; }
+.about a { color: var(--violet); font-weight: 600; }
+.about[open] ~ .bottom .card { display: none; }
+@media (max-width: 520px) {
+  .chip h1 { font-size: 19px; }
+  nav.dir button { padding: 7px 9px; font-size: 13px; }
+  .card h2 { font-size: 22px; }
+}
+</style>
+</head>
+<body>
+<canvas id="scene" tabindex="0" aria-label="3D town. Use the arrow keys or WASD to walk, or tap a spot to walk there."></canvas>
+<div class="ui">
+  <div class="top">
+    <div class="chip"><h1><b>Ojeda Works</b> Town</h1><p>Napa, CA · walk up to a door to step inside</p></div>
+    <nav class="dir" aria-label="Walk to a building">
+      <button type="button" data-go="ow"><span class="dot" style="background:var(--violet)"></span>Ojeda Works</button>
+      <button type="button" data-go="ao"><span class="dot" style="background:var(--blue)"></span>AO Audit</button>
+      <button type="button" data-go="mh"><span class="dot" style="background:var(--rosa)"></span>My Own Hit</button>
+    </nav>
+  </div>
+  <details class="about" id="about">
+    <summary>What is this?</summary>
+    <p>Ojeda Works Town is a small 3D town square in Napa, California. Each building is one of our three sites:</p>
+    <ul>
+      <li><a href="/">Ojeda Works</a>: video, web development, content and advertising that get local businesses found and called.</li>
+      <li><a href="https://aoaudit.com">AO Audit</a>: a free 60-second scan of how easily Google and AI tools like ChatGPT, Gemini and Perplexity can read your website.</li>
+      <li><a href="https://myownhit.com">My Own Hit</a>: your story made into a real song, in English, Spanish or both.</li>
+    </ul>
+    <p><a href="/">Back to ojedaworks.com</a></p>
+  </details>
+  <div class="bottom">
+    <div class="hint" id="hint"><kbd>W A S D</kbd> or arrows to walk · tap the ground to walk there · tap a building to visit</div>
+    <div class="card" id="card" hidden>
+      <p class="kick" id="cKick"></p>
+      <h2 id="cName"></h2>
+      <p class="desc" id="cDesc"></p>
+      <ul id="cFacts"></ul>
+      <div class="row"><a class="go" id="cLink" href="#" target="_blank" rel="noopener">Open</a><span class="url" id="cUrl"></span></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function () {
+  // The three sites. Copy comes from each site's own title/description (checked 2026-10-24).
+  const SITES = {
+    ow: { name: 'Ojeda Works', kick: 'Main office', url: '/', host: 'ojedaworks.com', color: '#5b21e0',
+          desc: "Customers can't find you? Ojeda Works makes the video, web development, content and advertising that get local businesses found and called.",
+          facts: ['Video, web development, content and advertising', 'For local businesses', 'Based in Napa, CA'] },
+    ao: { name: 'AO Audit', kick: 'The check-up', url: 'https://aoaudit.com', host: 'aoaudit.com', color: '#1f3fd1',
+          desc: 'Free Answer Optimization audit: a live scan of your site that checks how easily Google and AI tools like ChatGPT, Gemini and Perplexity can read it.',
+          facts: ['Your AO Score in 60 seconds', 'Free', 'Scans your site live'] },
+    mh: { name: 'My Own Hit', kick: 'The song shop', url: 'https://myownhit.com', host: 'myownhit.com', color: '#e4007c',
+          desc: "Your story, made into a real song in the style you've always wanted: corridos, oldies, R&B, country. In English, Spanish, or both.",
+          facts: ['One song: $47 · two: $87 · three: $127', 'Make one for someone you love', 'English, Spanish, or both'] }
+  };
+
+  const canvas = document.getElementById('scene');
+  const card = document.getElementById('card'), hint = document.getElementById('hint');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function fallback(msg) {
+    const ui = document.querySelector('.bottom');
+    ui.innerHTML = '<div class="fallback"><p style="margin:0 0 8px">' + msg + '</p>' +
+      Object.values(SITES).map(s => '<p style="margin:4px 0"><a href="' + s.url + '" target="_blank" rel="noopener">' + s.name + '</a> · ' + s.host + '</p>').join('') + '</div>';
+  }
+  if (!window.THREE) { fallback("The 3D town couldn't load here. The three sites:"); return; }
+
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true }); }
+  catch (e) { fallback("This browser can't show 3D. The three sites:"); return; }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.Fog(0xe9d2b8, 55, 120);
+  const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 300);
+
+  // Golden-hour light from the west
+  scene.add(new THREE.HemisphereLight(0xdfe9ff, 0x8a7a55, 0.62));
+  const sun = new THREE.DirectionalLight(0xffe2b8, 0.85);
+  sun.position.set(-30, 40, 18);
+  sun.castShadow = true;
+  sun.shadow.mapSize.set(2048, 2048);
+  Object.assign(sun.shadow.camera, { left: -40, right: 40, top: 40, bottom: -40, near: 1, far: 120 });
+  scene.add(sun);
+
+  const mat = (c, o) => new THREE.MeshStandardMaterial(Object.assign({ color: c, roughness: 0.85, metalness: 0 }, o || {}));
+  function box(w, h, d, color, x, y, z, parent, opts) {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat(color, opts));
+    m.position.set(x, y, z); m.castShadow = true; m.receiveShadow = true;
+    (parent || scene).add(m); return m;
+  }
+  function cyl(rt, rb, h, color, x, y, z, parent, seg) {
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, seg || 16), mat(color));
+    m.position.set(x, y, z); m.castShadow = true; m.receiveShadow = true;
+    (parent || scene).add(m); return m;
+  }
+
+  const buildings = {}; const solids = []; const clickables = [];
+
+  // Ground, plaza, streets
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(240, 240), mat(0x93b46a));
+  ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; ground.name = 'ground'; scene.add(ground);
+  const plaza = new THREE.Mesh(new THREE.CircleGeometry(15, 48), mat(0xe8d8bd));
+  plaza.rotation.x = -Math.PI / 2; plaza.position.y = 0.02; plaza.receiveShadow = true; plaza.name = 'ground'; scene.add(plaza);
+  const street = (w, d, x, z) => { const s = new THREE.Mesh(new THREE.PlaneGeometry(w, d), mat(0xcdbb9c)); s.rotation.x = -Math.PI / 2; s.position.set(x, 0.015, z); s.receiveShadow = true; s.name = 'ground'; scene.add(s); };
+  street(6, 40, 0, 18); street(60, 6, 0, -2);
+  // plaza ring tiles
+  for (let i = 0; i < 24; i++) { const a = i / 24 * Math.PI * 2; box(1.4, 0.06, 0.5, 0xd6c19d, Math.cos(a) * 13.6, 0.05, Math.sin(a) * 13.6).rotation.y = -a; }
+
+  // Fountain
+  cyl(3, 3.2, 0.7, 0xcfc2aa, 0, 0.35, 2);
+  const water = cyl(2.6, 2.6, 0.1, 0x6fb3d9, 0, 0.72, 2); water.material.roughness = 0.2;
+  cyl(0.4, 0.5, 1.8, 0xcfc2aa, 0, 1.2, 2);
+  cyl(1.1, 0.6, 0.3, 0xcfc2aa, 0, 2.1, 2);
+  solids.push({ x0: -3.6, x1: 3.6, z0: -1.6, z1: 5.6 });
+
+  const signRegistry = [];
+  // Signs drawn on canvas
+  function signTex(lines, bg, fg, w, h, font) {
+    const c = document.createElement('canvas'); c.width = w; c.height = h;
+    const g = c.getContext('2d');
+    g.fillStyle = bg; g.fillRect(0, 0, w, h);
+    g.fillStyle = fg; g.textAlign = 'center'; g.textBaseline = 'middle';
+    lines.forEach((l, i) => {
+      let size = l.size;
+      g.font = '700 ' + size + 'px ' + (font || 'Fredoka, Arial Rounded MT Bold, sans-serif');
+      while (g.measureText(l.t).width > w * 0.9 && size > 10) { size -= 2; g.font = '700 ' + size + 'px ' + (font || 'Fredoka, Arial Rounded MT Bold, sans-serif'); }
+      g.fillStyle = l.c || fg; g.fillText(l.t, w / 2, l.y * h);
+    });
+    const t = new THREE.CanvasTexture(c); t.anisotropy = 4; return t;
+  }
+  function sign(lines, bg, fg, pw, ph, parent, x, y, z, ry) {
+    const tex = signTex(lines, bg, fg, 1024, Math.round(1024 * ph / pw));
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(pw, ph), new THREE.MeshBasicMaterial({ map: tex }));
+    m.position.set(x, y, z); if (ry) m.rotation.y = ry; (parent || scene).add(m);
+    signRegistry.push({ lines, bg, fg, h: Math.round(1024 * ph / pw), mesh: m }); return m;
+  }
+
+  function door(parent, x, z, color) {
+    box(2.2, 3.2, 0.2, 0x2a2238, x, 1.6, z, parent);
+    box(2.6, 0.3, 0.3, color, x, 3.3, z + 0.05, parent);
+    const knob = new THREE.Mesh(new THREE.SphereGeometry(0.1, 12, 8), mat(0xf6d36b, { metalness: 0.6, roughness: 0.3 }));
+    knob.position.set(x + 0.7, 1.5, z + 0.15); parent.add(knob);
+  }
+  function windowRow(parent, y, z, xs, glow) {
+    xs.forEach(x => { box(1.4, 1.4, 0.15, glow, x, y, z, parent, { emissive: new THREE.Color(glow), emissiveIntensity: 0.25 }); });
+  }
+  function makeBuilding(key, pos, rotY, w, h, d, wall, roof) {
+    const g = new THREE.Group(); g.position.set(pos[0], 0, pos[1]); g.rotation.y = rotY; scene.add(g);
+    const body = box(w, h, d, wall, 0, h / 2, 0, g); body.userData.site = key;
+    const r = box(w + 0.6, 0.6, d + 0.6, roof, 0, h + 0.3, 0, g); r.userData.site = key;
+    const front = d / 2 + 0.01;
+    door(g, 0, front, roof);
+    // door point (world) = 3 units in front of the door
+    const dp = new THREE.Vector3(0, 0, d / 2 + 3).applyAxisAngle(new THREE.Vector3(0, 1, 0), rotY).add(new THREE.Vector3(pos[0], 0, pos[1]));
+    buildings[key] = { group: g, door: dp, front, rotY };
+    // footprint for collisions (world AABB, rotation is a multiple of 90deg)
+    const sw = Math.abs(Math.cos(rotY)) > 0.5 ? w : d, sd = Math.abs(Math.cos(rotY)) > 0.5 ? d : w;
+    solids.push({ x0: pos[0] - sw / 2 - 0.7, x1: pos[0] + sw / 2 + 0.7, z0: pos[1] - sd / 2 - 0.7, z1: pos[1] + sd / 2 + 0.7 });
+    g.traverse(o => { if (o.isMesh) { o.userData.site = key; clickables.push(o); } });
+    return g;
+  }
+
+  // 1. Ojeda Works main office (north, facing the plaza)
+  const ow = makeBuilding('ow', [0, -20], 0, 12, 7.5, 7, 0xf4efe6, 0x5b21e0);
+  windowRow(ow, 4.9, 3.51, [-4, -2.2, 2.2, 4], 0xffe9a8);
+  windowRow(ow, 1.9, 3.51, [-4, 4], 0xffe9a8);
+  sign([{ t: 'OJEDA WORKS', size: 150, y: 0.5 }], '#5b21e0', '#ffffff', 9, 1.5, ow, 0, 6.7, 3.52);
+  box(0.25, 2.2, 0.25, 0x0f1420, 5.2, 8.7, 0, ow); // rooftop flag pole
+  sign([{ t: 'OPEN', size: 160, y: 0.52 }], '#0f1420', '#e6ff00', 1.8, 0.8, ow, 4.25, 9.2, 0.01);
+  // 2. AO Audit (west, facing east)
+  const ao = makeBuilding('ao', [-20, -3], Math.PI / 2, 9, 6, 7, 0xffffff, 0x1f3fd1);
+  windowRow(ao, 4.1, 3.51, [-3, 3], 0xbfd3ff);
+  sign([{ t: 'AO AUDIT', size: 150, y: 0.5 }], '#1f3fd1', '#ffffff', 6.5, 1.3, ao, 0, 5.2, 3.52);
+  // rooftop magnifying glass
+  const lens = new THREE.Mesh(new THREE.TorusGeometry(1.3, 0.22, 12, 36), mat(0x1f3fd1)); lens.position.set(0, 8.4, 0); lens.castShadow = true; ao.add(lens);
+  const glass = new THREE.Mesh(new THREE.CircleGeometry(1.15, 32), new THREE.MeshStandardMaterial({ color: 0xcfe2ff, transparent: true, opacity: 0.55, side: THREE.DoubleSide })); glass.position.set(0, 8.4, 0); ao.add(glass);
+  const handle = cyl(0.18, 0.18, 1.8, 0x0f1420, 1.4, 7.0, 0, ao); handle.rotation.z = Math.PI / 4;
+  // 3. My Own Hit (east, facing west)
+  const mh = makeBuilding('mh', [20, -3], -Math.PI / 2, 9, 6, 7, 0x16133d, 0xe4007c);
+  windowRow(mh, 4.1, 3.51, [-3, 3], 0xffc46b);
+  sign([{ t: 'MY OWN HIT', size: 150, y: 0.5 }], '#e4007c', '#ffffff', 6.5, 1.3, mh, 0, 5.2, 3.52);
+  for (let i = 0; i < 7; i++) box(1.05, 0.12, 1.4, i % 2 ? 0xffffff : 0xf6a821, -3.15 + i * 1.05, 3.6, 4.1, mh).rotation.x = 0.35; // awning
+  const vinyl = new THREE.Group(); vinyl.position.set(0, 8.2, 0); mh.add(vinyl);
+  const rec = cyl(2.2, 2.2, 0.12, 0x111111, 0, 0, 0, vinyl, 48); rec.rotation.x = Math.PI / 2; rec.material.roughness = 0.35;
+  const lab = cyl(0.75, 0.75, 0.14, 0xe4007c, 0, 0, 0, vinyl, 32); lab.rotation.x = Math.PI / 2;
+  cyl(0.12, 0.12, 2.2, 0x0f1420, 0, 6.9, -0.2, mh);
+
+  // Signpost in the plaza
+  const post = cyl(0.12, 0.12, 3.4, 0x6b4f35, 5, 1.7, 7);
+  solids.push({ x0: 4.5, x1: 5.5, z0: 6.5, z1: 7.5 });
+  const arrows = [['↑ OJEDA WORKS', '#5b21e0', 0], ['← AO AUDIT', '#1f3fd1', 0.85], ['MY OWN HIT →', '#e4007c', 1.7]];
+  arrows.forEach(([t, c, k]) => sign([{ t, size: 120, y: 0.52 }], c, '#ffffff', 2.6, 0.55, scene, 5, 3.1 - k * 0.65 + 0.0, 7.13));
+
+  // Trees, lamps, benches
+  function tree(x, z, s) {
+    cyl(0.18 * s, 0.25 * s, 1.6 * s, 0x7a5a3a, x, 0.8 * s, z);
+    const c = new THREE.Mesh(new THREE.ConeGeometry(1.3 * s, 3 * s, 8), mat(0x5f8f4a)); c.position.set(x, 3 * s, z); c.castShadow = true; scene.add(c);
+    solids.push({ x0: x - 0.6, x1: x + 0.6, z0: z - 0.6, z1: z + 0.6 });
+  }
+  [[-11, 10], [11, 10], [-13, -12], [13, -12], [-30, 8], [30, 8], [-9, 22], [9, 22], [-28, -14], [28, -14], [-34, -4], [34, -4]].forEach(([x, z], i) => tree(x, z, 0.9 + (i % 3) * 0.15));
+  function lamp(x, z) {
+    cyl(0.09, 0.12, 3.6, 0x1b1f2a, x, 1.8, z);
+    const bulb = new THREE.Mesh(new THREE.SphereGeometry(0.32, 16, 10), new THREE.MeshStandardMaterial({ color: 0xfff1c4, emissive: 0xffd98a, emissiveIntensity: 0.9 }));
+    bulb.position.set(x, 3.75, z); scene.add(bulb);
+  }
+  [[-9, 9], [9, 9], [-11, -9], [11, -9]].forEach(([x, z]) => lamp(x, z));
+  function bench(x, z, ry) { const g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = ry; scene.add(g); box(2.2, 0.15, 0.6, 0x8a5a36, 0, 0.6, 0, g); box(2.2, 0.6, 0.12, 0x8a5a36, 0, 1, -0.3, g); box(0.12, 0.6, 0.5, 0x1b1f2a, -0.9, 0.3, 0, g); box(0.12, 0.6, 0.5, 0x1b1f2a, 0.9, 0.3, 0, g); }
+  bench(-5.5, 9, 0); bench(-8, 4, Math.PI / 2);
+
+  // Vineyard rows behind town + hills
+  for (let r = 0; r < 14; r++) {
+    for (let s = -1; s <= 1; s += 2) {
+      const row = box(22, 1.1, 0.7, 0x4f7a3a, s * 24, 0.55, -34 - r * 2.4);
+      row.castShadow = false;
+    }
+  }
+  [[-60, -80, 30, 0x9fb27c], [10, -95, 40, 0xb7a97a], [70, -75, 28, 0x8fa56f], [-90, -40, 26, 0xa9b884], [95, -30, 24, 0xb8ab80]].forEach(([x, z, r, c]) => {
+    const h = new THREE.Mesh(new THREE.SphereGeometry(r, 24, 12), mat(c)); h.scale.y = 0.35; h.position.set(x, -2, z); scene.add(h);
+  });
+
+  // The walker (a little box character)
+  const me = new THREE.Group(); scene.add(me);
+  const legs = [box(0.32, 0.7, 0.32, 0x0f1420, -0.2, 0.35, 0, me), box(0.32, 0.7, 0.32, 0x0f1420, 0.2, 0.35, 0, me)];
+  box(0.95, 1.0, 0.6, 0xf6a821, 0, 1.2, 0, me);
+  box(0.75, 0.7, 0.65, 0xf2c9a0, 0, 2.05, 0, me);
+  box(0.82, 0.22, 0.72, 0x5b21e0, 0, 2.5, 0, me);
+  box(0.8, 0.08, 0.35, 0x5b21e0, 0, 2.42, 0.45, me);
+  [-0.17, 0.17].forEach(x => box(0.09, 0.12, 0.02, 0x0f1420, x, 2.1, 0.33, me));
+  me.position.set(0, 0, 14);
+  let heading = Math.PI; me.rotation.y = heading;
+
+  // Ground marker for tap-to-walk
+  const marker = new THREE.Mesh(new THREE.RingGeometry(0.45, 0.65, 32), new THREE.MeshBasicMaterial({ color: 0x5b21e0, transparent: true, opacity: 0.85 }));
+  marker.rotation.x = -Math.PI / 2; marker.position.y = 0.05; marker.visible = false; scene.add(marker);
+
+  // Input
+  const keys = {};
+  const KEYMAP = { ArrowUp: 'f', KeyW: 'f', ArrowDown: 'b', KeyS: 'b', ArrowLeft: 'l', KeyA: 'l', ArrowRight: 'r', KeyD: 'r' };
+  addEventListener('keydown', e => { if (KEYMAP[e.code]) { keys[KEYMAP[e.code]] = true; target = null; marker.visible = false; if (e.target === document.body || e.target === canvas) e.preventDefault(); } });
+  addEventListener('keyup', e => { if (KEYMAP[e.code]) keys[KEYMAP[e.code]] = false; });
+  addEventListener('blur', () => { for (const k in keys) keys[k] = false; });
+
+  let target = null, targetSite = null;
+  const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+  let downAt = null;
+  canvas.addEventListener('pointerdown', e => { downAt = [e.clientX, e.clientY]; canvas.focus({ preventScroll: true }); });
+  canvas.addEventListener('pointerup', e => {
+    if (!downAt || Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]) > 8) return;
+    const r = canvas.getBoundingClientRect();
+    ndc.set((e.clientX - r.left) / r.width * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+    ray.setFromCamera(ndc, camera);
+    const hitB = ray.intersectObjects(clickables, false)[0];
+    if (hitB) { goTo(hitB.object.userData.site); return; }
+    const hitG = ray.intersectObjects(scene.children.filter(o => o.name === 'ground'), false)[0];
+    if (hitG) { sense = 0; target = hitG.point.clone(); target.y = 0; targetSite = null; marker.position.set(target.x, 0.05, target.z); marker.visible = true; }
+  });
+  function goTo(key) { const b = buildings[key]; sense = 0; target = b.door.clone(); targetSite = key; marker.position.set(target.x, 0.05, target.z); marker.visible = true; }
+  document.querySelectorAll('[data-go]').forEach(btn => btn.addEventListener('click', () => goTo(btn.dataset.go)));
+
+  // Collision: slide along whichever axis stays free
+  const R = 30;
+  function blocked(x, z) {
+    if (Math.hypot(x, z + 4) > R) return true;
+    return solids.some(s => x > s.x0 && x < s.x1 && z > s.z0 && z < s.z1);
+  }
+
+  // Door card
+  let shown = null;
+  function showCard(key) {
+    if (shown === key) return; shown = key;
+    if (!key) { card.hidden = true; hint.hidden = false; return; }
+    const s = SITES[key];
+    card.style.setProperty('--c', s.color);
+    document.getElementById('cKick').textContent = s.kick;
+    document.getElementById('cName').textContent = s.name;
+    document.getElementById('cDesc').textContent = s.desc;
+    document.getElementById('cFacts').innerHTML = s.facts.map(f => '<li>' + f.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</li>').join('');
+    const a = document.getElementById('cLink'); a.href = s.url; a.textContent = 'Visit ' + s.host + (s.url === '/' ? ' →' : ' ↗');
+    if (s.url === '/') a.removeAttribute('target'); else a.target = '_blank';
+    document.getElementById('cUrl').textContent = 'https://' + s.host;
+    card.hidden = false; hint.hidden = true;
+  }
+
+  // Camera
+  const camOff = new THREE.Vector3(0, 9.5, 13.5);
+  const camPos = new THREE.Vector3(), look = new THREE.Vector3();
+  let camYaw = 0, nearKey = null;
+  function placeCamera(snap) {
+    const wantYaw = nearKey ? buildings[nearKey].rotY : 0;
+    let dy = wantYaw - camYaw; dy = Math.atan2(Math.sin(dy), Math.cos(dy));
+    camYaw = snap ? wantYaw : camYaw + dy * 0.05;
+    const off = camOff.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), camYaw);
+    const want = me.position.clone().add(off);
+    if (snap) camPos.copy(want); else camPos.lerp(want, 0.08);
+    camera.position.copy(camPos);
+    const ahead = new THREE.Vector3(0, 0, -3).applyAxisAngle(new THREE.Vector3(0, 1, 0), camYaw);
+    look.set(me.position.x + ahead.x, 1.2, me.position.z + ahead.z);
+    camera.lookAt(look);
+  }
+  function resize() {
+    const w = innerWidth, h = innerHeight;
+    renderer.setSize(w, h, false); camera.aspect = w / h;
+    camOff.set(0, w < h ? 12 : 9.5, w < h ? 18 : 13.5); // phones: pull back so a building fits
+    camera.updateProjectionMatrix();
+  }
+  addEventListener('resize', resize); resize(); placeCamera(true);
+
+  const clock = new THREE.Clock(); let walkT = 0; let detour = null; let sense = 0;
+  function frame() {
+    const dt = Math.min(clock.getDelta(), 0.05);
+    let mx = 0, mz = 0;
+    if (keys.f) mz -= 1; if (keys.b) mz += 1; if (keys.l) mx -= 1; if (keys.r) mx += 1;
+    if (!mx && !mz && target) {
+      const dx = target.x - me.position.x, dz = target.z - me.position.z, dist = Math.hypot(dx, dz);
+      if (dist < 0.25) { sense = 0; target = null; marker.visible = false; if (targetSite) { heading = buildings[targetSite].rotY + Math.PI; } }
+      else { mx = dx / dist; mz = dz / dist; }
+    }
+    if (detour && target && !keys.f && !keys.b && !keys.l && !keys.r) {
+      detour.t -= dt;
+      const ax = me.position.x + detour.x * 7.5 * dt, az = me.position.z + detour.z * 7.5 * dt;
+      if (detour.t > 0 && !blocked(ax, az)) { mx = detour.x; mz = detour.z; } else detour = null;
+    } else detour = null;
+    const moving = mx || mz;
+    if (moving) {
+      const len = Math.hypot(mx, mz); mx /= len; mz /= len;
+      const step = 7.5 * dt;
+      const nx = me.position.x + mx * step, nz = me.position.z + mz * step;
+      if (!blocked(nx, nz)) { me.position.x = nx; me.position.z = nz; }
+      else if (Math.abs(mx) > 0.25 && !blocked(nx, me.position.z)) me.position.x = nx;
+      else if (Math.abs(mz) > 0.25 && !blocked(me.position.x, nz)) me.position.z = nz;
+      else {
+        // blocked head-on: sidestep along the obstacle (left or right, whichever is open and closer to the goal)
+        let sides = [[-mz, mx, 1], [mz, -mx, -1]];
+        if (sense) sides.sort((a) => (a[2] === sense ? -1 : 1));   // keep going round the same way
+        else if (target) sides.sort((a, b) => Math.hypot(target.x - (me.position.x + a[0]), target.z - (me.position.z + a[1])) - Math.hypot(target.x - (me.position.x + b[0]), target.z - (me.position.z + b[1])));
+        const side = sides.find(([sx, sz]) => !blocked(me.position.x + sx * step, me.position.z + sz * step));
+        if (side) { detour = { x: side[0], z: side[1], t: 0.6 }; sense = side[2]; }
+        else if (target) { target = null; marker.visible = false; }
+      }
+      heading = Math.atan2(mx, mz);
+      walkT += dt * 10;
+    }
+    // turn smoothly
+    let d = heading - me.rotation.y; d = Math.atan2(Math.sin(d), Math.cos(d)); me.rotation.y += d * Math.min(1, dt * 12);
+    const swing = moving ? Math.sin(walkT) * 0.5 : 0;
+    legs[0].rotation.x = swing; legs[1].rotation.x = -swing;
+    me.position.y = moving ? Math.abs(Math.sin(walkT)) * 0.12 : 0;
+    if (!reduce) { vinyl.rotation.z += dt * 1.2; lens.rotation.y += dt * 0.4; glass.rotation.y = lens.rotation.y; }
+    marker.material.opacity = 0.55 + Math.sin(performance.now() / 200) * 0.3;
+    // nearest door
+    let near = null;
+    for (const k in buildings) if (me.position.distanceTo(buildings[k].door) < 3.2) near = k;
+    showCard(near); nearKey = near;
+    placeCamera(false);
+    renderer.render(scene, camera);
+    requestAnimationFrame(frame);
+  }
+  // Signs were first drawn with a fallback face if Fredoka wasn't ready yet: redraw them once it loads
+  frame();
+  if (document.fonts && document.fonts.load) {
+    document.fonts.load('700 100px Fredoka').then(() => {
+      signRegistry.forEach(sg => { const t = signTex(sg.lines, sg.bg, sg.fg, 1024, sg.h); sg.mesh.material.map.dispose(); sg.mesh.material.map = t; sg.mesh.material.needsUpdate = true; });
+    }).catch(() => {});
+  }
+})();
+</script>
+</body>
+</html>
