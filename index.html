@@ -49,6 +49,9 @@ section.hero-3d p.hero-honest{margin-top:.5rem}
 /* Ojeda Works Town is the first screen (Alejandro, 2026-10-24) */
 .town-hero{position:relative;z-index:10;background:#cfd9e6;padding:0!important;margin:0}
 .town-hero iframe{display:block;width:100%;height:calc(100svh - 4rem - 52px);min-height:420px;max-height:880px;border:0}
+.town-bar{display:flex;background:#0f1420}
+.town-bar .town-more{flex:1 1 50%;padding:0 .6rem;text-align:center;font-size:.95rem}
+.town-bar .town-more+.town-more{border-left:1px solid rgba(255,255,255,.18)}
 .town-more{display:flex;align-items:center;justify-content:center;height:52px;background:#0f1420;color:#fff;font-weight:600;text-decoration:none;letter-spacing:.01em}
 .town-more:hover,.town-more:focus-visible{background:#5b21e0;color:#fff}
 @media (max-width:760px){.town-hero iframe{height:calc(100svh - 52px - 7.6rem);min-height:360px}}
@@ -378,7 +381,7 @@ html.walk .hero-3d .wrap>div:first-child{opacity:var(--lp-hero,1)}
 </header>
 <section class="town-hero" aria-label="Ojeda Works Town: walk to Ojeda Works, AO Audit and My Own Hit">
   <iframe src="/town/?embed=1" title="Ojeda Works Town: walk to Ojeda Works, AO Audit and My Own Hit" loading="eager"></iframe>
-  <a class="town-more" href="#after-town">See what Ojeda Works does &darr;</a>
+  <div class="town-bar"><a class="town-more" href="#after-town">See what Ojeda Works does &darr;</a><a class="town-more" href="who-should-do-my-marketing.html">Compare: Ojeda Works vs an agency &rarr;</a></div>
 </section>
 <div class="laptop-intro" id="after-town">
   <div class="lp-run1" data-station="intro" aria-hidden="true"></div><div class="lp-run2" data-station="fill" aria-hidden="true"></div>
@@ -516,6 +519,7 @@ html.walk .hero-3d .wrap>div:first-child{opacity:var(--lp-hero,1)}
         <p>Happy customers walk out without leaving a review? You get a printable "scan to review us" poster for the counter. No signup, no watermark, also en espa&ntilde;ol.</p>
       </a>
     </div>
+    <p>Not sure who should do your marketing? <a href="who-should-do-my-marketing.html">Compare your options side by side &rarr;</a></p>
     <p>Got a different problem? <a href="guides.html">See all the free guides, sorted by problem &rarr;</a></p>
   </div>
 </section>
