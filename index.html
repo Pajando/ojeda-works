@@ -46,6 +46,22 @@ section.hero-3d p.lede{color:#f2f0fb;font-size:1.22rem;font-weight:500;line-heig
 section.hero-3d p.small{color:#c9c4dd;max-width:34rem;margin:.75rem 0 0}
 section.hero-3d p.hero-honest{margin-top:.5rem}
 .songs-line{margin:0;color:var(--dim)}
+/* "Enter your website" scan box under the town (2026-10-30): hands off to the AO Audit scanner in a new tab */
+.scanbox{position:relative;z-index:10;background:var(--panel,#fbfcfe);border-bottom:1px solid var(--line,#e4e7ef);padding:2.2rem 0 2.4rem!important;margin:0}
+.scanbox h2{margin:0 0 .4rem;font-size:clamp(1.45rem,3.4vw,2.1rem);line-height:1.15;text-wrap:balance}
+.scanbox p{margin:0 0 1rem;color:var(--dim,#5b6373);max-width:44rem}
+.scanbox form{display:flex;flex-wrap:wrap;gap:.6rem;align-items:flex-end;max-width:52rem}
+.scanbox label{display:flex;flex-direction:column;gap:.25rem;font-size:.9rem;font-weight:600;color:var(--ink,#0f1420);flex:1 1 15rem;min-width:0}
+.scanbox input{font:inherit;font-weight:400;font-size:1.05rem;padding:.7rem .8rem;border:1.5px solid var(--line,#e4e7ef);border-radius:.5rem;background:#fff;color:var(--ink,#0f1420);min-width:0}
+.scanbox input:focus-visible{outline:3px solid #5b21e0;outline-offset:1px}
+.scanbox button{flex:0 0 auto;border:0;cursor:pointer;font:inherit;font-weight:700;font-size:1.02rem;padding:.8rem 1.4rem;border-radius:.5rem;color:#fff;background:linear-gradient(135deg,var(--cta,#db3a00),var(--cta-deep,#c53000))}
+.scanbox button:hover{background:linear-gradient(135deg,var(--cta-deep,#c53000),var(--cta-press,#ad2a00))}
+.scanbox .small{margin:.8rem 0 0;font-size:.88rem}
+html.walk section.scanbox{background:#0f1420!important;border-bottom:1px solid rgba(242,238,228,.12)}
+html.walk section.scanbox>.wrap{background:transparent!important;border:0!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;max-width:var(--max)!important;margin:0 auto!important;padding:0 1.25rem!important}
+html.walk section.scanbox h2{color:#fff;font-size:clamp(1.45rem,3.4vw,2.1rem);line-height:1.15}
+html.walk section.scanbox p{color:rgba(242,238,228,.82)}
+html.walk section.scanbox label{color:#fff}
 /* Ojeda Works Town is the first screen (Alejandro, 2026-10-24) */
 .town-hero{position:relative;z-index:10;background:#cfd9e6;padding:0!important;margin:0}
 .town-hero iframe{display:block;width:100%;height:calc(100svh - 4rem - 52px);min-height:420px;max-height:880px;border:0}
@@ -382,6 +398,19 @@ html.walk .hero-3d .wrap>div:first-child{opacity:var(--lp-hero,1)}
 <section class="town-hero" aria-label="Ojeda Works Town: walk to Ojeda Works, AO Audit and My Own Hit">
   <iframe src="/town/?embed=1" title="Ojeda Works Town: walk to Ojeda Works, AO Audit and My Own Hit" loading="eager"></iframe>
   <div class="town-bar"><a class="town-more" href="#after-town">See what Ojeda Works does &darr;</a><a class="town-more" href="who-should-do-my-marketing.html">Compare: Ojeda Works vs an agency &rarr;</a></div>
+</section>
+<section class="scanbox" aria-labelledby="scanbox-h">
+  <div class="wrap">
+    <h2 id="scanbox-h">Enter your website. See what Google and AI can read.</h2>
+    <p>It's free and takes about 60 seconds. It runs the AO Audit scan on your real website and opens your results in a new tab.</p>
+    <form action="https://aoaudit.com/" method="get" target="_blank" rel="noopener">
+      <input type="hidden" name="from" value="ojedaworks">
+      <label for="ow-scan-url">Your website<input id="ow-scan-url" name="scan" type="text" inputmode="url" autocomplete="url" placeholder="yourbusiness.com" required></label>
+      <label for="ow-scan-biz">Business name (optional)<input id="ow-scan-biz" name="biz" type="text" autocomplete="organization" placeholder="Your business"></label>
+      <button type="submit">Scan my site &#8599;</button>
+    </form>
+    <p class="small">The AO Audit is part of Ojeda Works. <a href="https://aoaudit.com/sample-report.pdf" target="_blank" rel="noopener">See a sample report first</a>.</p>
+  </div>
 </section>
 <div class="laptop-intro" id="after-town">
   <div class="lp-run1" data-station="intro" aria-hidden="true"></div><div class="lp-run2" data-station="fill" aria-hidden="true"></div>
