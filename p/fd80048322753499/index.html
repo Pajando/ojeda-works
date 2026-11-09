@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Art Ramirez Presence Map</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout concept: a plat map. The 3D scene fills the stage; the story sits in a panel (left on desktop, bottom sheet on phones). */
+:root{
+  --bg:#eef0ea; --panel:#f8f9f5; --ink:#14201a; --muted:#46554b; --line:#c3cbbd;
+  --brass:#7a5c14; --brass-3d:#b08a2e;
+  --good:#2f7a45; --fix:#b9770e; --stale:#b4472f; --missing:#66727e;
+  --scene-bg:#e3e8df; --ground:#d3dacd; --gridline:#b6c0b0; --vine:#9fb094;
+  --display:'Bricolage Grotesque',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --body:'Instrument Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d1410; --panel:#16201a; --ink:#e6ece3; --muted:#a3b2a7; --line:#2b3a31;
+    --brass:#d3ac4e; --brass-3d:#d3ac4e;
+    --good:#5dbb78; --fix:#e3a63b; --stale:#e2735a; --missing:#93a0ab;
+    --scene-bg:#0a100c; --ground:#121b15; --gridline:#243329; --vine:#2d4234;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d1410; --panel:#16201a; --ink:#e6ece3; --muted:#a3b2a7; --line:#2b3a31;
+  --brass:#d3ac4e; --brass-3d:#d3ac4e;
+  --good:#5dbb78; --fix:#e3a63b; --stale:#e2735a; --missing:#93a0ab;
+  --scene-bg:#0a100c; --ground:#121b15; --gridline:#243329; --vine:#2d4234;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--body);overflow:hidden}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+#ui{position:relative;height:100%;display:flex;flex-direction:column;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px}
+#stage{position:absolute;inset:0;background:var(--scene-bg);z-index:0;overflow:hidden}
+#cv{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+#cv.drag{cursor:grabbing}
+#labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.tag{position:absolute;left:0;top:0;font:500 12px/1.2 var(--mono);background:var(--panel);color:var(--ink);
+  border:1px solid var(--line);border-radius:4px;padding:3px 7px;white-space:nowrap;display:none}
+.tag.on{display:block}
+header.bar{position:relative;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  padding:6px 0 10px}
+.brand{font:600 15px/1.2 var(--display);letter-spacing:.01em}
+.brand small{display:block;font:400 11px/1.3 var(--mono);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.ctrls{display:flex;gap:8px;flex-wrap:wrap}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--panel)}
+.seg button{border:0;background:transparent;padding:7px 12px;font:500 13px/1 var(--body);color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+#panel{position:relative;z-index:2;background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  display:flex;flex-direction:column;min-height:0}
+#scroll{overflow-y:auto;padding:18px 18px 8px;flex:1;min-height:0}
+.eyebrow{font:500 11px/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--brass);margin:0 0 8px}
+h1,h2{font-family:var(--display);font-weight:650;letter-spacing:-.01em;margin:0 0 10px;text-wrap:balance;line-height:1.12}
+h1{font-size:30px} h2{font-size:24px}
+p{margin:0 0 10px;max-width:62ch} .fine{font-size:12.5px;color:var(--muted)}
+ul.plain{margin:0 0 10px;padding-left:18px} ul.plain li{margin:0 0 4px}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}
+.tile{border:1px solid var(--line);border-radius:8px;padding:10px 12px;min-width:0}
+.tile b{display:block;font:650 26px/1.05 var(--display);font-variant-numeric:tabular-nums}
+.tile span{display:block;font-size:13px;font-weight:600;margin-top:2px}
+.tile em{display:block;font-style:normal;font-size:12px;color:var(--muted);margin-top:2px}
+table.rv{border-collapse:collapse;width:100%;margin:6px 0 10px;font-size:13.5px}
+table.rv td{padding:5px 0;border-bottom:1px solid var(--line);vertical-align:baseline}
+table.rv td:last-child{text-align:right;font:500 14px var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+table.rv td small{color:var(--muted);display:block;font-size:11.5px}
+.chip{display:inline-flex;align-items:center;gap:6px;font:500 11.5px/1 var(--mono);padding:4px 8px;border:1px solid var(--line);border-radius:999px;white-space:nowrap}
+.chip i{width:9px;height:9px;border-radius:50%;background:var(--missing);display:inline-block}
+.s-good i{background:var(--good)} .s-fix i{background:var(--fix)} .s-stale i{background:var(--stale)} .s-missing i{background:var(--missing)}
+.code{font:400 12.5px/1.45 var(--mono);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 10px;margin:0 0 10px;overflow-x:auto}
+.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:8px 0 10px}
+.col{border:1px solid var(--line);border-radius:8px;padding:9px 11px;min-width:0}
+.col h3{font:600 12px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;margin:0 0 4px;color:var(--brass)}
+.col p{font-size:13px;margin:0}
+.btn{border:1px solid var(--ink);background:var(--ink);color:var(--bg);border-radius:8px;padding:9px 14px;font-weight:600;font-size:14px}
+.btn.alt{background:transparent;color:var(--ink)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
+nav.steps{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-top:1px solid var(--line)}
+.dots{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.dots button{width:10px;height:10px;border-radius:50%;border:1px solid var(--ink);background:transparent;padding:0}
+.dots button[aria-current="true"]{background:var(--brass);border-color:var(--brass)}
+.legend{position:absolute;right:12px;bottom:12px;z-index:1;display:flex;gap:8px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;max-width:calc(100% - 24px)}
+#detail{position:absolute;inset:0;background:var(--panel);border-radius:12px;padding:18px;overflow-y:auto;z-index:2}
+#detail dl{margin:12px 0 0} #detail dt{font:500 11px/1.2 var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--brass);margin-top:12px}
+#detail dd{margin:3px 0 0}
+#list{position:absolute;inset:0;z-index:1;background:var(--scene-bg);overflow-y:auto;padding:14px}
+#list h3{font:600 12px/1.2 var(--mono);letter-spacing:.07em;text-transform:uppercase;margin:14px 0 8px;color:var(--muted)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+.card{text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 12px;min-width:0;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start}
+.card b{display:block;margin-bottom:4px}
+.card span{display:block;font-size:12.5px;color:var(--muted);margin-top:6px}
+.target-ribbon{position:absolute;left:50%;top:10px;transform:translateX(-50%);z-index:1;font:500 12px/1 var(--mono);letter-spacing:.07em;text-transform:uppercase;
+  background:var(--good);color:#fff;border-radius:999px;padding:7px 14px}
+:root[data-theme="dark"] .target-ribbon{color:#07150c}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .target-ribbon{color:#07150c}}
+.stack{display:grid;gap:6px;margin:10px 0}
+.blk{border-radius:8px;padding:9px 12px;font-weight:600;font-size:14px}
+.blk small{display:block;font-weight:400;font-size:12px;opacity:.85;margin-top:1px}
+.b1{background:var(--ink);color:var(--bg)}
+.b2{background:transparent;border:1px solid var(--ink)}
+.b3{background:transparent;border:1px dashed var(--muted);color:var(--muted)}
+ol.tl{list-style:none;margin:8px 0 10px;padding:0;border-left:2px solid var(--line)}
+ol.tl li{position:relative;padding:0 0 12px 18px;font-size:14px}
+ol.tl li::before{content:"";position:absolute;left:-7px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--brass)}
+ol.tl li b{display:block;font:600 12px/1.3 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--brass);margin-bottom:1px}
+@media (min-width:821px){
+  #panel{position:absolute;left:max(16px,env(safe-area-inset-left,0px));top:70px;bottom:16px;width:410px;max-height:none}
+  #ui{padding-block:10px}
+  .legend{right:16px}
+  #list{padding:76px 16px 16px 440px}
+}
+@media (max-width:820px){
+  #stage{position:relative;inset:auto;flex:1 1 auto;min-height:150px;margin-left:calc(-1 * max(16px,env(safe-area-inset-left,0px)));margin-right:calc(-1 * max(16px,env(safe-area-inset-right,0px)));order:2}
+  header.bar{order:1} #panel{order:3;flex:0 0 52%;margin-top:8px;margin-bottom:6px}
+  h1{font-size:24px} h2{font-size:20px}
+  .legend{display:none}
+  .tiles,.cols{grid-template-columns:1fr 1fr}
+}
+@media (max-width:420px){ .tiles,.cols{grid-template-columns:1fr} .brand small{display:none} }
+@media (prefers-reduced-motion: reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+
+<div id="ui">
+  <header class="bar">
+    <div class="brand">Art Ramirez<small>Online presence map</small></div>
+    <div class="ctrls">
+      <div class="seg" role="group" aria-label="Show current or target state">
+        <button id="m-before" aria-pressed="true">Today</button>
+        <button id="m-after" aria-pressed="false">Target view</button>
+      </div>
+      <div class="seg" role="group" aria-label="Map or list view">
+        <button id="v-map" aria-pressed="true">3D map</button>
+        <button id="v-list" aria-pressed="false">List</button>
+      </div>
+    </div>
+  </header>
+
+  <div id="stage">
+    <canvas id="cv" aria-label="3D map of the places Art Ramirez can be found online. Use the List view for the same information as text."></canvas>
+    <div id="labels"></div>
+    <div id="ribbon" class="target-ribbon" hidden>Target view: what it looks like once updated</div>
+    <div class="legend" id="legend" aria-label="Legend">
+      <span class="chip s-good"><i></i>Working well</span>
+      <span class="chip s-fix"><i></i>Needs a fix</span>
+      <span class="chip s-stale"><i></i>Out of date</span>
+      <span class="chip s-missing"><i></i>Not claimed or not found</span>
+    </div>
+    <div id="list" hidden></div>
+  </div>
+
+  <section id="panel" aria-label="Presentation">
+    <div id="scroll" aria-live="polite"></div>
+    <div id="detail" hidden></div>
+    <nav class="steps" aria-label="Steps">
+      <button class="btn alt" id="prev">Back</button>
+      <div class="dots" id="dots"></div>
+      <button class="btn" id="next">Next</button>
+    </nav>
+  </section>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+'use strict';
+var $=function(id){return document.getElementById(id)};
+var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- Data: every fact checked 2026-11-08 ---------- */
+var STATUS={good:'Working well',fix:'Needs a fix',stale:'Out of date',missing:'Not claimed or not found'};
+var PLACES=[
+ {id:'google',name:'Google profile',status:'fix',label:'Strong, but thin',reviews:13,r:5,a:200,
+  now:'5.0 stars from 13 reviews, and you answered every one. Strong quality, but thin volume next to nearby agents, who show 28 to 83 on Google (it varies by location). Hours say "Open 24 hours" while other sites say 8 to 8 or 9 to 9. Two photos.',
+  target:'One set of hours, 10 or more photos including a headshot, a direct review link, and a steady flow of new reviews.',who:'You own it. We help as a manager you invite.'},
+ {id:'yelp',name:'Yelp',status:'good',reviews:38,r:5,a:320,
+  now:'5.0 stars from 38 reviews. Claimed, and lists Spanish. It says 18 years in business; your license shows 22.',
+  target:'Years and hours match your other profiles.',who:'You.'},
+ {id:'cb',name:'Coldwell Banker pages',status:'good',label:'Current, nothing more to show',reviews:0,r:5,a:80,
+  now:'Current brokerage, license number and phone. Nothing more to show yet.',
+  target:'Ask your broker what you can add, such as languages and a link to your own site.',who:'Your broker, with you.'},
+ {id:'zillow',name:'Zillow',status:'fix',reviews:0,r:8.5,a:10,
+  now:'Shows Coldwell Banker, English and Spanish, and 14 sales in the last 12 months. No reviews yet.',
+  target:'Reviews from your past clients.',who:'You, with a simple request to clients.'},
+ {id:'realtor',name:'Realtor.com',status:'fix',reviews:0,r:8.5,a:50,
+  now:'Bilingual profile with Coldwell Banker. No reviews. A second, empty "Arturo Ramirez" profile also exists.',
+  target:'One clean profile with reviews.',who:'You, with Realtor.com support.'},
+ {id:'experience',name:'Experience.com',status:'fix',reviews:0,r:8.5,a:130,
+  now:'Unclaimed profile with no reviews. It shows Coldwell Banker and 1775 Lincoln Ave, Suite 100.',
+  target:'Claimed and filled in.',who:'You.'},
+ {id:'facebook',name:'Facebook page',status:'fix',reviews:4,r:8.5,a:250,
+  now:'Shared page with 353 followers and 4 reviews. Last post July 2024. The profile picture still shows Compass.',
+  target:'Current profile picture and a posting rhythm you can keep.',who:'You, as page admin.'},
+ {id:'site',name:'napalisting.com',status:'fix',reviews:0,r:6.5,a:290,
+  now:'395 pages in its map and 52 blog posts. A search engine downloads the page title and a loading message, not your text.',
+  target:'Your main text readable to search engines.',who:'You for titles, descriptions and tracking. iHouseweb for the rest.'},
+ {id:'homes',name:'Homes.com',status:'stale',reviews:0,r:12,a:20,
+  now:'Shows Compass as your brokerage.',target:'Coldwell Banker Brokers of the Valley.',who:'You, by request to Homes.com.'},
+ {id:'linkedin',name:'LinkedIn',status:'stale',reviews:0,r:12,a:75,
+  now:'Headline and company still show Compass. The web address reads "compas".',target:'Current brokerage and a clean address.',who:'You.'},
+ {id:'usdre',name:'USDRE',status:'stale',reviews:9,r:12,a:120,
+  now:'Listed as "Arturo Ramirez, Compass Real Estate" with 9 reviews. Unclaimed.',target:'Claim it and update it, or ask for removal.',who:'You.'},
+ {id:'mapquest',name:'MapQuest',status:'stale',reviews:0,r:12,a:175,
+  now:'Lists Compass at 1300 First St.',target:'Current brokerage and address.',who:'You, by request.'},
+ {id:'unilocal',name:'Unilocal',status:'stale',reviews:10,r:12,a:225,
+  now:'Listed under Heritage Sotheby\'s with 10 reviews at 5.0.',target:'Current brokerage.',who:'You, by request.'},
+ {id:'homeasap',name:'HomeASAP',status:'stale',reviews:0,r:12,a:300,
+  now:'Heritage Sotheby\'s era listing with an out-of-state headquarters address.',target:'Current brokerage and address.',who:'You, by request.'},
+ {id:'apple',name:'Apple Maps',status:'missing',reviews:0,r:9.5,a:95,
+  now:'Your card is unclaimed, and its website button goes to Yelp.',target:'Claimed and matching Google.',who:'You, through Apple Business.'},
+ {id:'bing',name:'Bing Places',status:'missing',reviews:0,r:9.5,a:340,
+  now:'No Bing Maps card for you. Bing web results do show your pages.',target:'Created from your Google profile.',who:'You, with our help.'},
+ {id:'instagram',name:'Instagram',status:'fix',label:'Active, not linked',reviews:0,r:9.5,a:205,
+  now:'67 posts, newest July 2026, napalisting.com in the bio. Neither your website nor your two other sites link to it.',target:'Linked from your website, so the one active channel is found.',who:'You.'},
+ {id:'youtube',name:'YouTube',status:'missing',reviews:0,r:9.5,a:275,optional:true,
+  now:'We found no channel of your own. An empty channel exists under the team name.',target:'Optional. Short answers to one question each, if you will be on camera.',who:'You.'}
+];
+var BYID={};PLACES.forEach(function(p){BYID[p.id]=p});
+
+/* ---------- Story ---------- */
+function chip(s,l){return '<span class="chip s-'+s+'"><i></i>'+(l||STATUS[s])+'</span>'}
+var STEPS=[
+ {t:'Your online presence, mapped',e:'Prepared for Art Ramirez',hl:'all',labels:false,
+  cam:{th:0.55,ph:1.0,r:30,tx:0,ty:0.5,tz:0},
+  h:function(){return '<p>Every place a Napa buyer or seller can find you is a parcel on this map. Green is working. Amber needs a fix. Rust is out of date. Grey is not claimed or not found.</p><p>Drag to turn the map. Click a parcel for details. Use Next to move through the story, and the Target view button to see the goal.</p><p class="fine">Public information checked November 8, 2026. Eighteen places reviewed. Prepared by Ojeda Works.</p>'}},
+ {t:'The hard part is done',e:'What you already have',hl:['google','yelp','cb','zillow'],labels:true,
+  cam:{th:0.9,ph:1.0,r:15,tx:0,ty:0.3,tz:0},
+  h:function(){return '<div class="tiles"><div class="tile"><b>22</b><span>years licensed</span><em>Since August 2004. No disciplinary action on the state record.</em></div><div class="tile"><b>5.0</b><span>13 Google reviews</span><em>Every one answered by you.</em></div><div class="tile"><b>5.0</b><span>38 Yelp reviews</span><em>Claimed, and it lists Spanish.</em></div><div class="tile"><b>14</b><span>sales in 12 months</span><em>As shown on your Zillow profile.</em></div></div><p>These profiles already carry your name well. The rest of the map is about letting people find them.</p>'}},
+ {t:'Six places still show an old brokerage',e:'Correct',hl:['homes','linkedin','usdre','mapquest','unilocal','homeasap'],labels:true,
+  cam:{th:2.3,ph:0.95,r:30,tx:0,ty:0,tz:0},
+  h:function(){return '<p>Since February 13, 2025 you are with Coldwell Banker Brokers of the Valley. Homes.com, LinkedIn, USDRE and MapQuest still say Compass. Unilocal and HomeASAP still say Heritage Sotheby\'s.</p><p>Hours disagree too. Google says Open 24 hours. Other sites say 8 to 8 or 9 to 9.</p><p>A visitor sees a name that is not yours. Each site has its own way to update, and we handle that for you.</p>'}},
+ {t:'Your reviews are a strength spread thin',e:'Connect',hl:['google','yelp','usdre','unilocal','facebook','zillow','realtor','experience'],labels:true,reviews:true,
+  cam:{th:0.45,ph:1.0,r:46,tx:-2,ty:5.5,tz:0},
+  h:function(){return '<p>Column height is the review count at each place, drawn to one scale.</p><table class="rv"><tr><td>Yelp</td><td>38</td></tr><tr><td>Google</td><td>13</td></tr><tr><td>Unilocal<small>listing shows an old brokerage</small></td><td>10</td></tr><tr><td>USDRE<small>listing shows an old brokerage</small></td><td>9</td></tr><tr><td>Facebook<small>shared team page</small></td><td>4</td></tr><tr><td>Zillow, Realtor.com, Experience.com</td><td>0</td></tr></table><p>Nearby agents show 28 to 83 reviews on Google (logged-out Google Maps, results vary by location). A steady, honest review request after each closing closes that gap. We set the target together.</p>'}},
+ {t:'Your website: what visitors see, what a search engine gets',e:'Ask',hl:['site'],labels:true,siteView:true,
+  cam:{th:-0.2,ph:1.0,r:10,tx:2.2,ty:0.5,tz:-6.1},
+  h:function(){return '<div class="row"><div class="seg" role="group" aria-label="Who is looking"><button id="sv-visitor" aria-pressed="true">Visitors see</button><button id="sv-bot" aria-pressed="false">Search engine downloads</button></div></div><div id="svtext"></div><p><b>You can change:</b> page titles and descriptions, blog posts, tracking, and structured data through the Extra Code box.</p><p><b>iHouseweb has to change:</b> the robots.txt rules, the crawler firewall, and how pages are built. That is from the vendor\'s own documents. We confirm it with them.</p>'}},
+ {t:'Your Spanish is on three profiles, not on your site',e:'Connect',hl:['zillow','realtor','yelp','site'],labels:true,
+  cam:{th:0.3,ph:0.9,r:21,tx:2,ty:0.3,tz:-1},
+  h:function(){return '<p>Zillow, Realtor.com and Yelp say you speak Spanish. A client wrote that you helped their family in English or Spanish. napalisting.com has no Spanish at all.</p><p>Napa County is roughly 35 to 37 percent Hispanic, depending on the Census-based source and year (USAFacts 37.2%, Data USA 35.1%). In our searches we found no Napa agent with a Spanish-language site, though that search was limited.</p><p class="fine">Only if this is a lane you want.</p>'}},
+ {t:'Your story is stock articles, not your voice',e:'Add',hl:['site','google'],labels:true,
+  cam:{th:0.7,ph:1.0,r:15,tx:-1.2,ty:0.3,tz:-3.8},
+  h:function(){return '<p>Your blog has 52 posts. The newest is from March 5, and three are about Napa. Most are general articles supplied with the platform.</p><p>Your Google reviews mention probate, communication and kindness. Reviewers describe selling a family estate from out of state. That is your story.</p><p>A page on selling an inherited home from out of state, in your words, puts it where search engines can read it. Short videos of you answering one question at a time do the same.</p>'}},
+ {t:'Social media and AI answers: useful, but not first',e:'After the foundation',hl:['facebook','instagram','youtube'],labels:true,
+  cam:{th:0.35,ph:0.95,r:21,tx:-3,ty:0.3,tz:-5.5},
+  h:function(){return '<table class="rv"><tr><td>Facebook<small>Exists. Fix the profile picture and brokerage. Post only if you will keep it up.</small></td><td>Now</td></tr><tr><td>LinkedIn<small>Exists but still shows Compass. Quick fix.</small></td><td>Now</td></tr><tr><td>YouTube<small>Best fit for short video, if you will be on camera.</small></td><td>Later</td></tr><tr><td>Instagram<small>Active already. Link it from your website and keep the brokerage current.</small></td><td>Now</td></tr><tr><td>TikTok<small>Not now. We have no data that it would bring you clients.</small></td><td>Skip</td></tr><tr><td>AI answers<small>Not a place you post. They draw on the profiles and site on this map. We test the same questions every month.</small></td><td>Track</td></tr></table><p class="fine">These are our recommendations, not measured results. Your answer about where your clients come from decides how much of this matters.</p>'}},
+ {t:'Why the cleanup has to come first',e:'The reason',hl:'all',labels:false,ai:true,
+  cam:{th:0.5,ph:1.0,r:36,tx:0,ty:3.5,tz:0},
+  h:function(){return '<p>Everything else we could do sends people to the same places. If those places are wrong, the extra effort is wasted.</p><div class="stack" role="img" aria-label="Build from the bottom: Correct and Connect first, then Ask, then Add"><div class="blk b3">Add: your chosen focus, then AI recommendations<small>Months 2 to 3, last if you agree</small></div><div class="blk b2">Ask: iHouseweb and your broker<small>Weeks 2 to 4</small></div><div class="blk b1">Correct and Connect: facts and reviews<small>Weeks 1 to 2. The foundation.</small></div></div><p class="fine">Build from the bottom, and here is why.</p><ul class="plain"><li><b>People land on the wrong details.</b> More posts, videos or ads point to your profiles and site. Today they can find Compass, different hours, and a site that hides its text.</li><li><b>Search and AI read the same places.</b> Searching your name finds you through your Coldwell Banker page, Yelp and Zillow, not napalisting.com, and old Compass profiles sit beside them. Google\'s AI and Gemini named you in some of our tests, using your Google profile and reviews; ChatGPT and Perplexity did only when asked about you by name. Those tests were signed in and personalized, one run each.</li><li><b>Every new review lands somewhere.</b> It should land on a profile that shows who you are today.</li><li><b>It is fast, and it is yours.</b> The foundation takes about two weeks, and you stay the owner of every account.</li><li><b>It gives us a clean starting line.</b> We record a baseline before we change anything, so you can see what moved.</li></ul><p class="fine">We do not promise rankings or AI answers. This order makes sure that what people and tools find is correct.</p>'}},
+ {t:'A two-week cleanup comes first',e:'The plan',hl:'all',labels:false,plan:true,
+  cam:{th:-0.6,ph:0.9,r:30,tx:0,ty:0.4,tz:0},
+  h:function(){return '<div class="cols"><div class="col"><h3>Correct</h3><p>Old brokerage names, hours, years, labels. Weeks 1 to 2.</p></div><div class="col"><h3>Connect</h3><p>Reviews on Zillow and Realtor.com, Spanish on your site, profile links. Weeks 1 to 2.</p></div><div class="col"><h3>Ask</h3><p>iHouseweb and your broker. Weeks 2 to 4.</p></div><div class="col"><h3>Add</h3><p>The focus you choose: probate page, Spanish, local posts, short video. Months 2 to 3.</p></div></div><p><b>Last, only if you agree:</b> earn recommendations from AI tools. It starts after the cleanup, because tools name who they can read and verify. No promise of being named.</p><div class="row"><button class="btn" id="go-target">Show the target view</button></div><p class="fine">The target view shows the status we aim for. Review counts depend on your clients. We do not promise rankings or AI answers. We re-measure the same items at day 30, 60 and 90. YouTube stays grey in the target view because it is optional.</p>'}},
+ {t:'What happens next',e:'Next steps',hl:'all',labels:false,
+  cam:{th:-0.3,ph:1.0,r:32,tx:0,ty:0.4,tz:0},
+  h:function(){return '<ol class="tl"><li><b>This week</b>A 15 to 20 minute call: your goals, how clients find you, and read-only access.</li><li><b>Before we change anything</b>We record a baseline of the same items on this map.</li><li><b>Weeks 1 to 2</b>Correct and Connect: old names, hours, years, reviews, profile links.</li><li><b>Weeks 2 to 4</b>We ask iHouseweb and your broker, and choose the website path with you.</li><li><b>Months 2 to 3</b>Add the focus you choose: probate page, Spanish, local posts, short video.</li><li><b>Last, if you agree</b>Earn recommendations from AI tools, after the cleanup and your yes.</li><li><b>Day 30, 60 and 90</b>We re-check the same items and show you what changed.</li></ol><p class="fine">You approve each stage. Nothing changes on any account without you.</p>'}},
+ {t:'What we need from you',e:'Next step',hl:'all',labels:false,
+  cam:{th:0.2,ph:1.05,r:32,tx:0,ty:0.4,tz:0},
+  h:function(){return '<p><b>Read-only access</b> to your Google profile, Search Console, analytics and iHouseweb dashboard. You stay the owner of everything.</p><ul class="plain"><li>Where do most of your clients come from, and what do you want more of?</li><li>How many inquiries a month, and how fast are they answered?</li><li>Do you want Spanish-speaking clients and probate work as a focus?</li><li>What does your broker allow in marketing?</li><li>What can you spend monthly, and how much time can you give?</li></ul><p><b>What we have not seen:</b> website traffic, search rankings, who owns each profile, and where your leads go. In our tests, Google\'s AI and Gemini named you for some questions and ChatGPT and Perplexity only when asked about you by name (signed in, one run each). We have not tested Copilot or Grok.</p><p><a href="AO-Report-napalisting.com.pdf" target="_blank" rel="noopener"><b>Download the full report (PDF, 18 pages)</b></a></p><p class="fine">Ojeda Works · ojedaworks.com · alejandro@ojedaworks.com</p>'}}
+];
+
+/* ---------- State ---------- */
+var step=0, mode='before', view='map', siteView='visitor', hover=null, detailId=null;
+var hasGL=true, three=null;
+
+function setMode(m){mode=m;$('m-before').setAttribute('aria-pressed',m==='before');$('m-after').setAttribute('aria-pressed',m==='after');$('ribbon').hidden=(m!=='after');retarget();renderList()}
+function setView(v){view=v;$('v-map').setAttribute('aria-pressed',v==='map');$('v-list').setAttribute('aria-pressed',v==='list');$('list').hidden=(v!=='list');$('legend').hidden=(v==='list')}
+
+/* ---------- Panel ---------- */
+function renderStep(){
+  var s=STEPS[step];
+  $('scroll').innerHTML='<p class="eyebrow">'+s.e+'</p>'+(step===0?'<h1>':'<h2>')+s.t+(step===0?'</h1>':'</h2>')+s.h();
+  $('scroll').scrollTop=0;
+  var dots=$('dots');dots.innerHTML='';
+  STEPS.forEach(function(x,i){var b=document.createElement('button');b.setAttribute('aria-label','Step '+(i+1)+': '+x.t);if(i===step)b.setAttribute('aria-current','true');b.onclick=function(){go(i)};dots.appendChild(b)});
+  $('prev').disabled=step===0;$('prev').style.opacity=step===0?.4:1;
+  $('next').textContent=step===STEPS.length-1?'Start over':'Next';
+  var sv=$('sv-visitor');if(sv){sv.onclick=function(){setSite('visitor')};$('sv-bot').onclick=function(){setSite('bot')};setSite(siteView)}
+  var gt=$('go-target');if(gt)gt.onclick=function(){setMode('after')};
+}
+function setSite(v){
+  siteView=v;var a=$('sv-visitor'),b=$('sv-bot');if(!a)return;
+  a.setAttribute('aria-pressed',v==='visitor');b.setAttribute('aria-pressed',v==='bot');
+  $('svtext').innerHTML=v==='visitor'
+   ?'<p>Your full site: listings, blog, contact form, valuation box. 395 pages in its map.</p>'
+   :'<div class="code">Napa Valley Realtors | Buy &amp; Sell Homes | NapaListing.com<br>Loading NapaListing.com.</div><p>About 18 to 40 words per page in what is downloaded. Your robots.txt also tells every bot to skip the market-report and listing pages.</p>';
+  retarget();
+}
+function go(i){closeDetail();step=((i%STEPS.length)+STEPS.length)%STEPS.length;renderStep();aimCamera();retarget()}
+$('next').onclick=function(){go(step+1)};
+$('prev').onclick=function(){if(step>0)go(step-1)};
+$('m-before').onclick=function(){setMode('before')};$('m-after').onclick=function(){setMode('after')};
+$('v-map').onclick=function(){setView('map')};$('v-list').onclick=function(){setView('list')};
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight')go(step+1);else if(e.key==='ArrowLeft'&&step>0)go(step-1);else if(e.key==='Escape')closeDetail();
+});
+
+/* ---------- Detail ---------- */
+function openDetail(id){
+  var p=BYID[id];detailId=id;
+  var st=mode==='after'?'good':p.status;
+  var rv=p.reviews?'<dt>Reviews shown</dt><dd>'+p.reviews+'</dd>':'';
+  $('detail').innerHTML='<button class="btn alt" id="dclose">Back to the story</button><p class="eyebrow" style="margin-top:14px">'+(mode==='after'?'Target':'Today')+'</p><h2>'+p.name+'</h2>'+chip(p.status,p.label)+
+   '<dl><dt>Right now</dt><dd>'+p.now+'</dd>'+rv+'<dt>Target</dt><dd>'+p.target+'</dd><dt>Who can change it</dt><dd>'+p.who+'</dd></dl>';
+  $('detail').hidden=false;$('dclose').onclick=closeDetail;$('dclose').focus();
+}
+function openHouse(){
+  detailId='house';
+  $('detail').innerHTML='<button class="btn alt" id="dclose">Back to the story</button><p class="eyebrow" style="margin-top:14px">The center of the map</p><h2>Art Ramirez</h2><dl><dt>Who</dt><dd>Licensed real estate salesperson since 2004, Coldwell Banker Brokers of the Valley, Napa.</dd><dt>Contact</dt><dd>707-738-0939 · 1775 Lincoln Ave, Napa</dd></dl>';
+  $('detail').hidden=false;$('dclose').onclick=closeDetail;$('dclose').focus();
+}
+function closeDetail(){$('detail').hidden=true;detailId=null}
+
+/* ---------- List view ---------- */
+function renderList(){
+  var out='';
+  ['good','fix','stale','missing'].forEach(function(s){
+    var items=PLACES.filter(function(p){return p.status===s});
+    out+='<h3>'+STATUS[s]+' ('+items.length+')</h3><div class="cards">';
+    items.forEach(function(p){
+      out+='<button class="card" data-id="'+p.id+'"><b>'+p.name+'</b>'+chip((mode==='after'&&!p.optional)?'good':p.status,(mode==='after'&&!p.optional)?null:p.label)+'<span>'+(mode==='after'?p.target:p.now)+'</span></button>';
+    });
+    out+='</div>';
+  });
+  $('list').innerHTML=out;
+  Array.prototype.forEach.call($('list').querySelectorAll('.card'),function(b){b.onclick=function(){openDetail(b.getAttribute('data-id'))}});
+}
+
+/* ---------- 3D ---------- */
+var cam={th:.55,ph:1,r:30,tx:0,ty:.5,tz:0}, goal={th:.55,ph:1,r:30,tx:0,ty:.5,tz:0};
+var userMoved=false;
+function aimCamera(){
+  var c=STEPS[step].cam;
+  var th=c.th;while(th-cam.th>Math.PI)th-=2*Math.PI;while(th-cam.th<-Math.PI)th+=2*Math.PI;
+  goal.th=th;goal.ph=c.ph;goal.r=c.r;goal.tx=c.tx;goal.ty=c.ty;goal.tz=c.tz;
+  if(reduce||!three){for(var k in goal)cam[k]=goal[k]}
+}
+function css(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()}
+function retarget(){
+  if(!three)return;
+  var s=STEPS[step],pal=three.pal;
+  PLACES.forEach(function(p){
+    var m=three.meshes[p.id];
+    var col=(mode==='after'&&!p.optional)?pal.good:pal[p.status];
+    var op=1;
+    if(s.hl!=='all'&&s.hl.indexOf(p.id)<0)op=0.18;
+    if(p.status==='missing'&&(mode==='before'||p.optional))op*=0.55;
+    var h=0.3;
+    if(p.id==='site')h=0.9;
+    if(s.reviews)h=0.25+p.reviews*0.12;
+    if(p.id==='site'&&s.siteView&&siteView==='bot'){col=pal.missing;op=Math.min(op,0.45)}
+    m.goalColor.set(col);m.goalOp=op;m.goalH=h;
+  });
+  three.ghostGoal=s.reviews?0.45:0;
+  three.aiGoal=s.ai?1:0;
+  updateTags();
+}
+function initThree(){
+  var canvas=$('cv');
+  var renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+  var scene=new THREE.Scene();
+  var camera=new THREE.PerspectiveCamera(40,1,0.1,200);
+  scene.add(new THREE.AmbientLight(0xffffff,0.65));
+  var sun=new THREE.DirectionalLight(0xffffff,0.85);sun.position.set(10,18,8);scene.add(sun);
+
+  var pal={};
+  function readPal(){pal.bg=css('--scene-bg');pal.ground=css('--ground');pal.grid=css('--gridline');pal.vine=css('--vine');pal.brass=css('--brass-3d');
+    pal.good=css('--good');pal.fix=css('--fix');pal.stale=css('--stale');pal.missing=css('--missing')}
+  readPal();
+  scene.background=new THREE.Color(pal.bg);
+  scene.fog=new THREE.Fog(pal.bg,45,120);
+
+  var ground=new THREE.Mesh(new THREE.PlaneGeometry(260,260),new THREE.MeshStandardMaterial({color:pal.ground,roughness:1}));
+  ground.rotation.x=-Math.PI/2;scene.add(ground);
+  function lines(pts,color,op){var g=new THREE.BufferGeometry().setFromPoints(pts);var m=new THREE.LineBasicMaterial({color:color,transparent:true,opacity:op});return new THREE.LineSegments(g,m)}
+  var gp=[],i;for(i=-40;i<=40;i+=4){gp.push(new THREE.Vector3(i,0.01,-40),new THREE.Vector3(i,0.01,40),new THREE.Vector3(-40,0.01,i),new THREE.Vector3(40,0.01,i))}
+  var grid=lines(gp,pal.grid,0.7);scene.add(grid);
+  var vp=[];for(i=0;i<16;i++){var z0=-34+i*1.1;vp.push(new THREE.Vector3(-30,0.02,z0),new THREE.Vector3(-14,0.02,z0+3))}
+  var vines=lines(vp,pal.vine,0.9);scene.add(vines);
+
+  /* Art's house at the center */
+  var house=new THREE.Group();
+  var hm=new THREE.MeshStandardMaterial({color:pal.brass,roughness:.6,emissive:pal.brass,emissiveIntensity:.25});
+  var body=new THREE.Mesh(new THREE.BoxGeometry(1.7,1.1,1.7),hm);body.position.y=.55;house.add(body);
+  var roof=new THREE.Mesh(new THREE.ConeGeometry(1.5,1,4),hm);roof.rotation.y=Math.PI/4;roof.position.y=1.6;house.add(roof);
+  scene.add(house);
+  var pick=[body,roof];
+
+  var meshes={},links=[];
+  PLACES.forEach(function(p){
+    var a=p.a*Math.PI/180,x=Math.cos(a)*p.r,z=Math.sin(a)*p.r;
+    var g=new THREE.BoxGeometry(2,1,2);g.translate(0,0.5,0);
+    var mat=new THREE.MeshStandardMaterial({color:pal[p.status],roughness:.7,transparent:true,opacity:1});
+    var m=new THREE.Mesh(g,mat);m.position.set(x,0,z);m.scale.y=0.3;m.userData.id=p.id;
+    m.curColor=new THREE.Color(pal[p.status]);m.goalColor=new THREE.Color(pal[p.status]);m.curOp=1;m.goalOp=1;m.curH=0.3;m.goalH=0.3;m.px=x;m.pz=z;
+    scene.add(m);meshes[p.id]=m;pick.push(m);
+    var edge=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.PlaneGeometry(3,3)),new THREE.LineBasicMaterial({color:pal.grid}));
+    edge.rotation.x=-Math.PI/2;edge.position.set(x,0.03,z);scene.add(edge);
+    var ln=lines([new THREE.Vector3(0,0.05,0),new THREE.Vector3(x,0.05,z)],pal.grid,0.8);scene.add(ln);links.push(ln);
+  });
+
+  /* A sphere for search and AI answers, with lines to the places it reads (shown on the "why" step) */
+  var ai=new THREE.Group();
+  var aiMat=new THREE.MeshStandardMaterial({color:pal.brass,transparent:true,opacity:0,roughness:.4,emissive:pal.brass,emissiveIntensity:.35});
+  var aiBall=new THREE.Mesh(new THREE.SphereGeometry(1,24,18),aiMat);aiBall.position.set(0,8,0);ai.add(aiBall);
+  var aiPts=[];PLACES.forEach(function(p){var mm=meshes[p.id];aiPts.push(new THREE.Vector3(0,8,0),new THREE.Vector3(mm.px,0.6,mm.pz))});
+  var aiLines=lines(aiPts,pal.brass,0);ai.add(aiLines);ai.visible=false;scene.add(ai);
+
+  /* Ghost columns: nearby agents on Google (28 and 83), same scale as the review columns */
+  var gm=meshes.google,ghosts=[];
+  [[28,-2.6,0.2],[83,-2.6,-2.8]].forEach(function(d){
+    var g=new THREE.BoxGeometry(1.2,1,1.2);g.translate(0,0.5,0);
+    var m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:pal.missing,transparent:true,opacity:0}));
+    m.position.set(gm.px+d[1],0,gm.pz+d[2]);m.scale.y=0.25+d[0]*0.12;m.userData.ghost=d[0];scene.add(m);ghosts.push(m);
+    var eo=new THREE.LineSegments(new THREE.EdgesGeometry(g),new THREE.LineBasicMaterial({color:pal.missing,transparent:true,opacity:0}));
+    m.add(eo);m.userData.edge=eo;
+  });
+
+  /* Labels (HTML, so the text stays crisp and readable) */
+  var labels=$('labels'),tags={};
+  PLACES.forEach(function(p){var d=document.createElement('div');d.className='tag';d.textContent=p.name;labels.appendChild(d);tags[p.id]=d});
+  var gtags=ghosts.map(function(g){var d=document.createElement('div');d.className='tag';d.textContent='Nearby agents: '+g.userData.ghost;labels.appendChild(d);return d});
+  var stag=document.createElement('div');stag.className='tag';labels.appendChild(stag);
+  var atag=document.createElement('div');atag.className='tag';atag.textContent='Search and AI answers read these places';labels.appendChild(atag);
+
+  three={renderer:renderer,scene:scene,camera:camera,meshes:meshes,pal:pal,ghosts:ghosts,ghostOp:0,ghostGoal:0,tags:tags,gtags:gtags,stag:stag,pick:pick,
+         grid:grid,vines:vines,ground:ground,links:links,hm:hm,house:house};
+  three.aiMat=aiMat;three.aiLines=aiLines;three.ai=ai;three.aiOp=0;three.aiGoal=0;
+
+  function applyTheme(){
+    readPal();scene.background.set(pal.bg);scene.fog.color.set(pal.bg);ground.material.color.set(pal.ground);grid.material.color.set(pal.grid);vines.material.color.set(pal.vine);hm.color.set(pal.brass);hm.emissive.set(pal.brass);aiMat.color.set(pal.brass);aiMat.emissive.set(pal.brass);aiLines.material.color.set(pal.brass);
+    links.forEach(function(l){l.material.color.set(pal.grid)});
+    ghosts.forEach(function(g){g.material.color.set(pal.missing);g.userData.edge.material.color.set(pal.missing)});
+    retarget();
+  }
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',applyTheme);
+  new MutationObserver(applyTheme).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+
+  function resize(){
+    var st=$('stage'),w=st.clientWidth,h=st.clientHeight;if(!w||!h)return;
+    renderer.setSize(w,h,false);camera.aspect=w/h;
+    var off=(window.innerWidth>820)?-(210):0;
+    camera.setViewOffset(w,h,off,0,w,h);camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize',resize);new ResizeObserver(resize).observe($('stage'));resize();
+
+  /* Pointer: drag to turn, wheel or pinch to zoom, click to open */
+  var ptrs={},down=null,pinch=0,ray=new THREE.Raycaster(),v2=new THREE.Vector2();
+  function ndc(e){var r=canvas.getBoundingClientRect();v2.set(((e.clientX-r.left)/r.width)*2-1,-((e.clientY-r.top)/r.height)*2+1)}
+  function hit(e){ndc(e);ray.setFromCamera(v2,camera);var h=ray.intersectObjects(pick,false);return h.length?h[0].object:null}
+  canvas.addEventListener('pointerdown',function(e){canvas.setPointerCapture(e.pointerId);ptrs[e.pointerId]={x:e.clientX,y:e.clientY};down={x:e.clientX,y:e.clientY,moved:0};canvas.classList.add('drag');userMoved=true;
+    var k=Object.keys(ptrs);if(k.length===2){var a=ptrs[k[0]],b=ptrs[k[1]];pinch=Math.hypot(a.x-b.x,a.y-b.y)}});
+  canvas.addEventListener('pointermove',function(e){
+    var p=ptrs[e.pointerId];
+    if(!p){var o=hit(e);hover=o&&o.userData.id?o.userData.id:null;canvas.style.cursor=o?'pointer':'grab';updateTags();return}
+    var k=Object.keys(ptrs);
+    if(k.length===2){ptrs[e.pointerId]={x:e.clientX,y:e.clientY};var a=ptrs[k[0]],b=ptrs[k[1]],d=Math.hypot(a.x-b.x,a.y-b.y);if(pinch){goal.r=cam.r=Math.max(6,Math.min(48,cam.r*pinch/d))}pinch=d;return}
+    var dx=e.clientX-p.x,dy=e.clientY-p.y;p.x=e.clientX;p.y=e.clientY;down.moved+=Math.abs(dx)+Math.abs(dy);
+    cam.th-=dx*0.006;goal.th=cam.th;cam.ph=goal.ph=Math.max(0.35,Math.min(1.45,cam.ph-dy*0.005));
+  });
+  function up(e){
+    var wasClick=down&&down.moved<6&&Object.keys(ptrs).length===1;
+    delete ptrs[e.pointerId];canvas.classList.remove('drag');pinch=0;
+    if(wasClick){var o=hit(e);if(o){if(o.userData.id)openDetail(o.userData.id);else openHouse()}}
+    down=null;
+  }
+  canvas.addEventListener('pointerup',up);canvas.addEventListener('pointercancel',up);
+  canvas.addEventListener('wheel',function(e){e.preventDefault();goal.r=cam.r=Math.max(6,Math.min(48,cam.r*(1+e.deltaY*0.0012)));userMoved=true},{passive:false});
+
+  /* Labels follow the 3D positions */
+  var tmp=new THREE.Vector3();
+  function place(el,x,y,z){
+    tmp.set(x,y,z).project(camera);var st=$('stage'),w=st.clientWidth,h=st.clientHeight;
+    if(tmp.z>1){el.style.display='none';return}
+    el.style.display='';el.style.transform='translate('+Math.round((tmp.x*.5+.5)*w)+'px,'+Math.round((-tmp.y*.5+.5)*h)+'px) translate(-50%,-130%)';
+  }
+  updateTags=function(){
+    var s=STEPS[step];
+    PLACES.forEach(function(p){
+      var on=(s.labels&&(s.hl==='all'||s.hl.indexOf(p.id)>=0))||hover===p.id||detailId===p.id;
+      tags[p.id].classList.toggle('on',!!on);
+    });
+    gtags.forEach(function(t){t.classList.toggle('on',!!s.reviews)});
+    atag.classList.toggle('on',!!s.ai);
+    var showS=s.siteView&&siteView==='bot';
+    stag.classList.toggle('on',!!showS);stag.textContent='Loading NapaListing.com.';
+  };
+  function project(){
+    PLACES.forEach(function(p){var m=meshes[p.id];if(tags[p.id].classList.contains('on'))place(tags[p.id],m.px,m.curH+0.15,m.pz)});
+    ghosts.forEach(function(g,i){if(gtags[i].classList.contains('on'))place(gtags[i],g.position.x,g.scale.y+0.15,g.position.z)});
+    if(stag.classList.contains('on')){var m=meshes.site;place(stag,m.px,m.curH+2.6,m.pz)}
+    if(atag.classList.contains('on'))place(atag,0,9.4,0);
+  }
+
+  var k=reduce?1:0.09;
+  function frame(){
+    requestAnimationFrame(frame);
+    if(view==='list'||document.hidden)return;
+    if(step===0&&!userMoved&&!reduce){goal.th+=0.0016}
+    cam.th+=(goal.th-cam.th)*k;cam.ph+=(goal.ph-cam.ph)*k;cam.r+=(goal.r-cam.r)*k;
+    cam.tx+=(goal.tx-cam.tx)*k;cam.ty+=(goal.ty-cam.ty)*k;cam.tz+=(goal.tz-cam.tz)*k;
+    camera.position.set(cam.tx+cam.r*Math.sin(cam.ph)*Math.sin(cam.th),cam.ty+cam.r*Math.cos(cam.ph),cam.tz+cam.r*Math.sin(cam.ph)*Math.cos(cam.th));
+    camera.lookAt(cam.tx,cam.ty,cam.tz);
+    PLACES.forEach(function(p){
+      var m=meshes[p.id];
+      m.curColor.lerp(m.goalColor,k);m.material.color.copy(m.curColor);
+      m.curOp+=(m.goalOp-m.curOp)*k;m.material.opacity=m.curOp;
+      m.curH+=(m.goalH-m.curH)*k;m.scale.y=m.curH;
+    });
+    three.ghostOp+=(three.ghostGoal-three.ghostOp)*k;
+    three.aiOp+=(three.aiGoal-three.aiOp)*k;aiMat.opacity=three.aiOp*0.9;aiLines.material.opacity=three.aiOp*0.55;ai.visible=three.aiOp>0.01;
+    ghosts.forEach(function(g){g.material.opacity=three.ghostOp;g.userData.edge.material.opacity=Math.min(1,three.ghostOp*2);g.visible=three.ghostOp>0.01});
+    house.rotation.y+=reduce?0:0.003;
+    project();
+    renderer.render(scene,camera);
+  }
+  frame();
+}
+var updateTags=function(){};
+
+/* ---------- Start ---------- */
+renderList();renderStep();
+try{
+  var probe=document.createElement('canvas');
+  hasGL=!!(window.THREE&&(probe.getContext('webgl')||probe.getContext('experimental-webgl')));
+}catch(e){hasGL=false}
+if(hasGL){try{initThree();aimCamera();retarget();for(var kk in goal)cam[kk]=goal[kk]}catch(err){hasGL=false;three=null}}
+if(!hasGL){$('v-map').disabled=true;$('v-map').title='3D is not available here';setView('list')}
+})();
+</script>
+
+</body>
+</html>
